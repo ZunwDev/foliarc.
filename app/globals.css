@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 98%; /* Slightly brighter white */
+  --foreground: 220 14% 8%; /* Darker text */
+  --card: 0 0% 98%; /* Matches background */
+  --card-foreground: 220 14% 8%; /* Darker card text */
+  --popover: 0 0% 98%; /* Bright white for popovers */
+  --popover-foreground: 220 14% 8%; /* Darker popover text */
+  --primary: 220 90% 60%; /* More vibrant primary */
+  --primary-foreground: 210 40% 98%; /* Slightly brighter text */
+  --secondary: 210 20% 94%; /* Lighter secondary background */
+  --secondary-foreground: 220 14% 8%; /* Darker text for contrast */
+  --muted: 210 20% 92%; /* Muted with less saturation */
+  --muted-foreground: 220 10% 40%; /* Softer muted text */
+  --accent: 210 20% 92%; /* Match muted */
+  --accent-foreground: 220 14% 8%; /* Consistent text */
+  --alert: 40 90% 50%; /* Slightly softer alert */
+  --alert-foreground: 220 14% 8%; /* Darker for contrast */
+  --destructive: 0 90% 65%; /* Softer destructive */
+  --destructive-foreground: 210 40% 98%; /* Brighter destructive text */
+  --border: 214 15% 85%; /* Softer border */
+  --input: 214 15% 85%; /* Matches border */
+  --ring: 220 80% 60%; /* Vibrant ring */
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 220 10% 10%; /* Nearly black background */
+  --foreground: 220 20% 90%; /* Softer gray-white */
+  --card: 220 10% 10%; /* Matches background */
+  --card-foreground: 220 20% 90%; /* Softer gray-white */
+  --popover: 220 10% 10%; /* Darker popovers */
+  --popover-foreground: 220 20% 90%; /* Softer gray-white */
+  --primary: 220 50% 45%; /* Darker vibrant primary */
+  --primary-foreground: 220 20% 10%; /* Strong dark contrast */
+  --secondary: 220 10% 20%; /* Dark gray secondary */
+  --secondary-foreground: 220 20% 90%; /* Softer gray-white */
+  --muted: 220 10% 15%; /* Dark muted */
+  --muted-foreground: 220 20% 70%; /* Softer muted text */
+  --accent: 220 10% 15%; /* Matches muted */
+  --accent-foreground: 220 20% 90%; /* Softer gray-white */
+  --destructive: 0 50% 50%; /* Softer red */
+  --destructive-foreground: 220 20% 90%; /* Softer gray-white */
+  --border: 220 10% 15%; /* Dark gray border */
+  --input: 220 10% 15%; /* Matches border */
+  --ring: 220 60% 50%; /* Muted blue */
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+  }
+}
