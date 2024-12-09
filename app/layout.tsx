@@ -1,7 +1,9 @@
 import Header from "@/components/global/Header";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { ThemeProvider } from "next-themes";
 import localFont from "next/font/local";
 import React from "react";
+
 import "./globals.css";
 
 const geistSans = localFont({
@@ -22,12 +24,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <title>PortfolioShare</title>
         <meta name="description" content="Portfolio share is an app to share your portfolio and get feedback from others" />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <ThemeProvider attribute="class" defaultTheme="light" forcedTheme="dark" enableSystem={false}>
-          <Header />
-          {children}
-        </ThemeProvider>
-      </body>
+      <UserProvider>
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          <ThemeProvider attribute="class" defaultTheme="light" forcedTheme="dark" enableSystem={false}>
+            <Header />
+            {children}
+          </ThemeProvider>
+        </body>
+      </UserProvider>
     </html>
   );
 }
