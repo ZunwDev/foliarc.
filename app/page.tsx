@@ -1,22 +1,22 @@
 "use client";
+import Hero from "@/components/homepage/Hero";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useMediaQuery } from "@uidotdev/usehooks";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { ChevronUp, Grid, List, Sliders } from "lucide-react";
 import Image from "next/image";
 import React from "react";
-import Hero from "./components/homepage/Hero";
-import { Avatar, AvatarFallback, AvatarImage } from "./components/ui/avatar";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./components/ui/card";
 
 export default function Home() {
   return (
     <section className="relative flex flex-col min-w-[360px] h-[100dvh] pt-16 bg-background">
       {/* Background Gradient */}
       <div
-        className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(ellipse_750px_500px_at_50%_-200px,rgba(200,250,255,0.3),transparent)]"
+        className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(ellipse_750px_500px_at_50%_-200px,rgba(200,250,255,0.6),transparent)]"
         style={{ filter: "blur(200px)" }}></div>
 
       <Hero />
@@ -150,8 +150,8 @@ const viewModes: ViewModeOption[] = [
 ];
 
 export function ViewModeComboBox() {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const [isOpen, setIsOpen] = React.useState(false);
-  const isDesktopView = useMediaQuery("(min-width: 768px)");
   const [selectedViewMode, setSelectedViewMode] = React.useState<ViewModeOption>({
     label: "Cards",
     value: "cards",
@@ -161,7 +161,7 @@ export function ViewModeComboBox() {
   return (
     <section>
       <div className="flex gap-4">
-        {isDesktopView ? (
+        {isDesktop ? (
           <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
               <Button variant="outline" className="size-10">
@@ -192,14 +192,14 @@ export function ViewModeComboBox() {
 }
 
 export function SortComboBox() {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const [isOpen, setIsOpen] = React.useState(false);
-  const isDesktopView = useMediaQuery("(min-width: 768px)");
   const [selectedSortOption, setSelectedSortOption] = React.useState<SortOption>({
     label: "Popular",
     value: "popular",
   });
 
-  if (isDesktopView) {
+  if (isDesktop) {
     return (
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>
