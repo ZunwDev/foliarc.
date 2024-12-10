@@ -1,6 +1,6 @@
 import { ArrowDownUp } from "lucide-react";
 import Link from "next/link";
-import { Button } from "../ui/button";
+import Profile from "./Profile";
 
 export default function Header() {
   return (
@@ -14,9 +14,7 @@ export default function Header() {
             </span>
           </Link>
           <div className="flex md:gap-2 flex-row-reverse">
-            <Button asChild>
-              <Link href="/api/auth/login">Login</Link>
-            </Button>
+            <Profile />
           </div>
         </nav>
       </header>

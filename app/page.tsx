@@ -14,28 +14,26 @@ import React from "react";
 export default function Home() {
   return (
     <section className="relative flex flex-col min-w-[360px] h-[100dvh] pt-16 bg-background">
-      {/* Background Gradient */}
       <div
         className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(ellipse_750px_500px_at_50%_-200px,rgba(200,250,255,0.6),transparent)]"
         style={{ filter: "blur(200px)" }}></div>
 
       <Hero />
 
-      <div className="flex flex-row items-center gap-2 mt-12 sm:flex-row sm:gap-3 w-[1200px] mx-auto z-10 justify-between">
+      <div className="flex flex-row items-center gap-2 mt-12 sm:flex-row sm:gap-3 w-[1200px] xs:w-[400px] sm:w-[600px] md:w-[800px] lg:w-[1200px] mx-auto z-10 justify-between">
         <SortComboBox />
         <ViewModeComboBox />
       </div>
-      <div className="flex flex-col items-center gap-4 mt-3 sm:flex-row sm:gap-6 w-[1200px] mx-auto z-10">
+      <div className="flex flex-col items-center gap-4 mt-3 sm:flex-row sm:gap-6 w-[1200px] xs:w-[400px] sm:w-[600px] md:w-[800px] lg:w-[1200px] mx-auto z-10">
         <Card className="w-full rounded-lg shadow-lg overflow-hidden bg-secondary transition-all hover:bg-muted-foreground/30 hover:shadow-xl cursor-pointer relative">
           <CardHeader className="p-0">
             <div className="relative">
-              <button className="absolute top-2 left-2 bg-secondary text-primary rounded-full p-2 shadow-md hover:bg-muted-foreground hover:text-white transition">
+              <Button variant="outline" size="icon" className="absolute top-2 left-2 rounded-full">
                 <ChevronUp />
-              </button>
+              </Button>
               <span className="absolute top-2 left-12 bg-muted-foreground rounded-full px-2 flex justify-center items-center text-center text-sm font-semibold text-white">
                 99+
               </span>
-              {/* Image section */}
               <Image
                 width={1200}
                 height={300}
@@ -47,15 +45,10 @@ export default function Home() {
           </CardHeader>
 
           <CardContent className="p-4">
-            {/* Portfolio Title */}
             <CardTitle className="text-lg font-semibold">Creative Web Design</CardTitle>
-
-            {/* Description */}
             <CardDescription className="text-sm text-muted-foreground mt-2">
               A modern, sleek design showcasing creative web development projects for digital artists.
             </CardDescription>
-
-            {/* Creator Information */}
             <div className="flex items-center mt-4">
               <Avatar className="mr-3">
                 <AvatarImage src="https://via.placeholder.com/40" alt="Creator's Avatar" />
@@ -66,8 +59,6 @@ export default function Home() {
               </p>
             </div>
           </CardContent>
-
-          {/* Progress Circles */}
           <div className="absolute bottom-4 right-4 flex gap-2">
             {[
               { label: "Hireability", value: 80 },
