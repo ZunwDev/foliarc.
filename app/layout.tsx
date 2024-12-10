@@ -1,8 +1,9 @@
+"use client";
 import Header from "@/components/global/Header";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
-import { ThemeProvider } from "next-themes";
+import { ThemeProvider, useTheme } from "next-themes";
 import localFont from "next/font/local";
-import React from "react";
+import React, { useEffect } from "react";
 
 import "./globals.css";
 
@@ -18,6 +19,19 @@ const geistMono = localFont({
 });
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const { setTheme } = useTheme();
+  localStorage.removeItem("theme");
+  useEffect(() => {
+    const userPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if (userPrefersDark) {
+      setTheme("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      setTheme("light");
+      localStorage.setItem("theme", "light");
+    }
+  }, [setTheme]);
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -26,7 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <UserProvider>
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <ThemeProvider attribute="class" defaultTheme="light" forcedTheme="dark" enableSystem={false}>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
             <Header />
             {children}
           </ThemeProvider>

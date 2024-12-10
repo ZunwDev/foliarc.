@@ -1,6 +1,7 @@
 import { ArrowDownUp } from "lucide-react";
 import Link from "next/link";
-import Profile from "./Profile";
+import Profile from "../header/Profile";
+import ThemeSwitch from "../header/ThemeSwitch";
 
 export default function Header() {
   return (
@@ -13,8 +14,9 @@ export default function Header() {
               Portfolio<span className="text-red-500">Share</span>
             </span>
           </Link>
-          <div className="flex md:gap-2 flex-row-reverse">
+          <div className="flex gap-2 flex-row-reverse">
             <Profile />
+            <ThemeSwitch />
           </div>
         </nav>
       </header>

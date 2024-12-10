@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { DoorOpen } from "lucide-react";
+import { DoorOpen, ListChecks, MessageCircleQuestion, User } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
@@ -36,16 +36,26 @@ export default function Profile() {
       <DropdownMenuContent className="w-[220px] bg-background rounded-md shadow-lg py-2">
         <DropdownMenuLabel className="px-3 text-xs font-semibold text-foreground">My Account</DropdownMenuLabel>
         <DropdownMenuSeparator className="my-1 h-px bg-muted" />
+
         <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
-          <Avatar className="h-6 w-6">
-            <AvatarImage src={user.picture ?? undefined} alt="Profile picture" />
-            <AvatarFallback>{getInitials(user.name ?? "")}</AvatarFallback>
-          </Avatar>
-          <span className="text-sm font-medium">{user.name}</span>
+          <User className="size-5" />
+          <span className="text-sm font-medium">Profile</span>
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator className="my-1 h-px bg-muted" />
+        <DropdownMenuLabel className="px-3 text-xs font-semibold text-foreground">Admin</DropdownMenuLabel>
+        <DropdownMenuSeparator className="my-1 h-px bg-muted" />
+        <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
+          <MessageCircleQuestion className="size-5" />
+          <span className="text-sm font-medium">Feedback</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
+          <ListChecks className="size-5" />
+          <span className="text-sm font-medium">For review</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator className="my-1 h-px bg-muted" />
         <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
-          <DoorOpen className="h-5 w-5 text-red-500" />
+          <DoorOpen className="size-5 text-red-500" />
           <Link href="/api/auth/logout" className="text-red-500 text-sm font-medium">
             Logout
           </Link>
