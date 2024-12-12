@@ -1,6 +1,6 @@
 "use client";
 import Hero from "@/components/homepage/Hero";
-import PortfolioGallery from "./components/homepage/PortfolioGallery";
+import PortfolioGallery from "@/components/homepage/PortfolioGallery";
 
 export default function Home() {
   return (

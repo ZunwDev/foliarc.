@@ -1,7 +1,7 @@
+import Profile from "@/components/header/Profile";
+import ThemeSwitch from "@/components/header/ThemeSwitch";
 import { ArrowDownUp } from "lucide-react";
 import Link from "next/link";
-import Profile from "../header/Profile";
-import ThemeSwitch from "../header/ThemeSwitch";
 
 export default function Header() {
   return (

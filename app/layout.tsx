@@ -1,5 +1,4 @@
 "use client";
-
 import Header from "@/components/global/Header";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { ThemeProvider } from "next-themes";

@@ -1,6 +1,6 @@
+import { Button } from "@/components/ui/button";
 import { scrollToTop } from "@/lib/utils";
 import { ArrowUp } from "lucide-react";
-import { Button } from "../ui/button";
 
 export default function ScrollUpButton() {
   return (

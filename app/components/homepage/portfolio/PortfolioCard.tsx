@@ -24,7 +24,7 @@ export default function PortfolioCard({ likeAmount, index }: PortfolioCardProps)
             alt="Portfolio Image"
             className="w-full h-[250px] object-cover"
           />
-          <div className="absolute top-2 right-2 flex space-x-2">
+          <div className="absolute top-2 right-2 flex space-x-1">
             <Button variant="outline" size="icon" className="rounded-full hover:text-red-500">
               <Heart />
             </Button>
@@ -43,7 +43,7 @@ export default function PortfolioCard({ likeAmount, index }: PortfolioCardProps)
             <AvatarImage src="https://via.placeholder.com/40" alt="Creator's Avatar" />
             <AvatarFallback>AB</AvatarFallback>
           </Avatar>
-          <div className="flex flex-col gap-0.5">
+          <div className="flex flex-col gap-1">
             <p className="text-lg">John Doe</p>
             <div className="flex flex-row flex-wrap gap-1">
               <Badge>Developer</Badge>
