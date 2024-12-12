@@ -5,9 +5,12 @@ import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { ThemeProvider } from "next-themes";
 import React from "react";
 
+import ScrollUpButton from "@/components/global/ScrollUpButton";
+import { useScrollPosition } from "@/hooks/useScrollPosition";
 import "./globals.css";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const showGoToTop = useScrollPosition();
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -20,6 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Header />
             {children}
           </ThemeProvider>
+          {showGoToTop && <ScrollUpButton />}
         </body>
       </UserProvider>
     </html>

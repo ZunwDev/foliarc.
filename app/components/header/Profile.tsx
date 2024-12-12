@@ -1,8 +1,9 @@
+/* eslint-disable jsx-a11y/alt-text */
 "use client";
 
 import { Button } from "@/components/ui/button";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { DoorOpen, ListChecks, MessageCircleQuestion, User } from "lucide-react";
+import { DoorOpen, Image, ListChecks, MessageCircleQuestion, User } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
@@ -23,14 +24,11 @@ export default function Profile() {
   return user ? (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          className="w-[180px] flex items-center gap-2 justify-start text-foreground px-3 py-2 hover:bg-accent">
+        <Button variant="ghost" size="icon" className="rounded-full text-foreground">
           <Avatar className="h-8 w-8">
             <AvatarImage src={user.picture ?? undefined} alt="Profile picture" />
             <AvatarFallback>{getInitials(user.name ?? "")}</AvatarFallback>
           </Avatar>
-          <span className="truncate text-sm font-medium">{user.name}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[220px] bg-background rounded-md shadow-lg py-2">
@@ -40,6 +38,10 @@ export default function Profile() {
         <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
           <User className="size-5" />
           <span className="text-sm font-medium">Profile</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
+          <Image className="size-5" />
+          <span className="text-sm font-medium">My portfolio</span>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator className="my-1 h-px bg-muted" />
