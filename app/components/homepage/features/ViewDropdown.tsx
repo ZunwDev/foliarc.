@@ -53,7 +53,7 @@ export function ViewDropdown({ setViewToggle }: ViewDropdownProps) {
                 <ChevronDown className="size-4" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0" align="start">
+            <PopoverContent className="w-40 p-0" align="start">
               <ViewModeOptionList setIsOpen={setIsOpen} setSelectedViewMode={setSelectedViewMode} />
             </PopoverContent>
           </Popover>

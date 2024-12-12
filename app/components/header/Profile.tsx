@@ -31,7 +31,7 @@ export default function Profile() {
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[220px] bg-background rounded-md shadow-lg py-2">
+      <DropdownMenuContent className="w-40 bg-background rounded-md shadow-lg py-2">
         <DropdownMenuLabel className="px-3 text-xs font-semibold text-foreground">My Account</DropdownMenuLabel>
         <DropdownMenuSeparator className="my-1 h-px bg-muted" />
 
