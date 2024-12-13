@@ -24,7 +24,9 @@ export default function Hero() {
       <div className="flex space-x-4">
         <Dialog>
           <DialogTrigger asChild>
-            <Button>Get Started</Button>
+            <Button className="px-6 text-blue-400 border-2 border-blue-400 hover:text-white hover:border-blue-600 bg-transparent transition-all duration-300 transform hover:scale-105 hover:bg-blue-400 shadow-xl hover:shadow-2xl hover:shadow-blue-500">
+              Get Started
+            </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
@@ -49,9 +51,6 @@ export default function Hero() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-        <Button variant="outline" className="px-6 py-3">
-          Learn More
-        </Button>
       </div>
     </div>
   );
