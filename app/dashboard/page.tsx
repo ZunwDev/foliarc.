@@ -9,7 +9,7 @@ export default function Dashboard() {
   const { user, error, isLoading } = useUser();
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen bg-background pt-16">
       <div className="flex-1 p-8">
         {/* Overview Section */}
         <section className="mb-12">
