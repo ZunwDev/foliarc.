@@ -12,10 +12,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { DoorOpen, ListChecks, MessageCircleQuestion, User } from "lucide-react";
+import { DoorOpen, LayoutDashboard, ListChecks, MessageSquareText, User } from "lucide-react";
 import Link from "next/link";
 
-export default function Profile() {
+export function Profile() {
   const { user, error, isLoading } = useUser();
 
   if (isLoading) return <div>Loading...</div>;
@@ -44,12 +44,18 @@ export default function Profile() {
         <DropdownMenuLabel className="px-3 text-xs text-foreground">Admin</DropdownMenuLabel>
         <DropdownMenuSeparator className="my-1 h-px bg-muted" />
         <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
-          <MessageCircleQuestion className="size-5" />
+          <LayoutDashboard className="size-5" />
+          <Link href="/dashboard" className="text-sm font-medium">
+            <span className="text-sm font-medium">Dashboard</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
+          <MessageSquareText className="size-5" />
           <span className="text-sm font-medium">Feedback</span>
         </DropdownMenuItem>
         <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
           <ListChecks className="size-5" />
-          <span className="text-sm font-medium">For review</span>
+          <span className="text-sm font-medium">Reviews</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator className="my-1 h-px bg-muted" />
         <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
@@ -68,12 +74,7 @@ export default function Profile() {
 }
 
 function getInitials(name: string) {
-  if (!name) return "A";
-  const words = name.match(/\b[a-zA-Z]/g);
-
-  if (words && words.length > 1) {
-    return words.slice(0, 2).join("").toUpperCase();
-  }
-  const firstValidLetter = name.match(/[a-zA-Z]/);
-  return firstValidLetter ? firstValidLetter[0].toUpperCase() : "A";
+  if (!name.trim()) return "A";
+  const words = name.match(/\b\w/g) || [];
+  return words.length > 1 ? words.slice(0, 2).join("").toUpperCase() : name[0].toUpperCase();
 }

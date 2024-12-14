@@ -1,8 +1,7 @@
-import { SortDropdown, ViewDropdown } from "@/components/homepage";
-import PortfolioCard from "@/components/homepage/portfolio/PortfolioCard";
+import { PortfolioCard, SortDropdown, ViewDropdown } from "@/components/homepage";
 import { useEffect, useState } from "react";
 
-export default function PortfolioGallery() {
+export function PortfolioGallery() {
   const [viewToggle, setViewToggle] = useState("compact");
   const likeAmount = 1;
   const items = [1, 2, 3, 4];
@@ -16,7 +15,7 @@ export default function PortfolioGallery() {
   if (!mounted) return null;
 
   return (
-    <div className="max-w-[1200px] mx-auto z-10 w-full mt-12">
+    <div className="max-w-[1600px] mx-auto z-10 w-full mt-12 px-4">
       <div className="flex flex-row justify-between mb-5">
         <SortDropdown />
         <ViewDropdown setViewToggle={setViewToggle} />

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { ChevronDown } from "lucide-react";
@@ -50,6 +50,10 @@ export function SortDropdown() {
         </Button>
       </DrawerTrigger>
       <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>Sort Options</DrawerTitle>
+          <DrawerDescription>Choose a sort option</DrawerDescription>
+        </DrawerHeader>
         <div className="mt-4 border-t">
           <SortOptionList setIsOpen={setIsOpen} setSelectedSortOption={setSelectedSortOption} />
         </div>

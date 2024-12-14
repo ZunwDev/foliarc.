@@ -1,11 +1,9 @@
 "use client";
-import Header from "@/components/global/Header";
+import { Header, ScrollUpButton } from "@/components/global";
+import { useScrollPosition } from "@/hooks/useScrollPosition";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { ThemeProvider } from "next-themes";
 import React from "react";
-
-import ScrollUpButton from "@/components/global/ScrollUpButton";
-import { useScrollPosition } from "@/hooks/useScrollPosition";
 import "./globals.css";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

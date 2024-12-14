@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { ChevronDown, Grid, List } from "lucide-react";
 import React from "react";
 
@@ -30,7 +28,6 @@ type ViewDropdownProps = {
 };
 
 export function ViewDropdown({ setViewToggle }: ViewDropdownProps) {
-  const isDesktop = useMediaQuery("(min-width: 768px)");
   const [isOpen, setIsOpen] = React.useState(false);
   const [selectedViewMode, setSelectedViewMode] = React.useState<ViewModeOption>({
     label: "Compact",
@@ -43,36 +40,19 @@ export function ViewDropdown({ setViewToggle }: ViewDropdownProps) {
   }, [selectedViewMode.value, setViewToggle]);
 
   return (
-    <section>
-      <div className="flex gap-4">
-        {isDesktop ? (
-          <Popover open={isOpen} onOpenChange={setIsOpen}>
-            <PopoverTrigger asChild>
-              <Button variant="outline" className="size-10 w-16" onClick={() => setViewToggle(selectedViewMode.value)}>
-                {selectedViewMode.icon}
-                <ChevronDown className="size-4" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-40 p-0" align="start">
-              <ViewModeOptionList setIsOpen={setIsOpen} setSelectedViewMode={setSelectedViewMode} />
-            </PopoverContent>
-          </Popover>
-        ) : (
-          <Drawer open={isOpen} onOpenChange={setIsOpen}>
-            <DrawerTrigger asChild>
-              <Button variant="outline" className="size-10" onClick={() => setViewToggle(selectedViewMode.value)}>
-                {selectedViewMode.icon}
-              </Button>
-            </DrawerTrigger>
-            <DrawerContent>
-              <div className="mt-4 border-t">
-                <ViewModeOptionList setIsOpen={setIsOpen} setSelectedViewMode={setSelectedViewMode} />
-              </div>
-            </DrawerContent>
-          </Drawer>
-        )}
-      </div>
-    </section>
+    <div className="hidden md:block">
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <PopoverTrigger asChild>
+          <Button variant="outline" className="size-10 w-16" onClick={() => setViewToggle(selectedViewMode.value)}>
+            {selectedViewMode.icon}
+            <ChevronDown className="size-4" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-40 p-0" align="start">
+          <ViewModeOptionList setIsOpen={setIsOpen} setSelectedViewMode={setSelectedViewMode} />
+        </PopoverContent>
+      </Popover>
+    </div>
   );
 }
 

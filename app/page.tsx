@@ -1,6 +1,5 @@
 "use client";
-import Hero from "@/components/homepage/Hero";
-import PortfolioGallery from "@/components/homepage/PortfolioGallery";
+import { Hero, PortfolioGallery } from "@/components/homepage";
 
 export default function Home() {
   return (

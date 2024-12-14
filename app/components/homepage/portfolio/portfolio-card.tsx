@@ -11,7 +11,7 @@ interface PortfolioCardProps {
   index: number;
 }
 
-export default function PortfolioCard({ likeAmount, index }: PortfolioCardProps) {
+export function PortfolioCard({ likeAmount, index }: PortfolioCardProps) {
   const overallScore = 88; // Example calculated value
   const calculations = "Hireability: 80%\nCreativity: 95%\nAesthetic: 90%";
 
