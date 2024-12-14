@@ -21,6 +21,9 @@ export function Profile() {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
 
+  const validEmails = process.env.NEXT_PUBLIC_VALID_EMAILS?.split(",") || [];
+  const email = user?.email ?? "";
+
   return user ? (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -31,8 +34,10 @@ export function Profile() {
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-40 bg-background rounded-md shadow-lg py-2">
-        <DropdownMenuLabel className="px-3 text-xs text-foreground">My Account</DropdownMenuLabel>
+      <DropdownMenuContent className="w- bg-background rounded-md shadow-lg py-2">
+        <DropdownMenuLabel className="px-3 text-xs text-foreground flex flex-col">
+          My Account<span className="text-muted-foreground truncate">{email}</span>
+        </DropdownMenuLabel>
         <DropdownMenuSeparator className="my-1 h-px bg-muted" />
 
         <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
@@ -40,23 +45,29 @@ export function Profile() {
           <span className="text-sm font-medium">Profile</span>
         </DropdownMenuItem>
 
-        <DropdownMenuSeparator className="my-1 h-px bg-muted" />
-        <DropdownMenuLabel className="px-3 text-xs text-foreground">Admin</DropdownMenuLabel>
-        <DropdownMenuSeparator className="my-1 h-px bg-muted" />
-        <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
-          <LayoutDashboard className="size-5" />
-          <Link href="/dashboard" className="text-sm font-medium">
-            <span className="text-sm font-medium">Dashboard</span>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
-          <MessageSquareText className="size-5" />
-          <span className="text-sm font-medium">Feedback</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
-          <ListChecks className="size-5" />
-          <span className="text-sm font-medium">Reviews</span>
-        </DropdownMenuItem>
+        {/* Render Admin section only if the email is valid */}
+        {validEmails.includes(email) && (
+          <>
+            <DropdownMenuSeparator className="my-1 h-px bg-muted" />
+            <DropdownMenuLabel className="px-3 text-xs text-foreground">Admin</DropdownMenuLabel>
+            <DropdownMenuSeparator className="my-1 h-px bg-muted" />
+            <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
+              <LayoutDashboard className="size-5" />
+              <Link href="/dashboard" className="text-sm font-medium">
+                <span className="text-sm font-medium">Dashboard</span>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
+              <MessageSquareText className="size-5" />
+              <span className="text-sm font-medium">Feedback</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
+              <ListChecks className="size-5" />
+              <span className="text-sm font-medium">Reviews</span>
+            </DropdownMenuItem>
+          </>
+        )}
+
         <DropdownMenuSeparator className="my-1 h-px bg-muted" />
         <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
           <DoorOpen className="size-5 text-red-500" />
