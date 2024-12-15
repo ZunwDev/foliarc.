@@ -15,7 +15,6 @@ interface ChangelogItem {
 
 const changelogData: ChangelogItem[] = [
   /*   {
-    id: "1",
     version: "2.1.0",
     date: "2024-12-15",
     changes: [
@@ -56,8 +55,8 @@ export function ChangelogList() {
     <div className="min-[100dvh] bg-background p-6">
       <div className="mx-auto max-w-3xl space-y-6">
         <div className="space-y-6">
-          {sortedChangelogData.map((version) => (
-            <Card key={version.id}>
+          {sortedChangelogData.map((version, index) => (
+            <Card key={index}>
               <CardHeader className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
