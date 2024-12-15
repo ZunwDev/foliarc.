@@ -1,4 +1,6 @@
+"use client";
 import { BarChart, FileText, MessageSquare, Settings, Users } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const sidebarData = [
@@ -13,12 +15,12 @@ const sidebarData = [
     link: "/dashboard/review",
   },
   {
-    name: "Manage Feedback",
+    name: "Feedback",
     icon: MessageSquare,
     link: "/dashboard/feedback",
   },
   {
-    name: "Manage Users",
+    name: "Users",
     icon: Users,
     link: "/dashboard/users",
   },
@@ -42,30 +44,74 @@ const sidebarData = [
 ];
 
 export function SidebarLinks() {
-  const [activePath, setActivePath] = useState<string>("");
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const pathname = usePathname(); // Get the current pathname
+  const router = useRouter();
 
-  // Set the current path on component mount
+  const toggleExpand = (name: string) => {
+    setExpanded((prev) => ({ ...prev, [name]: !prev[name] }));
+  };
+
+  const handleNavigation = (link: string) => {
+    router.push(link);
+  };
+
   useEffect(() => {
-    setActivePath(window.location.pathname);
-  }, []);
+    if (pathname === "/dashboard/dashboard") {
+      router.push("/dashboard");
+    }
+  }, [pathname, router]);
 
   return (
-    <>
+    <nav className="space-y-2">
       {sidebarData.map((item) => {
-        const isActive = activePath === item.link || (activePath.startsWith(item.link) && item.link !== "/dashboard");
+        const isActive = pathname === item.link;
 
         return (
-          <a
-            key={item.name}
-            href={item.link}
-            className={`flex items-center space-x-3 px-3 py-2 rounded ${
-              isActive ? "bg-muted-foreground/10 text-muted-foreground font-bold" : "hover:bg-muted-foreground/10"
-            }`}>
-            <item.icon className="size-5" />
-            <span>{item.name}</span>
-          </a>
+          <div key={item.name}>
+            <button
+              onClick={(e) => {
+                if (item.children) {
+                  e.preventDefault();
+                  toggleExpand(item.name);
+                } else {
+                  handleNavigation(item.link);
+                }
+              }}
+              className={`flex items-center justify-between px-3 py-2 rounded w-full ${
+                isActive ? "bg-muted-foreground/10 text-muted-foreground font-bold" : "hover:bg-muted-foreground/10"
+              }`}>
+              <div className="flex items-center space-x-3">
+                <item.icon className="size-5" />
+                <span>{item.name}</span>
+              </div>
+              {item.children && <span className="text-muted-foreground">{expanded[item.name] ? "-" : "+"}</span>}
+            </button>
+
+            {item.children && expanded[item.name] && (
+              <div className="ml-6 mt-2 space-y-1">
+                {item.children.map((child) => {
+                  const isChildActive = pathname === child.link;
+
+                  return (
+                    <button
+                      key={child.name}
+                      onClick={() => handleNavigation(child.link)}
+                      className={`flex items-center space-x-3 px-3 py-2 rounded w-full ${
+                        isChildActive
+                          ? "bg-muted-foreground/10 text-muted-foreground font-medium"
+                          : "hover:bg-muted-foreground/10"
+                      }`}>
+                      <child.icon className="size-4" />
+                      <span>{child.name}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         );
       })}
-    </>
+    </nav>
   );
 }

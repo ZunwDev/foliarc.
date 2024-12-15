@@ -11,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { getInitials } from "@/lib/utils";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { DoorOpen, LayoutDashboard, User } from "lucide-react";
 import Link from "next/link";
@@ -74,10 +75,4 @@ export function Profile() {
       <Link href="/api/auth/login">Login</Link>
     </Button>
   );
-}
-
-function getInitials(name: string) {
-  if (!name.trim()) return "A";
-  const words = name.match(/\b\w/g) || [];
-  return words.length > 1 ? words.slice(0, 2).join("").toUpperCase() : name[0].toUpperCase();
 }

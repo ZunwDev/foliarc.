@@ -11,3 +11,9 @@ export const scrollToTop = () => {
     behavior: "smooth",
   });
 };
+
+export const getInitials = (name: string) => {
+  if (!name.trim()) return "A";
+  const words = name.match(/\b\w/g) || [];
+  return words.length > 1 ? words.slice(0, 2).join("").toUpperCase() : name[0].toUpperCase();
+};

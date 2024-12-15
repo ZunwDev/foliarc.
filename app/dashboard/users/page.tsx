@@ -1,4 +1,4 @@
-export default function Dashboard() {
+export default function Users() {
   return (
     <div className="flex min-h-screen pt-16">
       {/* Main Content */}

@@ -1,5 +1,4 @@
 "use client";
-
 import { SidebarLinks } from "@/components/dashboard";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useRouter } from "next/navigation";
