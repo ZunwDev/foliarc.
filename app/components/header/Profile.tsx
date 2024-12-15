@@ -28,7 +28,7 @@ export function Profile() {
   return user ? (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="rounded-full text-foreground">
+        <Button variant="ghost" size="icon" className="rounded-full text-foreground" title={user.name ?? ""}>
           <Avatar className="size-8">
             <AvatarImage src={user.picture ?? undefined} alt="Profile picture" />
             <AvatarFallback>{getInitials(user.name ?? "")}</AvatarFallback>

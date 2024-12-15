@@ -67,8 +67,8 @@ export function ReviewList() {
   };
 
   return (
-    <div className="min-h-screen bg-background p-6 w-full">
-      <div className="mx-auto max-w-3xl space-y-6">
+    <div className="p-6 w-full">
+      <div className="mx-auto max-w-4xl space-y-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Review Dashboard</h1>

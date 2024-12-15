@@ -22,6 +22,7 @@
 
 # misc
 .DS_Store
+diff_output.txt
 *.pem
 
 # debug

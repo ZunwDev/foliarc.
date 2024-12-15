@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card";
-import { Activity, MessageSquareText, User } from "lucide-react";
+import { Activity, CheckCircle, List, MessageSquareText, User } from "lucide-react";
 
 export function Overview() {
   const overviewData = [
@@ -17,6 +17,16 @@ export function Overview() {
       name: "New Users",
       value: 6,
       icon: <User className="text-yellow-500 size-16" />,
+    },
+    {
+      name: "Total Portfolios",
+      value: 42,
+      icon: <List className="text-purple-500 size-16" />,
+    },
+    {
+      name: "Approved Portfolios",
+      value: 30,
+      icon: <CheckCircle className="text-teal-500 size-16" />,
     },
   ];
 
