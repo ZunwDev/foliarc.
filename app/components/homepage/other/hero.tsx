@@ -27,7 +27,7 @@ export function Hero() {
 
   return (
     <div className="flex flex-col items-center text-center px-4 py-16 w-full text-foreground relative z-10">
-      <a href="/release-notes" className="mx-auto mb-4 flex w-fit items-center rounded-full bg-muted px-4 py-2 text-sm">
+      <a href="/changelog" className="mx-auto mb-4 flex w-fit items-center rounded-full bg-muted px-4 py-2 text-sm">
         <span className="mr-1 font-semibold">What&#x27;s new</span>| Read more
         <ArrowRight className="ml-2 size-4" />
       </a>
