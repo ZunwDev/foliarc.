@@ -3,7 +3,7 @@ import { Hero, PortfolioGallery } from "@/components/homepage";
 
 export default function Home() {
   return (
-    <section className="relative flex flex-col min-w-[360px] h-[100dvh] pt-16 bg-background overflow-x-hidden">
+    <section className="relative flex flex-col min-w-[360px] min-h-[100dvh] pt-16 bg-background overflow-x-hidden">
       <div
         className="absolute top-0 left-0 w-[800px] h-[600px] bg-[radial-gradient(ellipse,rgba(200,250,255,0.6),transparent)]"
         style={{

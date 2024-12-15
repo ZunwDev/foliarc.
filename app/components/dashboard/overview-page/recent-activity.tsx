@@ -1,38 +1,60 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
+const activities = [
+  {
+    user: {
+      name: "John Doe",
+      image: "/avatars/01.png",
+      initials: "JD",
+    },
+    action: "submitted a portfolio for review",
+    time: "2 hours ago",
+  },
+  {
+    user: {
+      name: "Jane Smith",
+      image: "/avatars/02.png",
+      initials: "JS",
+    },
+    action: "provided new feedback",
+    time: "4 hours ago",
+  },
+  {
+    user: {
+      name: "Zuno",
+      image: "/avatars/03.png",
+      initials: "ZN",
+    },
+    action: "updated admin settings",
+    time: "1 day ago",
+  },
+];
 
 export function RecentActivity() {
   return (
-    <div className="h-full">
-      <Card className="h-full">
-        <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="divide-y divide-muted-foreground">
-            <li className="py-4">
-              <div className="flex flex-col">
-                <p className="text-foreground font-medium">John Doe submitted a portfolio for review.</p>
-                <p className="text-muted-foreground text-sm">2 hours ago</p>
+    <Card>
+      <CardHeader>
+        <CardTitle>Recent Activity</CardTitle>
+        <CardDescription>Latest actions from users</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-8">
+          {activities.map((activity, index) => (
+            <div key={index} className="flex items-center">
+              <Avatar className="size-9">
+                <AvatarImage src={activity.user.image} alt={activity.user.name} />
+                <AvatarFallback>{activity.user.initials}</AvatarFallback>
+              </Avatar>
+              <div className="ml-4 space-y-1">
+                <p className="text-sm font-medium leading-none">{activity.user.name}</p>
+                <p className="text-sm text-muted-foreground">{activity.action}</p>
               </div>
-            </li>
-            <Separator />
-            <li className="py-4">
-              <div className="flex flex-col">
-                <p className="text-foreground font-medium">New feedback received from Jane Smith.</p>
-                <p className="text-muted-foreground text-sm">4 hours ago</p>
-              </div>
-            </li>
-            <Separator />
-            <li className="py-4">
-              <div className="flex flex-col">
-                <p className="text-foreground font-medium">Admin settings updated by Zuno.</p>
-                <p className="text-muted-foreground text-sm">1 day ago</p>
-              </div>
-            </li>
-          </ul>
-        </CardContent>
-      </Card>
-    </div>
+              <div className="ml-auto text-sm text-muted-foreground">{activity.time}</div>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 }

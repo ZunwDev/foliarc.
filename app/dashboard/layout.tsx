@@ -33,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   if (isLoading || !mounted) return <div>Loading...</div>;
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-[100dvh]">
       {/* Sidebar */}
       <aside className="w-64 bg-secondary/50 text-foreground flex flex-col fixed top-0 left-0 h-full z-[999]">
         <div className="flex items-center justify-center px-3 py-8 rounded mx-auto h-14 w-full">

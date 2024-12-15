@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { DoorOpen, LayoutDashboard, ListChecks, MessageSquareText, User } from "lucide-react";
+import { DoorOpen, LayoutDashboard, User } from "lucide-react";
 import Link from "next/link";
 
 export function Profile() {
@@ -56,14 +56,6 @@ export function Profile() {
               <Link href="/dashboard" className="text-sm font-medium">
                 <span className="text-sm font-medium">Dashboard</span>
               </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
-              <MessageSquareText className="size-5" />
-              <span className="text-sm font-medium">Feedback</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
-              <ListChecks className="size-5" />
-              <span className="text-sm font-medium">Reviews</span>
             </DropdownMenuItem>
           </>
         )}
