@@ -1,4 +1,5 @@
 import { PortfolioCard, SortDropdown, ViewDropdown } from "@/components/homepage";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export function PortfolioGallery() {
@@ -21,15 +22,15 @@ export function PortfolioGallery() {
         <ViewDropdown setViewToggle={setViewToggle} />
       </div>
       {viewToggle === "list" ? (
-        <div className="flex flex-col gap-4">
+        <Link href={"/portfolio/1"} className="flex flex-col gap-4">
           <PortfolioCard likeAmount={likeAmount} index={0} />
-        </div>
+        </Link>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+        <Link href={"/portfolio/1"} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
           {items.map((item, index) => (
             <PortfolioCard key={index} likeAmount={likeAmount} index={index} />
           ))}
-        </div>
+        </Link>
       )}
     </div>
   );
