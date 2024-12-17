@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowUpCircle, Bug, PlusCircle } from "lucide-react";
 
 interface ChangelogItem {
-  id: string;
   version: string;
   date: string;
   changes: {

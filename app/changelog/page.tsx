@@ -1,7 +1,6 @@
 "use client";
 
 import { ChangelogList } from "@/components/changelog";
-import { Title } from "@/components/global";
 
 export default function ReleaseNotes() {
   return (
@@ -19,7 +18,12 @@ export default function ReleaseNotes() {
           filter: "blur(250px)",
           transform: "translate(50%, 50%)",
         }}></div>
-      <Title>Changelog</Title>
+      <div className="flex flex-col items-center text-center px-4 py-16 w-full text-foreground relative z-10">
+        <h1 className="text-6xl font-semibold justify-center mx-auto mb-6">Changelog</h1>
+        <p className="text-lg text-muted-foreground mb-8 max-w-lg">
+          View the latest updates, features, and fixes in the changelog.
+        </p>
+      </div>
       <ChangelogList />
     </section>
   );
