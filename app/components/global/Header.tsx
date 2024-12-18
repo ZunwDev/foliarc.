@@ -5,8 +5,6 @@ import { usePathname } from "next/navigation";
 
 export function Header() {
   const pathname = usePathname();
-
-  // Check if the current path includes "dashboard"
   const isDashboard = pathname.includes("/dashboard");
 
   return (
@@ -16,18 +14,17 @@ export function Header() {
           isDashboard ? "border-b lg:h-[65px] h-[65px] pb-4 bg-background" : ""
         }`}>
         <nav className="flex items-center h-full flex-row justify-start gap-16">
-          <Link className={`flex flex-row gap-2 items-center ${isDashboard ? "text-foreground" : "text-foreground"}`} href="/">
-            {isDashboard ? (
-              <></>
-            ) : (
-              <>
-                <ArrowDownUp />
-                <span className="text-foreground">
-                  Portfolio<span className="text-blue-500">Share</span>
-                </span>
-              </>
-            )}
-          </Link>
+          {isDashboard ? (
+            <></>
+          ) : (
+            <Link href="/" className="flex flex-row gap-2 items-center text-foreground">
+              <ArrowDownUp />
+              <span className="text-foreground">
+                Portfolio<span className="text-blue-500">Share</span>
+              </span>
+            </Link>
+          )}
+
           <div className="ml-auto flex gap-2 flex-row-reverse">
             <Profile />
             <ThemeSwitch />
