@@ -75,7 +75,7 @@ export function CommentInput({ onChange, handleSubmit }: CommentInputProps) {
         role="textbox"
         aria-placeholder="Type a message..."></div>
       <div
-        className="absolute left-2 top-[22%] text-sm text-muted-foreground pointer-events-none flex items-center"
+        className="absolute left-3 top-[22%] text-sm text-muted-foreground pointer-events-none flex items-center"
         style={{
           visibility: newComment ? "hidden" : "visible",
           transform: "translateY(-50%)",

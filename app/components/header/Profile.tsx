@@ -21,9 +21,7 @@ export function Profile() {
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
-
-  const validEmails = process.env.NEXT_PUBLIC_VALID_EMAILS?.split(",") || [];
-  const email = user?.email ?? "";
+  const validUserIds = process.env.NEXT_PUBLIC_ALLOWED_USERS?.split(",") || [];
 
   return user ? (
     <DropdownMenu>
@@ -37,7 +35,7 @@ export function Profile() {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 bg-background rounded-md shadow-lg py-2">
         <DropdownMenuLabel className="px-3 text-xs text-foreground flex flex-col">
-          My Account<span className="text-muted-foreground truncate">{email}</span>
+          My Account<span className="text-muted-foreground truncate">{user?.email || user?.name || ""}</span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="my-1 h-px bg-muted" />
 
@@ -46,8 +44,7 @@ export function Profile() {
           <span className="text-sm font-medium">Profile</span>
         </DropdownMenuItem>
 
-        {/* Render Admin section only if the email is valid */}
-        {validEmails.includes(email) && (
+        {validUserIds.includes(user?.sub ?? "") && (
           <>
             <DropdownMenuSeparator className="my-1 h-px bg-muted" />
             <DropdownMenuLabel className="px-3 text-xs text-foreground">Admin</DropdownMenuLabel>

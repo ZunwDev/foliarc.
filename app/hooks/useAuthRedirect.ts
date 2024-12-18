@@ -20,9 +20,9 @@ export const useAuthRedirect = () => {
       return;
     }
 
-    const validEmails = process.env.NEXT_PUBLIC_VALID_EMAILS?.split(",") || [];
-    if (user.email && !validEmails.includes(user.email)) {
-      console.log("Invalid email, redirecting to home...");
+    const validUserIds = process.env.NEXT_PUBLIC_ALLOWED_USERS?.split(",") || [];
+    if (user.sub && !validUserIds.includes(user.sub)) {
+      console.log("Invalid sub, redirecting to home...");
       router.push("/");
     }
   }, [user, isLoading, mounted, router]);

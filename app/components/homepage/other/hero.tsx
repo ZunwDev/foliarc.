@@ -36,48 +36,46 @@ export function Hero() {
         Showcase your portfolios and projects, learn from others, and be part of a vibrant creative community.
       </p>
       <div className="flex space-x-4">
-        {
-          !user ? (
-            <Link href="/api/auth/login">
-              <Button className="px-6 text-blue-400 border-2 border-blue-400 hover:text-white hover:border-blue-600 bg-transparent transition-all duration-300 transform hover:scale-105 hover:bg-blue-400 shadow-xl hover:shadow-2xl hover:shadow-blue-500">
-                Get Started
+        {!user ? (
+          <Link href="/api/auth/login">
+            <Button className="px-6 text-blue-400 border-2 border-blue-400 hover:text-white hover:border-blue-600 bg-transparent transition-all duration-300 transform hover:scale-105 hover:bg-blue-400 shadow-xl hover:shadow-2xl hover:shadow-blue-500">
+              Get Started
+            </Button>
+          </Link>
+        ) : !hasSubmitted ? (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="px-6 text-white bg-green-500 border-2 border-green-500 hover:bg-green-600 shadow-lg transition-all duration-300 transform hover:scale-105 relative group">
+                Submit Your Portfolio
+                <span className="absolute inset-0 rounded-lg bg-green-400 opacity-0 group-hover:opacity-40 transition-opacity duration-300 blur-md"></span>
               </Button>
-            </Link>
-          ) : !hasSubmitted ? (
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button className="px-6 text-white bg-green-500 border-2 border-green-500 hover:bg-green-600 shadow-lg transition-all duration-300 transform hover:scale-105 relative group">
-                  Submit Your Portfolio
-                  <span className="absolute inset-0 rounded-lg bg-green-400 opacity-0 group-hover:opacity-40 transition-opacity duration-300 blur-md"></span>
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Submit a portfolio</DialogTitle>
-                  <DialogDescription>
-                    Fill out your name and a link to your portfolio or GitHub. Approval may take some time. Click{" "}
-                    <strong>submit</strong> when done.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="flex flex-col gap-6 py-4">
-                  <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="name">Your Name</Label>
-                    <Input id="name" placeholder="Hasnan Patel" />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="url">URL</Label>
-                    <Input id="url" placeholder="www.yourportfolio.com" />
-                  </div>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Submit a portfolio</DialogTitle>
+                <DialogDescription>
+                  Fill out your name and a link to your portfolio or GitHub. Approval may take some time. Click{" "}
+                  <strong>submit</strong> when done.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex flex-col gap-6 py-4">
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="name">Your Name</Label>
+                  <Input id="name" placeholder="Hasnan Patel" />
                 </div>
-                <DialogFooter>
-                  <Button type="submit" onClick={handleSubmit}>
-                    Submit
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          ) : null /* Hide the button entirely if submitted */
-        }
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="url">URL</Label>
+                  <Input id="url" placeholder="www.yourportfolio.com" />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="submit" onClick={handleSubmit}>
+                  Submit
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        ) : null}
       </div>
     </div>
   );
