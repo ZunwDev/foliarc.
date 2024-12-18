@@ -68,4 +68,8 @@
     font-family: "Inter", sans-serif;
     @apply bg-background text-foreground;
   }
+  [contenteditable]:empty:before {
+    content: attr(placeholder);
+    color: #a0a0a0;
+  }
 }

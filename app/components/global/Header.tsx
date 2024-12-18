@@ -23,7 +23,7 @@ export function Header() {
               <>
                 <ArrowDownUp />
                 <span className="text-foreground">
-                  Portfolio<span className="text-red-500">Share</span>
+                  Portfolio<span className="text-blue-500">Share</span>
                 </span>
               </>
             )}
