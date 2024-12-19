@@ -3,12 +3,12 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Calendar, Check, ExternalLink, Mail, X } from "lucide-react";
 import { useState } from "react";
 
-interface ReviewItem {
+interface PendingItem {
   id: string;
   userName: string;
   email: string;
@@ -18,8 +18,8 @@ interface ReviewItem {
   status: "pending" | "approved" | "denied";
 }
 
-export function ReviewList() {
-  const [items, setItems] = useState<ReviewItem[]>([
+export function PendingList() {
+  const [items, setItems] = useState<PendingItem[]>([
     {
       id: "1",
       userName: "Sarah Johnson",
@@ -71,8 +71,8 @@ export function ReviewList() {
       <div className="mx-auto max-w-4xl space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Review Dashboard</h1>
-            <p className="text-muted-foreground">Review user portfolios and projects</p>
+            <h1 className="text-3xl font-bold tracking-tight">Pending Submissions</h1>
+            <p className="text-muted-foreground">Review user submissions</p>
           </div>
           <div className="flex gap-2">
             <Badge variant="secondary">Pending: {items.filter((item) => item.status === "pending").length}</Badge>
@@ -84,10 +84,7 @@ export function ReviewList() {
         </div>
 
         <Card>
-          <CardHeader>
-            <CardTitle>Portfolios to Review</CardTitle>
-          </CardHeader>
-          <CardContent>
+          <CardContent className="pt-6">
             <ScrollArea className="h-[500px] pr-4">
               <div className="space-y-4">
                 {items.map((item) => (
@@ -119,7 +116,7 @@ export function ReviewList() {
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-sm text-blue-500 hover:underline flex items-center">
-                              View Portfolio
+                              View Submitted Link
                               <ExternalLink className="h-3 w-3 ml-1" />
                             </a>
                           </div>

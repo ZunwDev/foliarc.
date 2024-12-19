@@ -108,7 +108,7 @@ export default function PortfolioView() {
         }}></div>
       <div className="mx-auto max-w-6xl space-y-8 w-full">
         <div className="flex flex-col md:flex-row gap-6">
-          <Picture src="/cats-9024710_960_720.jpg" />
+          <Picture src="/cats-9024710_960_720.jpg" link="https://www.example.com" />
 
           <div className="md:w-1/3 space-y-6">
             <MainProfile likeAmount={likeAmount} />

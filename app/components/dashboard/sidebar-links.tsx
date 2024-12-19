@@ -10,9 +10,20 @@ const sidebarData = [
     link: "/dashboard",
   },
   {
-    name: "Review Portfolios",
+    name: "Submissions",
     icon: FileText,
-    link: "/dashboard/review",
+    children: [
+      {
+        name: "Pending",
+        icon: FileText,
+        link: "/dashboard/submissions/pending",
+      },
+      {
+        name: "Approved",
+        icon: FileText,
+        link: "/dashboard/submissions/approved",
+      },
+    ],
   },
   {
     name: "Feedback",
@@ -27,7 +38,6 @@ const sidebarData = [
   {
     name: "Settings",
     icon: Settings,
-    link: "/dashboard/settings",
     children: [
       {
         name: "Theme",

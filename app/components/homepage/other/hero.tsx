@@ -8,22 +8,43 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Form } from "@/components/ui/form";
+import { InputFormItem } from "@/components/util";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+const PortfolioSchema = z.object({
+  name: z.string().nonempty("Name is required"),
+  url: z.string().url("Invalid URL format"),
+});
 
 export function Hero() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { user, error, isLoading } = useUser();
   const [hasSubmitted, setHasSubmitted] = React.useState(false);
 
-  const handleSubmit = () => {
+  const form = useForm<z.infer<typeof PortfolioSchema>>({
+    mode: "onChange",
+    resolver: zodResolver(PortfolioSchema),
+    defaultValues: {
+      name: "",
+      url: "",
+    },
+  });
+
+  const handleFormSubmit = async (values: z.infer<typeof PortfolioSchema>) => {
+    console.log(values);
     console.log("Portfolio submitted!");
     setHasSubmitted(true);
   };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {}, [form.watch()]);
 
   return (
     <div className="flex flex-col items-center text-center px-4 py-16 w-full text-foreground relative z-10">
@@ -58,20 +79,30 @@ export function Hero() {
                   <strong>submit</strong> when done.
                 </DialogDescription>
               </DialogHeader>
-              <div className="flex flex-col gap-6 py-4">
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="name">Your Name</Label>
-                  <Input id="name" placeholder="Hasnan Patel" />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="url">URL</Label>
-                  <Input id="url" placeholder="www.yourportfolio.com" />
-                </div>
-              </div>
+              <Form {...form}>
+                <form className="mt-4">
+                  <div className="flex flex-col w-full gap-4">
+                    <InputFormItem
+                      label="Your Name"
+                      id="name"
+                      placeholder="Hasnan Patel"
+                      form={form}
+                      required
+                      description="Enter your full name."
+                    />
+                    <InputFormItem
+                      label="Portfolio URL"
+                      id="url"
+                      form={form}
+                      required
+                      description="Insert a link to your portfolio or project."
+                      placeholder="https://www.example.com"
+                    />
+                  </div>
+                </form>
+              </Form>
               <DialogFooter>
-                <Button type="submit" onClick={handleSubmit}>
-                  Submit
-                </Button>
+                <Button onClick={form.handleSubmit(handleFormSubmit)}>Submit</Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
