@@ -21,6 +21,7 @@ export function Profile() {
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
+
   const validUserIds = process.env.NEXT_PUBLIC_ALLOWED_USERS?.split(",") || [];
 
   return user ? (
