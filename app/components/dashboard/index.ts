@@ -6,4 +6,5 @@ export * from "./overview-page/quick-actions";
 export * from "./overview-page/recent-activity";
 export * from "./overview-page/top-performers";
 export * from "./sidebar-links";
+export * from "./submission-page/approved-page";
 export * from "./submission-page/pending-list";

@@ -72,4 +72,9 @@
     content: attr(placeholder);
     color: #a0a0a0;
   }
+
+  .PopoverContent {
+    width: var(--radix-popover-trigger-width);
+    max-height: var(--radix-popover-content-available-height);
+  }
 }

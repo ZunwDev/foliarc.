@@ -21,6 +21,33 @@ const changelogData: ChangelogItem[] = [
       { type: "improvement", description: "Enhanced performance of data loading" },
       { type: "fix", description: "Fixed a bug causing occasional crashes on startup" },
     ],
+  },
+  {
+    version: "2.1.0",
+    date: "2024-12-15",
+    changes: [
+      { type: "new", description: "Added dark mode support" },
+      { type: "improvement", description: "Enhanced performance of data loading" },
+      { type: "fix", description: "Fixed a bug causing occasional crashes on startup" },
+    ],
+  },
+  {
+    version: "2.1.0",
+    date: "2024-12-15",
+    changes: [
+      { type: "new", description: "Added dark mode support" },
+      { type: "improvement", description: "Enhanced performance of data loading" },
+      { type: "fix", description: "Fixed a bug causing occasional crashes on startup" },
+    ],
+  },
+  {
+    version: "2.1.0",
+    date: "2024-12-15",
+    changes: [
+      { type: "new", description: "Added dark mode support" },
+      { type: "improvement", description: "Enhanced performance of data loading" },
+      { type: "fix", description: "Fixed a bug causing occasional crashes on startup" },
+    ],
   }, */
 ];
 

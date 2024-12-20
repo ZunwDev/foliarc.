@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -8,9 +9,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { CommandList } from "cmdk";
 import { format } from "date-fns";
-import { CalendarIcon, ChevronsUpDown } from "lucide-react";
-import { useState } from "react";
+import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
+import { useEffect, useState } from "react";
+import { SelectRangeEventHandler } from "react-day-picker";
 
 const handleWheel = (e: React.WheelEvent<HTMLInputElement>) => {
   (e.target as HTMLInputElement).blur();
@@ -175,6 +178,15 @@ export function DateRangeFormItem({
   date?: { from: Date; to?: Date };
   setDate?: (date: { from: Date; to?: Date }) => void;
 }) {
+  const handleDateSelect: SelectRangeEventHandler = (range) => {
+    if (range && range.from) {
+      setDate?.({
+        from: range.from,
+        to: range.to || undefined,
+      });
+    }
+  };
+
   return (
     <FormItem>
       <FormLabel htmlFor={id} className="block" isRequired={required}>
@@ -209,7 +221,7 @@ export function DateRangeFormItem({
               mode="range"
               defaultMonth={date?.from}
               selected={date}
-              onSelect={setDate}
+              onSelect={handleDateSelect}
               numberOfMonths={2}
             />
           </PopoverContent>
@@ -228,7 +240,7 @@ export function SelectFormItem({
   description,
   form,
   required = false,
-  data,
+  data = [], // Provide a default empty array for `data`
   ...rest
 }: {
   id: string;
@@ -238,11 +250,11 @@ export function SelectFormItem({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: any;
   required?: boolean;
-  data?: string[];
+  data?: string[]; // data is optional, but we default it to an empty array
 }) {
   const [open, setOpen] = useState(false);
   const selectedValue = form.getValues(id)?.toLowerCase();
-  const selectedItem = data?.find((item) => item?.toLowerCase() === selectedValue);
+  const selectedItem = data.find((item) => item?.toLowerCase() === selectedValue);
   const buttonText = selectedItem ?? `Select ${id || "default"}...`;
 
   return (
@@ -264,13 +276,13 @@ export function SelectFormItem({
             </Button>
           </FormControl>
         </PopoverTrigger>
-        <PopoverContent className={cn({ "h-96": data?.length > 10 })}>
+        <PopoverContent className={cn({ "h-96": data.length > 10 })}>
           <Command>
             <CommandInput placeholder={placeholder} />
-            <ScrollArea className={cn({ "h-96": data?.length > 10 })}>
+            <ScrollArea className={cn({ "h-96": data.length > 10 })}>
               <CommandEmpty>No {id} found.</CommandEmpty>
               <CommandGroup>
-                {data?.map((item, index) => (
+                {data.map((item, index) => (
                   <CommandItem
                     key={`${item}${index}`}
                     id={id}
@@ -294,198 +306,126 @@ export function SelectFormItem({
   );
 }
 
-/* export function NoValidationInputFormItem({
+type TagOption = {
+  value: string;
+  label: string;
+};
+
+export function MultiSelectFormItem({
   id,
   label,
-  placeholder = "",
-  description = "",
-  disabled,
-  inputType = "text",
-  suffix = "",
-  prefix = "",
-  ...rest
+  placeholder,
+  description,
+  form,
+  data = [],
+  required = false,
+}: {
+  id: string;
+  label: string;
+  placeholder?: string;
+  description?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  form: any;
+  data?: TagOption[];
+  required?: boolean;
 }) {
-  return (
-    <>
-      <label htmlFor={id} className="block text-sm">
-        {label}
-      </label>
-      <div className="flex flex-row items-center">
-        {prefix && <div className="bg-accent p-1.5 border rounded-tl-md rounded-bl-md">{prefix}</div>}
-        <Input
-          disabled={disabled}
-          id={id}
-          name={id}
-          type={inputType}
-          onWheel={handleWheel}
-          placeholder={placeholder}
-          className={cn("border rounded-md p-2", {
-            "rounded-tl-none rounded-bl-none border-l-0": prefix,
-            "rounded-tr-none rounded-br-none border-r-0": suffix,
-          })}
-          {...rest}
-        />
-        {suffix && (
-          <div
-            className={cn(
-              "bg-accent h-[38px] w-12 flex mb-[0.5px] justify-center items-center border rounded-tr-md rounded-br-md truncate",
-              {
-                "opacity-50": disabled,
-              }
-            )}>
-            <span className="text-sm">{suffix}</span>
-          </div>
-        )}
-      </div>
-      {description && <p>{description}</p>}
-    </>
-  );
-}
+  const [selectedValues, setSelectedValues] = useState<TagOption[]>([]);
 
-export function NoValidationCheckboxFormItem({ id, label, description, disabled, ...rest }) {
-  const [checked, setChecked] = useState(rest.defaultChecked || false);
-
-  const handleClick = (e) => {
-    e.preventDefault();
-    setChecked(!checked);
-    if (rest.onChange) {
-      rest.onChange(!checked);
+  // Sync form values with selected values
+  useEffect(() => {
+    const values = form.getValues(id) || [];
+    if (Array.isArray(values) && !arraysEqual(values, selectedValues)) {
+      setSelectedValues(values);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form, id]);
+
+  // Prevent unnecessary updates when selected values change
+  useEffect(() => {
+    form.setValue(id, selectedValues);
+  }, [selectedValues, form, id]);
+
+  // Toggle the selection of an option
+  const toggleValue = (option: TagOption) => {
+    setSelectedValues((current) => {
+      const exists = current.some((item) => item.value === option.value);
+      const newValues = exists ? current.filter((item) => item.value !== option.value) : [...current, option];
+      return newValues;
+    });
+  };
+
+  // Check if a value is selected
+  const isValueSelected = (targetValue: string): boolean => {
+    return selectedValues.some((item) => item?.value === targetValue);
   };
 
   return (
-    <>
-      <div className="flex flex-row gap-2 items-center">
-        <Checkbox id={id} name={id} checked={checked} onClick={handleClick} disabled={disabled} />
-        <label className="text-sm" htmlFor={id}>
-          {label}
-        </label>
-      </div>
-      {description && <p>{description}</p>}
-    </>
-  );
-}
-
-export function NoValidationSelectFormItem({
-  id,
-  label,
-  asyncFetchData,
-  handleSelect,
-  section,
-  field,
-  disabled,
-  selectedValue: propSelectedValue,
-  data: preloadedData,
-}) {
-  const [open, setOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(propSelectedValue);
-  const [loading, setLoading] = useState(true);
-  const [asyncData, setAsyncData] = useState([]);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const resolvedData = await asyncFetchData;
-        setAsyncData(resolvedData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchData();
-  }, [asyncFetchData]);
-
-  const data = preloadedData || asyncData;
-
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center gap-2 h-screen text-center w-full">
-        <ScaleLoader color="#2563eb" />
-        Loading products...
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex flex-col space-y-2">
-      <label htmlFor={id} className="block text-sm">
+    <FormItem className="flex flex-col space-y-2">
+      <FormLabel htmlFor={id} isRequired={required}>
         {label}
-      </label>
-      <Popover open={open} onOpenChange={setOpen}>
+      </FormLabel>
+      <Popover modal={true}>
         <PopoverTrigger asChild>
-          <Button variant="outline" role="combobox" name={`${id}Select`} aria-expanded={open} disabled={disabled}>
-            {(data?.length > 0 && data?.find((item) => item?.toLowerCase() === selectedValue?.toLowerCase())) ||
-              `Select ${label}...`}
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-hidden={false}
+            className={cn("w-full justify-between h-fit", !selectedValues.length && "text-muted-foreground")}>
+            {selectedValues.length ? (
+              <div className="flex flex-wrap gap-2">
+                {selectedValues.map((value) => (
+                  <Badge key={value.value} className="capitalize">
+                    {value.label}
+                  </Badge>
+                ))}
+              </div>
+            ) : (
+              <span>{placeholder}</span>
+            )}
             <ChevronsUpDown className="ml-auto size-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className={cn({ "h-96": data?.length > 10 })}>
-          <Command>
-            <CommandInput placeholder={`Search ${label}...`} />
-            <ScrollArea className={cn({ "h-96": data?.length > 10 })}>
-              <CommandEmpty>No {label} found.</CommandEmpty>
-              <CommandGroup>
-                {data &&
-                  data.map((item, index) => (
-                    <CommandItem
-                      key={index}
-                      id={id}
-                      value={item.name || item}
-                      onSelect={(currentValue) => {
-                        setSelectedValue(currentValue);
-                        setOpen(false);
-                        handleSelect(
-                          section,
-                          data.find((item) => item?.toLowerCase() === currentValue?.toLowerCase()),
-                          field
-                        );
-                      }}>
-                      {item.name || item}
-                    </CommandItem>
-                  ))}
-                <CommandItem
-                  onSelect={(currentValue) => {
-                    setSelectedValue("");
-                    setOpen(false);
-                    handleSelect(
-                      section,
-                      data.find((item) => item?.toLowerCase() === currentValue?.toLowerCase()),
-                      field
-                    );
-                  }}>
-                  None
-                </CommandItem>
-              </CommandGroup>
-            </ScrollArea>
-          </Command>
+        <PopoverContent className="w-full p-0 h-96 z-[999]">
+          <ScrollArea className="h-full z-[999]">
+            <Command>
+              <CommandInput placeholder={placeholder} />
+              <CommandList>
+                <CommandEmpty>No tags found.</CommandEmpty>
+                <CommandGroup>
+                  {data.length > 0 ? (
+                    data.map((option, index) => (
+                      <CommandItem
+                        key={`${option.value}-${index}`}
+                        onSelect={() => toggleValue(option)}
+                        className={isValueSelected(option.value) ? "bg-secondary/50" : ""}>
+                        <div className="flex items-center space-x-2">
+                          <div
+                            className={`${
+                              isValueSelected(option.value) ? "text-blue-500 block" : "text-muted-foreground hidden"
+                            }`}>
+                            <Check size={16} />
+                          </div>
+                          <span>{option.label}</span>
+                        </div>
+                      </CommandItem>
+                    ))
+                  ) : (
+                    <div className="text-center text-muted-foreground">No tags available</div>
+                  )}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          </ScrollArea>
         </PopoverContent>
       </Popover>
-    </div>
+      {description && <FormDescription>{description}</FormDescription>}
+      <FormMessage>{form.formState.errors[id]?.message}</FormMessage>
+    </FormItem>
   );
 }
 
-export function NoValidationInputFile({ id, label, setImage }) {
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setImage(imageUrl); // Store the blob URL instead of the file object
-    }
-  };
-
-  return (
-    <div className="grid w-full items-center gap-1.5">
-      <Label htmlFor={id}>{label}</Label>
-      <Input
-        id={id}
-        type="file"
-        className="border w-full rounded-md"
-        onChange={handleFileChange}
-        accept=".png, .jpg, .jpeg, .webp"
-      />
-    </div>
-  );
-}
- */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const arraysEqual = (arr1: any[], arr2: any[]) => {
+  if (arr1.length !== arr2.length) return false;
+  return arr1.every((value, index) => value.value === arr2[index].value);
+};

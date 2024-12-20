@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { getInitials } from "@/lib/utils";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { DoorOpen, LayoutDashboard, User } from "lucide-react";
+import { DoorOpen, FileText, LayoutDashboard, User } from "lucide-react";
 import Link from "next/link";
 
 export function Profile() {
@@ -35,13 +35,17 @@ export function Profile() {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 bg-background rounded-md shadow-lg py-2">
         <DropdownMenuLabel className="px-3 text-xs text-foreground flex flex-col">
-          My Account<span className="text-muted-foreground truncate">{user?.email || user?.name || ""}</span>
+          Account<span className="text-muted-foreground truncate">{user?.email || user?.name || ""}</span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="my-1 h-px bg-muted" />
 
         <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
           <User className="size-5" />
-          <span className="text-sm font-medium">Profile</span>
+          <span className="text-sm font-medium">My Profile</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
+          <FileText className="size-5" />
+          <span className="text-sm font-medium">My Submissions</span>
         </DropdownMenuItem>
 
         {validUserIds.includes(user?.sub ?? "") && (

@@ -67,6 +67,25 @@ export function SidebarLinks() {
   };
 
   useEffect(() => {
+    // Check if the current pathname is a child route and auto-expand the parent
+    const expandedState: Record<string, boolean> = {};
+
+    sidebarData.forEach((item) => {
+      if (item.children) {
+        item.children.forEach((child) => {
+          if (pathname.startsWith(child.link)) {
+            expandedState[item.name] = true;
+          }
+        });
+      }
+    });
+
+    setExpanded((prev) => ({
+      ...prev,
+      ...expandedState,
+    }));
+
+    // Redirect from /dashboard/dashboard to /dashboard
     if (pathname === "/dashboard/dashboard") {
       router.push("/dashboard");
     }

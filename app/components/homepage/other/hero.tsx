@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
-import { InputFormItem } from "@/components/util";
+import { InputFormItem, MultiSelectFormItem } from "@/components/util";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
@@ -21,6 +21,7 @@ import { z } from "zod";
 const PortfolioSchema = z.object({
   name: z.string().nonempty("Name is required"),
   url: z.string().url("Invalid URL format"),
+  technologies: z.array(z.object({ value: z.string(), label: z.string() })).min(1, "At least one tag must be selected"),
 });
 
 export function Hero() {
@@ -34,6 +35,7 @@ export function Hero() {
     defaultValues: {
       name: "",
       url: "",
+      technologies: [],
     },
   });
 
@@ -42,6 +44,43 @@ export function Hero() {
     console.log("Portfolio submitted!");
     setHasSubmitted(true);
   };
+
+  const technologies = [
+    { value: "react", label: "React" },
+    { value: "angular", label: "Angular" },
+    { value: "vue", label: "Vue.js" },
+    { value: "svelte", label: "Svelte" },
+    { value: "javascript", label: "JavaScript" },
+    { value: "typescript", label: "TypeScript" },
+    { value: "java", label: "Java" },
+    { value: "python", label: "Python" },
+    { value: "ruby", label: "Ruby" },
+    { value: "go", label: "Go" },
+    { value: "rust", label: "Rust" },
+    { value: "php", label: "PHP" },
+    { value: "csharp", label: "C#" },
+    { value: "c++", label: "C++" },
+    { value: "html", label: "HTML" },
+    { value: "css", label: "CSS" },
+    { value: "swift", label: "Swift" },
+    { value: "kotlin", label: "Kotlin" },
+    { value: "scala", label: "Scala" },
+    { value: "nodejs", label: "Node.js" },
+    { value: "django", label: "Django" },
+    { value: "flask", label: "Flask" },
+    { value: "spring", label: "Spring" },
+    { value: "express", label: "Express.js" },
+    { value: "nextjs", label: "Next.js" },
+    { value: "gatsby", label: "Gatsby" },
+    { value: "reactnative", label: "React Native" },
+    { value: "flutter", label: "Flutter" },
+    { value: "graphql", label: "GraphQL" },
+    { value: "aws", label: "AWS" },
+    { value: "azure", label: "Azure" },
+    { value: "googlecloud", label: "Google Cloud" },
+    { value: "docker", label: "Docker" },
+    { value: "kubernetes", label: "Kubernetes" },
+  ];
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {}, [form.watch()]);
@@ -97,6 +136,15 @@ export function Hero() {
                       required
                       description="Insert a link to your portfolio or project."
                       placeholder="https://www.example.com"
+                    />
+                    <MultiSelectFormItem
+                      id="technologies"
+                      label="Technologies"
+                      placeholder="Choose technologies..."
+                      description="Select one or more technologies you use in your projects/portfolios."
+                      form={form}
+                      data={technologies}
+                      required
                     />
                   </div>
                 </form>
