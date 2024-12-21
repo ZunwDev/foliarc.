@@ -1,8 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import Database from "../config/database";
-
-const database = new Database();
-const sequelize = database.sequelize!;
+import { sequelize } from "../config/database";
 
 class Portfolio extends Model {
   public pid!: string;
