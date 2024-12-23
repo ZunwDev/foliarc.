@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
 import { Flag, Heart, MapPin, Star } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface PortfolioCardProps {
   likeAmount: number;
@@ -12,8 +13,21 @@ interface PortfolioCardProps {
 }
 
 export function PortfolioCard({ likeAmount, index }: PortfolioCardProps) {
-  const overallScore = 88; // Example calculated value
+  const overallScore = 88;
   const calculations = "Hireability: 80%\nCreativity: 95%\nAesthetic: 90%";
+
+  const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
+  const handleDivClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  const redirectToProfile = (event: React.MouseEvent<HTMLAnchorElement>, profile: string) => {
+    event.preventDefault();
+    window.location.href = `/${profile}`;
+  };
 
   return (
     <Card
@@ -28,14 +42,14 @@ export function PortfolioCard({ likeAmount, index }: PortfolioCardProps) {
             alt="Portfolio Image"
             className="w-full h-[250px] object-cover"
           />
-          <div className="absolute top-2 right-2 flex space-x-1">
-            <Button variant="outline" size="icon" className="rounded-full hover:text-red-500">
+          <div className="absolute top-2 right-2 flex space-x-1" onClick={handleDivClick}>
+            <Button variant="outline" size="icon" className="rounded-full hover:text-red-500" onClick={handleButtonClick}>
               <Heart />
             </Button>
-            <Button variant="outline" size="icon" className="rounded-full hover:text-yellow-500">
+            <Button variant="outline" size="icon" className="rounded-full hover:text-yellow-500" onClick={handleButtonClick}>
               <Star />
             </Button>
-            <Button variant="outline" size="icon" className="rounded-full hover:text-red-700">
+            <Button variant="outline" size="icon" className="rounded-full hover:text-red-700" onClick={handleButtonClick}>
               <Flag />
             </Button>
           </div>
@@ -49,7 +63,9 @@ export function PortfolioCard({ likeAmount, index }: PortfolioCardProps) {
               <AvatarFallback>AB</AvatarFallback>
             </Avatar>
             <div className="flex flex-col gap-1">
-              <p className="text-lg">John Doe</p>
+              <Link className="text-lg hover:underline" href="#" onClick={(event) => redirectToProfile(event, "user1")}>
+                John Doe
+              </Link>
               <div className="flex flex-row flex-wrap gap-1">
                 <Badge>Developer</Badge>
                 <Badge>UI/UX Designer</Badge>

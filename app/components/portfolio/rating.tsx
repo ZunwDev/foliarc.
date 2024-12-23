@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 interface RatingProps {
   ratings: { [key: string]: number | null };
@@ -7,16 +8,25 @@ interface RatingProps {
 }
 
 export function Rating({ ratings, setRatings }: RatingProps) {
+  const { user, error, isLoading } = useUser();
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>{error.message}</div>;
+
   const handleRatingChange = (category: string, value: number) => {
+    if (!user) return;
     setRatings((prevRatings) => ({
       ...prevRatings,
       [category]: value,
     }));
   };
+
   return (
     <div className="pt-24">
       <h2 className="text-2xl font-semibold">Your Rating</h2>
-      <p className="text-muted-foreground">Rate this portfolio across multiple categories</p>
+      <p className="text-muted-foreground">
+        {user ? "Rate this portfolio across multiple categories" : "Log in to rate this portfolio across multiple categories."}
+      </p>
 
       <Card className="bg-secondary/20 p-6 rounded-lg shadow-md mt-6">
         {["Hireability", "Creativity", "Aesthetic"].map((category) => (
@@ -32,7 +42,8 @@ export function Rating({ ratings, setRatings }: RatingProps) {
                       ? "bg-blue-500 hover:bg-blue-700 transform scale-110"
                       : "bg-background text-blue-500 hover:bg-blue-400 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500"
                   }`}
-                  onClick={() => handleRatingChange(category.toLowerCase(), number)}>
+                  onClick={() => handleRatingChange(category.toLowerCase(), number)}
+                  disabled={!user}>
                   {number}
                 </Button>
               ))}
@@ -40,7 +51,7 @@ export function Rating({ ratings, setRatings }: RatingProps) {
           </div>
         ))}
         <div className="flex justify-end">
-          <Button>Save Rating</Button>
+          <Button disabled={!user}>Save Rating</Button>
         </div>
       </Card>
     </div>

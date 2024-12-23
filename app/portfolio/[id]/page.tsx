@@ -8,7 +8,7 @@ interface Comment {
   author: string;
   avatar: string;
   content: string;
-  date: string;
+  date: number | string;
 }
 
 export default function PortfolioView() {
@@ -19,51 +19,52 @@ export default function PortfolioView() {
       author: "Alice Johnson",
       avatar: "",
       content: "Impressive work! The attention to detail is outstanding.",
-      date: "2023-12-10",
+      date: "2024-12-23T12:45:30Z",
     },
     {
       id: "2",
       author: "Bob Smith",
       avatar: "",
       content: "I love the color scheme and overall design. Great job!",
-      date: "2023-12-11",
+      date: "2024-12-23T12:40:30Z",
     },
     {
       id: "3",
-      author: "Bob Smith",
+      author: "Charlie Brown",
       avatar: "",
-      content: "I love the color scheme and overall design. Great job!",
-      date: "2023-12-11",
+      content: "Fantastic layout and typography. Looks professional!",
+      date: "2024-12-23T10:45:30Z",
     },
     {
       id: "4",
-      author: "Bob Smith",
+      author: "Diana Prince",
       avatar: "",
-      content: "I love the color scheme and overall design. Great job!",
-      date: "2023-12-11",
+      content: "Could use some more animations. Otherwise, awesome!",
+      date: "2024-12-20T12:45:30Z",
     },
     {
       id: "5",
-      author: "Bob Smith",
+      author: "Eve Adams",
       avatar: "",
-      content: "I love the color scheme and overall design. Great job!",
-      date: "2023-12-11",
+      content: "The design speaks for itself. Stunning work!",
+      date: "2024-10-23T12:45:30Z",
     },
     {
       id: "6",
-      author: "Bob Smith",
+      author: "Frank Wright",
       avatar: "",
-      content: "I love the color scheme and overall design. Great job!",
-      date: "2023-12-11",
+      content: "Clean and crisp UI. Great work!",
+      date: "2023-12-23T12:45:30Z",
     },
     {
       id: "7",
-      author: "Bob Smith",
+      author: "Grace Hopper",
       avatar: "",
-      content: "I love the color scheme and overall design. Great job!",
-      date: "2023-12-11",
+      content: "Timeless design. Loved it!",
+      date: "2019-12-23T12:45:30Z",
     },
   ]);
+
   const [ratings, setRatings] = useState<{ [key: string]: number | null }>({
     hireability: null,
     creativity: null,
@@ -84,7 +85,7 @@ export default function PortfolioView() {
         author: "Current User",
         avatar: "",
         content: comment || value,
-        date: new Date().toISOString().split("T")[0],
+        date: Date.now() as unknown as string,
       };
 
       setComments([...comments, newComment]);

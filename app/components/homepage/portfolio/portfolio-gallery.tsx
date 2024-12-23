@@ -22,13 +22,13 @@ export function PortfolioGallery() {
         <ViewDropdown setViewToggle={setViewToggle} />
       </div>
       {viewToggle === "list" ? (
-        <Link href={"/portfolio/1"} className="flex flex-col gap-4">
+        <Link href={"/portfolio/1"} className="flex flex-col gap-4" passHref>
           <PortfolioCard likeAmount={likeAmount} index={0} />
         </Link>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
           {items.map((item, index) => (
-            <Link href={"/portfolio/1"} key={index}>
+            <Link href={"/portfolio/1"} key={index} passHref>
               <PortfolioCard key={index} likeAmount={likeAmount} index={index} />
             </Link>
           ))}

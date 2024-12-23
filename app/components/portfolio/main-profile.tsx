@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Heart, MapPin } from "lucide-react";
+import Link from "next/link";
 
 export function MainProfile({ likeAmount }: { likeAmount: number }) {
   return (
@@ -13,7 +14,9 @@ export function MainProfile({ likeAmount }: { likeAmount: number }) {
             <AvatarFallback>JD</AvatarFallback>
           </Avatar>
           <div className="flex flex-col gap-1">
-            <h2 className="text-xl font-semibold">Jane Doe</h2>
+            <Link className="text-xl font-semibold hover:underline" href="#">
+              Jane Doe
+            </Link>
             <div className="flex flex-row flex-wrap gap-1">
               <Badge>Developer</Badge>
               <Badge>UI/UX Designer</Badge>
