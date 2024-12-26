@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
-import { Flag, Heart, MapPin, Star } from "lucide-react";
+import { ExternalLink, Flag, Heart, MapPin, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -20,29 +20,28 @@ export function PortfolioCard({ likeAmount, index }: PortfolioCardProps) {
     event.preventDefault();
   };
 
-  const handleDivClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    event.preventDefault();
-  };
-
-  const redirectToProfile = (event: React.MouseEvent<HTMLAnchorElement>, profile: string) => {
-    event.preventDefault();
-    window.location.href = `/${profile}`;
-  };
-
   return (
     <Card
       key={index}
-      className="rounded-lg shadow-lg overflow-hidden transition-all hover:bg-muted-foreground/10 hover:shadow-xl cursor-pointer relative duration-300">
-      <CardHeader className="p-0">
+      className="rounded-lg shadow-lg overflow-hidden transition-all hover:bg-secondary hover:shadow-xl relative duration-300">
+      <CardHeader className="p-0 relative group">
         <div className="relative">
-          <Image
-            width={1200}
-            height={300}
-            src="/cats-9024710_960_720.jpg"
-            alt="Portfolio Image"
-            className="w-full h-[250px] object-cover"
-          />
-          <div className="absolute top-2 right-2 flex space-x-1" onClick={handleDivClick}>
+          <Link href={"/portfolio/1"} className="flex flex-col gap-4" passHref>
+            <div className="relative">
+              <Image
+                width={1200}
+                height={300}
+                src="/cats-9024710_960_720.jpg"
+                alt="Portfolio Image"
+                className="w-full h-[250px] object-cover object-top transform transition-transform duration-300 group-hover:scale-105"
+              />
+              {/* Icon overlay */}
+              <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <ExternalLink className="text-foreground size-10" />
+              </div>
+            </div>
+          </Link>
+          <div className="absolute top-2 right-2 flex space-x-1">
             <Button variant="outline" size="icon" className="rounded-full hover:text-red-500" onClick={handleButtonClick}>
               <Heart />
             </Button>
@@ -58,12 +57,14 @@ export function PortfolioCard({ likeAmount, index }: PortfolioCardProps) {
       <CardContent className="p-4">
         <div className="flex flex-row justify-between w-full items-center">
           <div className="flex flex-row items-start">
-            <Avatar className="mr-3">
-              <AvatarImage src="https://via.placeholder.com/40" alt="Creator's Avatar" />
-              <AvatarFallback>AB</AvatarFallback>
-            </Avatar>
+            <Link className="text-lg hover:underline" href="/johndoe">
+              <Avatar className="mr-3">
+                <AvatarImage src="https://via.placeholder.com/40" alt="Creator's Avatar" />
+                <AvatarFallback>AB</AvatarFallback>
+              </Avatar>
+            </Link>
             <div className="flex flex-col gap-1">
-              <Link className="text-lg hover:underline" href="#" onClick={(event) => redirectToProfile(event, "user1")}>
+              <Link className="text-lg hover:underline" href="/johndoe">
                 John Doe
               </Link>
               <div className="flex flex-row flex-wrap gap-1">

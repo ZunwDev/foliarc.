@@ -1,11 +1,11 @@
+"use client";
 import { PortfolioCard, SortDropdown, ViewDropdown } from "@/components/homepage";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export function PortfolioGallery() {
   const [viewToggle, setViewToggle] = useState("compact");
   const likeAmount = 1;
-  const items = [1, 2, 3, 4];
+  const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
   const [mounted, setMounted] = useState(false);
 
@@ -22,15 +22,11 @@ export function PortfolioGallery() {
         <ViewDropdown setViewToggle={setViewToggle} />
       </div>
       {viewToggle === "list" ? (
-        <Link href={"/portfolio/1"} className="flex flex-col gap-4" passHref>
-          <PortfolioCard likeAmount={likeAmount} index={0} />
-        </Link>
+        <PortfolioCard likeAmount={likeAmount} index={0} />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
           {items.map((item, index) => (
-            <Link href={"/portfolio/1"} key={index} passHref>
-              <PortfolioCard key={index} likeAmount={likeAmount} index={index} />
-            </Link>
+            <PortfolioCard key={index} likeAmount={likeAmount} index={index} />
           ))}
         </div>
       )}

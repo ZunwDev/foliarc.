@@ -1,5 +1,6 @@
+"use client";
+import { Logo } from "@/components/global/logo";
 import { Profile, ThemeSwitch } from "@/components/header";
-import { ArrowDownUp } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -30,11 +31,9 @@ export function Header() {
           {isDashboard ? (
             <></>
           ) : (
-            <Link href="/" className="flex flex-row gap-2 items-center">
-              <ArrowDownUp />
-              <span className="text-foreground">
-                Portfolio<span className="text-blue-500">Share</span>
-              </span>
+            <Link href="/" className="flex flex-row items-center">
+              <Logo />
+              <span className="text-foreground text-xl pb-1 !specialtext">foliarc.</span>
             </Link>
           )}
 

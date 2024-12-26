@@ -95,18 +95,6 @@ export default function PortfolioView() {
 
   return (
     <div className="min-h-screen bg-background p-6 pt-48 w-full overflow-hidden relative">
-      <div
-        className="absolute top-0 left-0 w-[800px] h-[600px] bg-[radial-gradient(ellipse,rgba(200,250,255,0.6),transparent)]"
-        style={{
-          filter: "blur(200px)",
-          transform: "translate(-50%, -20%)",
-        }}></div>
-      <div
-        className="absolute bottom-0 right-0 w-[900px] h-[700px] bg-[radial-gradient(ellipse,rgba(130,170,255,0.4),transparent)]"
-        style={{
-          filter: "blur(250px)",
-          transform: "translate(50%, 50%)",
-        }}></div>
       <div className="mx-auto max-w-6xl space-y-8 w-full">
         <div className="flex flex-col md:flex-row gap-6">
           <Picture src="/cats-9024710_960_720.jpg" link="https://www.example.com" />

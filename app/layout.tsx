@@ -11,8 +11,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <title>PortfolioShare</title>
-        <meta name="description" content="Portfolio share is an app to share your portfolio and get feedback from others" />
+        <title>folioarc.</title>
+        <meta name="description" content="Folioarc is an app to share your portfolio and get feedback from others" />
       </head>
       <UserProvider>
         <body className="antialiased">

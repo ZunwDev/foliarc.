@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -86,28 +87,32 @@ export function Hero() {
   useEffect(() => {}, [form.watch()]);
 
   return (
-    <div className="flex flex-col items-center text-center px-4 py-16 w-full text-foreground relative z-10">
-      <a href="/changelog" className="mx-auto mb-4 flex w-fit items-center rounded-full bg-muted px-4 py-2 text-sm">
+    <div className="flex flex-col items-center text-center px-4 py-16 w-full text-foreground relative z-10 mt-40">
+      <Link href="/changelog" className="mx-auto mb-10 flex w-fit items-center rounded-full bg-muted px-4 py-2 text-sm border">
         <span className="mr-1 font-semibold">What&#x27;s new</span>| Read more
         <ArrowRight className="ml-2 size-4" />
-      </a>
-      <h1 className="text-6xl font-extrabold mb-4">Your Work, Your Stage</h1>
-      <p className="text-lg text-muted-foreground mb-8 max-w-lg">
+      </Link>
+      <h1 className="text-9xl font-extrabold mb-4 !specialtext">Your Work, Your Stage</h1>
+      <p className="text-2xl text-muted-foreground mb-8 max-w-4xl mt-8">
         Showcase your portfolios and projects, learn from others, and be part of a vibrant creative community.
       </p>
       <div className="flex space-x-4">
         {!user ? (
           <Link href="/api/auth/login">
-            <Button className="px-6 text-blue-400 border-2 border-blue-400 hover:text-white hover:border-blue-600 bg-transparent transition-all duration-300 transform hover:scale-105 hover:bg-blue-400 shadow-xl hover:shadow-2xl hover:shadow-blue-500">
+            <Button
+              size={"dxl"}
+              className="px-12 text-xl rounded-full text-blue-400 border-2 border-blue-400 hover:text-white hover:border-blue-600 bg-transparent transition-all duration-300 transform hover:scale-105 hover:bg-blue-400 shadow-xl hover:shadow-2xl hover:shadow-blue-500">
               Get Started
             </Button>
           </Link>
         ) : !hasSubmitted ? (
           <Dialog>
             <DialogTrigger asChild>
-              <Button className="px-6 text-white bg-green-500 border-2 border-green-500 hover:bg-green-600 shadow-lg transition-all duration-300 transform hover:scale-105 relative group">
+              <Button
+                size={"dxl"}
+                className="px-12 text-xl rounded-full text-white bg-blue-600 border-2 border-blue-600 hover:bg-blue-700 shadow-lg transition-all duration-300 transform hover:scale-105 relative group">
                 Submit Your Portfolio
-                <span className="absolute inset-0 rounded-lg bg-green-400 opacity-0 group-hover:opacity-40 transition-opacity duration-300 blur-md"></span>
+                <span className="absolute inset-0 rounded-lg bg-blue-600 opacity-0 group-hover:opacity-40 transition-opacity duration-300 blur-md"></span>
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">

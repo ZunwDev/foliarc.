@@ -2,7 +2,7 @@ import { axiosInstance, handleRequest } from "@/lib/api";
 import { User } from "./types";
 
 // 1. GET request to fetch a user by ID
-export async function fetchUserDataById(id: string): Promise<User> {
+export async function fetchUserById(id: string): Promise<User> {
   return handleRequest<User>(axiosInstance.get(`/users/${id}`));
 }
 

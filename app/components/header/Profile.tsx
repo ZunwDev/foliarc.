@@ -11,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Skeleton } from "@/components/ui/skeleton";
 import { getInitials } from "@/lib/utils";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { DoorOpen, FileText, LayoutDashboard, User } from "lucide-react";
@@ -19,7 +20,7 @@ import Link from "next/link";
 export function Profile() {
   const { user, error, isLoading } = useUser();
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Skeleton className="size-8 rounded-full mt-1"></Skeleton>;
   if (error) return <div>{error.message}</div>;
 
   const validUserIds = process.env.NEXT_PUBLIC_ALLOWED_USERS?.split(",") || [];

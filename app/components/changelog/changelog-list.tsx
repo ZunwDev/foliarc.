@@ -13,15 +13,6 @@ interface ChangelogItem {
 }
 
 const changelogData: ChangelogItem[] = [
-  /*   {
-    version: "2.1.0",
-    date: "2024-12-15",
-    changes: [
-      { type: "new", description: "Added dark mode support" },
-      { type: "improvement", description: "Enhanced performance of data loading" },
-      { type: "fix", description: "Fixed a bug causing occasional crashes on startup" },
-    ],
-  },
   {
     version: "2.1.0",
     date: "2024-12-15",
@@ -48,7 +39,16 @@ const changelogData: ChangelogItem[] = [
       { type: "improvement", description: "Enhanced performance of data loading" },
       { type: "fix", description: "Fixed a bug causing occasional crashes on startup" },
     ],
-  }, */
+  },
+  {
+    version: "2.1.0",
+    date: "2024-12-15",
+    changes: [
+      { type: "new", description: "Added dark mode support" },
+      { type: "improvement", description: "Enhanced performance of data loading" },
+      { type: "fix", description: "Fixed a bug causing occasional crashes on startup" },
+    ],
+  },
 ];
 
 export function ChangelogList() {
@@ -82,7 +82,7 @@ export function ChangelogList() {
       <div className="mx-auto max-w-3xl space-y-6">
         <div className="space-y-6">
           {sortedChangelogData.map((version, index) => (
-            <Card key={index}>
+            <Card key={index} className="bg-secondary">
               <CardHeader className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
@@ -91,7 +91,7 @@ export function ChangelogList() {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent className="p-4 pt-0">
+              <CardContent className="p-4 pt-0 bg-secondary">
                 <ul className="space-y-2">
                   {version.changes.map((change, index) => (
                     <li key={index} className="flex items-center gap-2">

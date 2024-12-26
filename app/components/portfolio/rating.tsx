@@ -50,9 +50,7 @@ export function Rating({ ratings, setRatings }: RatingProps) {
             </div>
           </div>
         ))}
-        <div className="flex justify-end">
-          <Button disabled={!user}>Save Rating</Button>
-        </div>
+        <div className="flex justify-end">{user ? <Button>Save Rating</Button> : null}</div>
       </Card>
     </div>
   );

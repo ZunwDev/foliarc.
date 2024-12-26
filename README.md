@@ -1,6 +1,6 @@
-# Project X
+# Foliarc.
 
-**Project X** is a web application designed to empower creatives, developers, and professionals by providing a platform to showcase their portfolios or projects and receive constructive feedback from others in the vibrant community.
+**Foliarc.** is a web application designed to empower creatives, developers, and professionals by providing a platform to showcase their portfolios or projects and receive constructive feedback from others in the vibrant community.
 
 ---
 

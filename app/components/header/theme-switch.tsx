@@ -20,7 +20,7 @@ export function ThemeSwitch() {
   };
 
   return (
-    <Button variant="outline" size="icon" onClick={toggleTheme}>
+    <Button variant="ghost" size="icon" onClick={toggleTheme}>
       {resolvedTheme === "dark" ? <Sun className="text-foreground" /> : <Moon className="text-foreground" />}
     </Button>
   );
