@@ -18,8 +18,8 @@
 ## Resources
 
 - **Frontend**: Built with [React](https://reactjs.org/) and styled using [Tailwind CSS](https://tailwindcss.com/).
-- **Backend**: Powered by [Node.js](https://nodejs.org/) with [Express](https://expressjs.com/) for handling API requests.
-- **Database**: Utilizes [PostgreSQL](https://www.postgresql.org/) for secure and scalable data storage.
+- **Backend**: Powered by [Next.js](https://nextjs.org/) for server-side rendering and API handling.
+- **Database**: Utilizes [Supabase](https://www.supabase.org/) for secure and scalable data storage.
 - **Authentication**: Secure login and registration powered by [Auth0](https://auth0.com/).
 
 ---
@@ -52,10 +52,10 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 
 For questions, suggestions, or issues, feel free to reach out:
 
-- **Email**: support@projectx.com
-- **GitHub Issues**: [Report a bug or suggest a feature](https://github.com/yourusername/portfolio-share/issues)
+- **Email**: support@foliarc.com
+- **GitHub Issues**: [Report a bug or suggest a feature](https://github.com/yourusername/foliarc./issues)
 
 ---
 
-Thank you for using Project X! We’re excited to see the amazing portfolios you’ll create and share.
+Thank you for using foliarc.! We’re excited to see the amazing portfolios you’ll create and share.
 
