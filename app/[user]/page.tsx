@@ -1,6 +1,6 @@
 "use client";
 import { PortfolioCard } from "@/components/homepage";
-import { UserInfo } from "./user-info";
+import { UserInfo } from "@/components/profile";
 
 const userData = {
   username: "jane_doe",

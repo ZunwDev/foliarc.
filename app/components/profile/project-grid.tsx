@@ -1,4 +1,4 @@
-import { ProjectCard } from "./project-card";
+import { ProjectCard } from "@/components/profile";
 
 interface Project {
   id: number;

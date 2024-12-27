@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="description" content="Folioarc is an app to share your portfolio and get feedback from others" />
       </head>
       <UserProvider>
-        <body className="antialiased">
+        <body className="antialiased min-w-[360px] min-h-[100dvh]">
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <Header />
             {children}

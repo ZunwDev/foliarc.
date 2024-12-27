@@ -9,7 +9,7 @@ export function MainProfile({ likeAmount }: { likeAmount: number }) {
     <Card className="bg-secondary/50 p-4 rounded-lg">
       <div className="flex flex-row">
         <div className="flex items-center space-x-4">
-          <Link className="text-xl font-semibold hover:underline" href="/johndoe">
+          <Link className="text-xl font-semibold" href="/johndoe">
             <Avatar className="h-16 w-16">
               <AvatarImage src="" alt="Jane Doe" />
               <AvatarFallback>JD</AvatarFallback>

@@ -97,6 +97,7 @@ export function TextareaFormItem({
   description,
   form,
   required = false,
+  size = "md", // Default size
   ...rest
 }: {
   id: string;
@@ -106,13 +107,20 @@ export function TextareaFormItem({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: any;
   required?: boolean;
+  size?: "sm" | "md" | "lg";
 }) {
+  const sizeClasses = {
+    sm: "h-20",
+    md: "h-44",
+    lg: "h-64",
+  };
+
   return (
     <FormItem>
       <FormLabel htmlFor={id} isRequired={required}>
         {label}
       </FormLabel>
-      <Textarea id={id} name={id} placeholder={placeholder} {...form.register(id)} className="h-44" {...rest} />
+      <Textarea id={id} name={id} placeholder={placeholder} {...form.register(id)} className={sizeClasses[size]} {...rest} />
       {description && <FormDescription>{description}</FormDescription>}
       <FormMessage>{form?.formState?.errors?.[id]?.message}</FormMessage>
     </FormItem>
@@ -331,7 +339,6 @@ export function MultiSelectFormItem({
 }) {
   const [selectedValues, setSelectedValues] = useState<TagOption[]>([]);
 
-  // Sync form values with selected values
   useEffect(() => {
     const values = form.getValues(id) || [];
     if (Array.isArray(values) && !arraysEqual(values, selectedValues)) {
@@ -340,12 +347,10 @@ export function MultiSelectFormItem({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form, id]);
 
-  // Prevent unnecessary updates when selected values change
   useEffect(() => {
     form.setValue(id, selectedValues);
   }, [selectedValues, form, id]);
 
-  // Toggle the selection of an option
   const toggleValue = (option: TagOption) => {
     setSelectedValues((current) => {
       const exists = current.some((item) => item.value === option.value);
@@ -354,7 +359,6 @@ export function MultiSelectFormItem({
     });
   };
 
-  // Check if a value is selected
   const isValueSelected = (targetValue: string): boolean => {
     return selectedValues.some((item) => item?.value === targetValue);
   };

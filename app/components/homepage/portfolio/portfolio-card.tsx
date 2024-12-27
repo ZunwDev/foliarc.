@@ -57,7 +57,7 @@ export function PortfolioCard({ likeAmount, index }: PortfolioCardProps) {
       <CardContent className="p-4">
         <div className="flex flex-row justify-between w-full items-center">
           <div className="flex flex-row items-start">
-            <Link className="text-lg hover:underline" href="/johndoe">
+            <Link className="text-lg" href="/johndoe">
               <Avatar className="mr-3">
                 <AvatarImage src="https://via.placeholder.com/40" alt="Creator's Avatar" />
                 <AvatarFallback>AB</AvatarFallback>
