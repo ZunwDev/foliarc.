@@ -1,14 +1,16 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase-client";
 
-export async function GET() {
-  try {
-    const { pid } = await req.json();
-    const { data, error } = await supabase
-      .from("portfolios")
+export async function GET(req, context) {
+    try {
+      const { pid } = await context.params;
+  
+      const { data, error } = await supabase
+      .from('users')
+      .select('*')
       .eq('pid', pid)
-      .select();
-
+      .single();
+    
     if (error) {
       throw new Error(error.message);
     }
