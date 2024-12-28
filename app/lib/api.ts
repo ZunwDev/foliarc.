@@ -2,40 +2,34 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 
 export const API_URL = "http://localhost:3000/api";
 
-function newAbortSignal() {
-  const abortController = new AbortController();
-  setTimeout(() => abortController.abort(), 5000);
-  return abortController.signal;
-}
-
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
   baseURL: API_URL,
-  signal: newAbortSignal(),
 });
 
-function isAxiosError<T>(error: unknown): error is AxiosError<T> {
-  return typeof error === "object" && error !== null && "isAxiosError" in error && (error as AxiosError).isAxiosError === true;
+export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
+  return typeof error === "object" && error !== null && "isAxiosError" in error;
 }
 
-async function handleRequest<T>(request: Promise<AxiosResponse<T>>): Promise<T> {
+export async function handleRequest<T>(request: Promise<AxiosResponse<T>>, timeoutMs: number = 5000): Promise<T> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
   try {
     const response = await request;
+    clearTimeout(timeoutId);
     return response.data;
   } catch (error: unknown) {
+    clearTimeout(timeoutId);
     if (isAxiosError<T>(error)) {
-      if (error.response?.data && typeof error.response?.data === "object") {
+      if (error.response?.data && typeof error.response.data === "object") {
         const message = (error.response.data as { message?: string }).message || error.message;
-        console.error("Axios Error:", message);
-      } else {
-        console.error("Axios Error without message:", error.message);
+        throw new Error(message);
       }
-    } else if (error instanceof Error) {
-      console.error("General Error:", error.message);
-    } else {
-      console.error("An unknown error occurred.");
+      throw new Error(error.message);
     }
-    throw error;
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error("An unknown error occurred");
   }
 }
-
-export { axiosInstance, handleRequest, isAxiosError, newAbortSignal };

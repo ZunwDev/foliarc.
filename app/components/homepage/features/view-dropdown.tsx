@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ChevronDown, Grid, List } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 type ViewModeOption = {
   value: string;
@@ -28,14 +28,14 @@ type ViewDropdownProps = {
 };
 
 export function ViewDropdown({ setViewToggle }: ViewDropdownProps) {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [selectedViewMode, setSelectedViewMode] = React.useState<ViewModeOption>({
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedViewMode, setSelectedViewMode] = useState<ViewModeOption>({
     label: "Compact",
     value: "compact",
     icon: <Grid size={20} />,
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     setViewToggle(selectedViewMode.value);
   }, [selectedViewMode.value, setViewToggle]);
 

@@ -11,12 +11,13 @@ import {
 } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { InputFormItem, MultiSelectFormItem } from "@/components/util";
+import { useFetchUserById } from "@/lib/api/hooks";
 import { technologies } from "@/lib/constants";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -28,7 +29,8 @@ const PortfolioSchema = z.object({
 export function Hero() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { user, error, isLoading } = useUser();
-  const [hasSubmitted, setHasSubmitted] = React.useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const { data: dbUser } = useFetchUserById(user?.sub || "");
 
   const form = useForm<z.infer<typeof PortfolioSchema>>({
     mode: "onChange",
@@ -41,7 +43,6 @@ export function Hero() {
 
   const handleFormSubmit = async (values: z.infer<typeof PortfolioSchema>) => {
     console.log(values);
-    console.log("Portfolio submitted!");
     setHasSubmitted(true);
   };
 
@@ -63,6 +64,12 @@ export function Hero() {
           <Link href="/api/auth/login?returnTo=/welcome">
             <Button className="h-10 sm:h-11 md:h-12 lg:h-14 px-4 sm:px-8 md:px-10 lg:px-12 text-lg sm:text-xl md:text-2xl rounded-full text-blue-400 border-2 border-blue-400 hover:text-white hover:border-blue-600 bg-transparent transition-all duration-300 transform hover:scale-105 hover:bg-blue-400 shadow-xl hover:shadow-2xl hover:shadow-blue-500">
               Get Started
+            </Button>
+          </Link>
+        ) : !dbUser ? (
+          <Link href="/welcome">
+            <Button className="h-10 sm:h-11 md:h-12 lg:h-14 px-4 sm:px-8 md:px-10 lg:px-12 text-lg sm:text-xl md:text-2xl rounded-full text-blue-400 border-2 border-blue-400 hover:text-white hover:border-blue-600 bg-transparent transition-all duration-300 transform hover:scale-105 hover:bg-blue-400 shadow-xl hover:shadow-2xl hover:shadow-blue-500">
+              Complete Your Profile
             </Button>
           </Link>
         ) : !hasSubmitted ? (

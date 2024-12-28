@@ -1,6 +1,6 @@
 "use client";
 import { SidebarLinks } from "@/components/dashboard";
-import { useAuthRedirect } from "@/hooks/useAuthRedirect";
+import { useAuthRedirect } from "@/lib/hooks/useAuthRedirect";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const { isLoading, mounted } = useAuthRedirect();

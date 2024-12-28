@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
 import { InputFormItem, MultiSelectFormItem, TextareaFormItem } from "@/components/util";
+import { useFetchUserById } from "@/lib/api/hooks";
 import { roles } from "@/lib/constants";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,7 +14,6 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-// Zod Schema for Validation
 const welcomeSchema = z.object({
   nickname: z
     .string()
@@ -34,16 +34,16 @@ type WelcomeFormValues = z.infer<typeof welcomeSchema>;
 
 export default function WelcomePage() {
   const { user, error, isLoading } = useUser();
-
-  /*   const dbUser = use(fetchUserById(user?.sub || ""));
-  console.log(dbUser); */
+  const { data: dbUser, isLoading: isLoadingDbUser } = useFetchUserById(user?.sub || "");
   const router = useRouter();
 
   useEffect(() => {
     if (!isLoading && !user) {
       router.push("/");
+    } else if (dbUser) {
+      router.push("/");
     }
-  }, [isLoading, user, router]);
+  }, [isLoading, user, dbUser, router]);
 
   const form = useForm<z.infer<typeof welcomeSchema>>({
     mode: "onChange",
@@ -62,7 +62,7 @@ export default function WelcomePage() {
     }
   }, [user, form]);
 
-  if (isLoading) {
+  if (isLoading || isLoadingDbUser || !user) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <p>Loading your profile...</p>
