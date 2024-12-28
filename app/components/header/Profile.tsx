@@ -75,7 +75,7 @@ export function Profile() {
     </DropdownMenu>
   ) : (
     <Button asChild>
-      <Link href="/api/auth/login">Login</Link>
+      <Link href="/api/auth/login?returnTo=/welcome">Login</Link>
     </Button>
   );
 }

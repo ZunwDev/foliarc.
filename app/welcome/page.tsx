@@ -18,10 +18,10 @@ const welcomeSchema = z.object({
   nickname: z
     .string()
     .min(3, { message: "Nickname must be at least 3 characters" })
-    .max(20, { message: "Nickname must not exceed 20 characters" }),
+    .max(16, { message: "Nickname must not exceed 16 characters" }),
   name: z
     .string()
-    .min(2, { message: "Name must be at least 2 characters" })
+    .min(4, { message: "Name must be at least 4 characters" })
     .max(50, { message: "Name must not exceed 50 characters" }),
   bio: z.string().max(200, { message: "Bio must not exceed 200 characters" }).optional(),
   roles: z
@@ -34,6 +34,9 @@ type WelcomeFormValues = z.infer<typeof welcomeSchema>;
 
 export default function WelcomePage() {
   const { user, error, isLoading } = useUser();
+
+  /*   const dbUser = use(fetchUserById(user?.sub || ""));
+  console.log(dbUser); */
   const router = useRouter();
 
   useEffect(() => {
@@ -78,7 +81,7 @@ export default function WelcomePage() {
   const onSubmit = (data: WelcomeFormValues) => {
     console.log("Form data:", data);
     setTimeout(() => {
-      router.push("/"); // Redirect after form submission
+      router.push("/");
     }, 500);
   };
 
@@ -100,8 +103,9 @@ export default function WelcomePage() {
                 id="nickname"
                 placeholder="hasnan_patel"
                 form={form}
+                prefix="@"
                 required
-                description="Enter a unique nickname."
+                description="Enter a unique nickname. This will be used to identify you on the platform."
               />
               <InputFormItem
                 label="Your Name"
@@ -109,7 +113,7 @@ export default function WelcomePage() {
                 placeholder="Hasnan Patel"
                 form={form}
                 required
-                description="Enter your full name to display on your profile and projects."
+                description="Enter your full name, appears on your profile and projects."
               />
               <TextareaFormItem label="Bio" id="bio" size="sm" placeholder="Tell us a little about yourself..." form={form} />
               <MultiSelectFormItem label="Roles" id="roles" form={form} data={roles} placeholder="Select your roles" required />

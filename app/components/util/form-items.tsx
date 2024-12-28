@@ -48,13 +48,11 @@ export function InputFormItem({
     <FormItem>
       <FormLabel htmlFor={id} className="block" isRequired={required}>
         {label}
+        {!required ? <span className="text-muted-foreground">(optional)</span> : ""}
       </FormLabel>
       <div className="flex flex-row items-center">
         {prefix && (
-          <div
-            className={cn(
-              "bg-accent h-[38px] w-8 flex mb-[0.5px] justify-center items-center border rounded-tl-md rounded-bl-md"
-            )}>
+          <div className={cn("bg-muted h-10 w-8 flex justify-center items-center border rounded-tl-md rounded-bl-md")}>
             <span className="text-sm">{prefix}</span>
           </div>
         )}
@@ -76,10 +74,7 @@ export function InputFormItem({
           {...rest}
         />
         {suffix && (
-          <div
-            className={cn(
-              "bg-accent h-[38px] w-12 flex mb-[0.5px] justify-center items-center border rounded-tr-md rounded-br-md truncate"
-            )}>
+          <div className={cn("bg-muted h-10 w-8 flex justify-center items-center border rounded-tr-md rounded-br-md truncate")}>
             <span className="text-sm">{suffix}</span>
           </div>
         )}
@@ -119,6 +114,7 @@ export function TextareaFormItem({
     <FormItem>
       <FormLabel htmlFor={id} isRequired={required}>
         {label}
+        {!required ? <span className="text-muted-foreground"> (optional)</span> : ""}
       </FormLabel>
       <Textarea id={id} name={id} placeholder={placeholder} {...form.register(id)} className={sizeClasses[size]} {...rest} />
       {description && <FormDescription>{description}</FormDescription>}

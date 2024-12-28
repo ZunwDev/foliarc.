@@ -21,7 +21,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const PortfolioSchema = z.object({
-  name: z.string().nonempty("Name is required"),
   url: z.string().url("Invalid URL format"),
   technologies: z.array(z.object({ value: z.string(), label: z.string() })).min(1, "At least one tag must be selected"),
 });
@@ -61,7 +60,7 @@ export function Hero() {
       </p>
       <div className="flex space-x-4">
         {!user ? (
-          <Link href="/api/auth/login">
+          <Link href="/api/auth/login?returnTo=/welcome">
             <Button className="h-10 sm:h-11 md:h-12 lg:h-14 px-4 sm:px-8 md:px-10 lg:px-12 text-lg sm:text-xl md:text-2xl rounded-full text-blue-400 border-2 border-blue-400 hover:text-white hover:border-blue-600 bg-transparent transition-all duration-300 transform hover:scale-105 hover:bg-blue-400 shadow-xl hover:shadow-2xl hover:shadow-blue-500">
               Get Started
             </Button>
