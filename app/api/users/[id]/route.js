@@ -1,12 +1,15 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase-client';
 
-export async function GET() {
+export async function GET(req, context) {
   try {
+    const { id } = await context.params;
+
     const { data, error } = await supabase
-      .from('users')
-      .eq('id', id)
-      .select();
+    .from('users')
+    .select('*')
+    .eq('id', id)
+    .single();
 
     if (error) {
       throw new Error(error.message);
