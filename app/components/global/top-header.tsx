@@ -27,7 +27,7 @@ export function Header() {
         className={`h-14 px-8 md:px-16 w-full z-40 fixed min-w-[360px] transition-all transition-colors duration-300 items-center ${
           isDashboard ? "border-b h-[65px]" : ""
         } ${isScrolled ? "bg-background/50 shadow-md border-b" : ""}`}>
-        <nav className="flex items-center h-full flex-row justify-start gap-16">
+        <nav className="flex items-center h-full flex-row justify-between">
           {isDashboard ? (
             <></>
           ) : (

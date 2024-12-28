@@ -29,7 +29,7 @@ export default function UserProfile() {
   const items = [1, 2, 3, 4];
 
   return (
-    <section className="relative flex flex-col min-w-[360px] min-h-[100dvh] py-16 bg-background overflow-hidden pt-32">
+    <section className="relative flex flex-col min-h-[100dvh] py-16 bg-background overflow-hidden pt-32">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mx-auto container px-4 max-w-[1600px]">
         <div className="md:col-span-1">
           <UserInfo user={userData} />

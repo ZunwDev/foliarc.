@@ -4,7 +4,7 @@ import { Hero, PortfolioGallery } from "@/components/homepage";
 
 export default function Home() {
   return (
-    <section className="relative flex flex-col min-w-[360px] min-h-[100dvh] py-16 bg-background overflow-hidden">
+    <section className="relative flex flex-col min-h-[100dvh] py-16 bg-background overflow-hidden">
       <BlurBackground />
       <Hero />
       <PortfolioGallery />
