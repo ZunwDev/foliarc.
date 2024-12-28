@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { InputFormItem, MultiSelectFormItem } from "@/components/util";
-import { useFetchUserById } from "@/lib/api/hooks";
+import { useFetchUser } from "@/lib/api/hooks";
 import { technologies } from "@/lib/constants";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -30,7 +30,7 @@ export function Hero() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { user, error, isLoading } = useUser();
   const [hasSubmitted, setHasSubmitted] = useState(false);
-  const { data: dbUser } = useFetchUserById(user?.sub || "");
+  const { data: dbUser } = useFetchUser(user?.sub || "", "id");
 
   const form = useForm<z.infer<typeof PortfolioSchema>>({
     mode: "onChange",

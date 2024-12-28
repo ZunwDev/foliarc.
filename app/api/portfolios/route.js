@@ -16,7 +16,7 @@ export async function GET(req, context) {
     }
     return NextResponse.json(data);
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 404 });
   }
 }
 
@@ -38,7 +38,7 @@ export async function POST(req) {
       { status: 201 }
     );
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 406 });
   }
 }
 
@@ -60,7 +60,7 @@ export async function PUT(req) {
       { status: 201 }
     );
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 404 });
   }
 }
 
@@ -78,9 +78,9 @@ export async function DELETE(req) {
 
     return NextResponse.json(
       { message: "User deleted successfully" },
-      { status: 201 }
+      { status: 200 }
     );
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 404 });
   }
 }

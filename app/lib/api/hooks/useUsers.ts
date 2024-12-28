@@ -1,4 +1,4 @@
-import { createUser, fetchUserById, updateUser } from "@/lib/api/users";
+import { searchUsers, createUser, updateUser, deleteUser } from "@/lib/api/users";
 import { User } from "@/lib/api/users/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -9,16 +9,16 @@ type ApiError = {
   statusCode?: number;
 };
 
-export function useFetchUserById(userId?: string) {
-  return useQuery<NonNullUser, ApiError>({
-    queryKey: ["user", userId],
+export function useFetchUser(search: string, field: keyof NonNullUser = "id") {
+  return useQuery<NonNullUser[], ApiError>({
+    queryKey: ["user", { search, field }],
     queryFn: async () => {
-      if (!userId) throw new Error("User ID is required");
-      const user = await fetchUserById(userId);
-      if (!user) throw new Error("User not found");
-      return user;
+      if (!search) throw new Error("Search query is required");
+      const users = await searchUsers(search, field);
+      if (!users.length) throw new Error("User not found");
+      return users;
     },
-    enabled: !!userId,
+    enabled: !!search,
     retry: false,
     refetchOnWindowFocus: false,
   });
@@ -35,7 +35,7 @@ export function useCreateUser() {
     },
     onSuccess: (newUser) => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      queryClient.setQueryData(["user", newUser.id], newUser);
+      queryClient.setQueryData(["user", { search: newUser.id, field: "id" }], [newUser]);
     },
     onError: (error) => {
       console.error("Error creating user:", error);
@@ -54,11 +54,29 @@ export function useUpdateUser() {
       return updatedUser;
     },
     onSuccess: (updatedUser, { id }) => {
-      queryClient.invalidateQueries({ queryKey: ["user", id] });
-      queryClient.setQueryData(["user", id], updatedUser);
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.setQueryData(["user", { search: id, field: "id" }], [updatedUser]);
     },
     onError: (error, variables) => {
       console.error(`Error updating user ${variables.id}:`, error);
+      throw error;
+    },
+  });
+}
+
+export function useDeleteUser() {
+  const queryClient = useQueryClient();
+
+  return useMutation<void, ApiError, string>({
+    mutationFn: async (userId) => {
+      if (!userId) throw new Error("User ID is required");
+      await deleteUser(userId);
+    },
+    onSuccess: (_, userId) => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+    onError: (error, userId) => {
+      console.error(`Error deleting user ${userId}:`, error);
       throw error;
     },
   });

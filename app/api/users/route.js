@@ -1,22 +1,28 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase-client';
 
-export async function GET(req, context) {
+export async function GET(req) {
   try {
-    const { id } = await context.params;
+    const { search, field = 'id' } = Object.fromEntries(new URL(req.url).searchParams);
+
+    if (!search) {
+      return NextResponse.json({ error: "Searched keyword is required" }, { status: 400 });
+    }
+    else if(!field) {
+      return NextResponse.json({ error: "Field is required" }, { status: 400 });
+    }
 
     const { data, error } = await supabase
     .from('users')
     .select('*')
-    .eq('id', id)
-    .single();
+    .ilike(field, `%${search}%`);
 
     if (error) {
       throw new Error(error.message);
     }
     return NextResponse.json(data);
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 404 });
   }
 }
 
@@ -34,13 +40,19 @@ export async function POST(req) {
 
     return NextResponse.json(data ? data[0] : { message: 'User created successfully' }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 406 });
   }
 }
 
-export async function PUT(req) {
+export async function PUT(req, params) {
   try {
-    const { id, name, email, location, tags, interactions, bio } = await req.json();
+    const { id } = params;
+
+    if (!id) {
+      return NextResponse.json({ error: "User ID is required" }, { status: 400 });
+    }
+
+    const { name, email, location, tags, interactions, bio } = await req.json();
     const { data, error } = await supabase
       .from('users')
       .update([{ name, email, location, tags, interactions, bio }])
@@ -53,13 +65,18 @@ export async function PUT(req) {
 
     return NextResponse.json(data ? data[0] : { message: 'User updated successfully' }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 404 });
   }
 }
 
-export async function DELETE(req) {
+export async function DELETE(req, params) {
   try {
-    const { id } = await req.json();
+    const { id } = params;
+
+    if (!id) {
+      return NextResponse.json({ error: "User ID is required" }, { status: 400 });
+    }
+
     const { error } = await supabase
       .from('users')
       .delete()
@@ -69,8 +86,8 @@ export async function DELETE(req) {
       throw new Error(error.message);
     }
 
-    return NextResponse.json({ message: 'User deleted successfully' }, { status: 201 });
+    return NextResponse.json({ message: 'User deleted successfully' }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 404 });
   }
 }

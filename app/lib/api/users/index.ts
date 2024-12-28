@@ -1,17 +1,22 @@
 import { axiosInstance, handleRequest } from "@/lib/api";
 import { User } from "./types";
 
-// 1. GET request to fetch a user by ID
-export async function fetchUserById(id: string): Promise<User> {
-  return handleRequest<User>(axiosInstance.get(`/users/${id}`));
+/**
+  /users?search=keyword&field=column-in-table
+*/
+export async function searchUsers(search: string, field: keyof User = "id"): Promise<User[]> {
+  const query = new URLSearchParams({ search, field }).toString();
+  return handleRequest<User[]>(axiosInstance.get(`/users?${query}`));
 }
 
-// 2. POST request to create a new user
 export async function createUser(data: Omit<User, "id">): Promise<User> {
   return handleRequest<User>(axiosInstance.post("/users", data));
 }
 
-// 3. PUT request to update an existing user by ID
 export async function updateUser(id: string, data: Partial<User>): Promise<User> {
   return handleRequest<User>(axiosInstance.put(`/users/${id}`, data));
+}
+
+export async function deleteUser(id: string): Promise<User> {
+  return handleRequest<User>(axiosInstance.put(`/users/${id}`));
 }

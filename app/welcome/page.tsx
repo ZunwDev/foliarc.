@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
 import { InputFormItem, MultiSelectFormItem, TextareaFormItem } from "@/components/util";
-import { useFetchUserById } from "@/lib/api/hooks";
+import { useFetchUser } from "@/lib/api/hooks";
 import { roles } from "@/lib/constants";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,7 +34,7 @@ type WelcomeFormValues = z.infer<typeof welcomeSchema>;
 
 export default function WelcomePage() {
   const { user, error, isLoading } = useUser();
-  const { data: dbUser, isLoading: isLoadingDbUser } = useFetchUserById(user?.sub || "");
+  const { data: dbUser, isLoading: isLoadingDbUser } = useFetchUser(user?.sub || "", "id");
   const router = useRouter();
 
   useEffect(() => {
