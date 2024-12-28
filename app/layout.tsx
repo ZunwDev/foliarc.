@@ -15,8 +15,39 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <QueryClientProvider client={queryClient}>
       <html lang="en" suppressHydrationWarning>
         <head>
-          <title>folioarc.</title>
-          <meta name="description" content="Folioarc is an app to share your portfolio and get feedback from others" />
+          <title>Foliarc | Share and Get Feedback on Your Portfolio</title>
+          <meta
+            name="description"
+            content="Foliarc is a platform for showcasing your portfolio, sharing your projects, and getting valuable feedback from others in the community."
+          />
+          <meta property="og:type" content="website" />
+          <meta property="og:title" content="Foliarc | Share and Get Feedback on Your Portfolio" />
+          <meta
+            property="og:description"
+            content="Foliarc is a platform for showcasing your portfolio, sharing your projects, and getting valuable feedback from others in the community."
+          />
+          <meta property="og:url" content="https://www.foliarc.com" />
+          <meta property="og:image" content="https://www.foliarc.com/logo.jpg" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content="Foliarc | Share and Get Feedback on Your Portfolio" />
+          <meta
+            name="twitter:description"
+            content="Foliarc is a platform for showcasing your portfolio, sharing your projects, and getting valuable feedback from others in the community."
+          />
+          <meta name="twitter:image" content="https://www.foliarc.com/logo.jpg" />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                name: "Foliarc",
+                url: "https://www.foliarc.com",
+                description:
+                  "Foliarc is a platform for showcasing your portfolio, sharing your projects, and getting valuable feedback from others in the community.",
+              }),
+            }}
+          />
         </head>
         <UserProvider>
           <body className="antialiased min-w-[360px] min-h-[100dvh]">
