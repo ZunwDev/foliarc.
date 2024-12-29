@@ -3,14 +3,14 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
-import { InputFormItem, MultiSelectFormItem, TextareaFormItem } from "@/components/util";
+import { InputFormItem, Loading, MultiSelectFormItem, TextareaFormItem } from "@/components/util";
 import { useFetchUser } from "@/lib/api/hooks";
 import { roles } from "@/lib/constants";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -34,16 +34,19 @@ type WelcomeFormValues = z.infer<typeof welcomeSchema>;
 
 export default function WelcomePage() {
   const { user, error, isLoading } = useUser();
-  const { data: dbUser, isLoading: isLoadingDbUser } = useFetchUser(user?.sub || "", "id");
+  const { data: fetchedUsers, isLoading: isLoadingDbUser } = useFetchUser(user?.sub || "", "id");
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      router.push("/");
-    } else if (dbUser) {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted && !isLoading && (!user || fetchedUsers)) {
       router.push("/");
     }
-  }, [isLoading, user, dbUser, router]);
+  }, [mounted, isLoading, user, fetchedUsers, router]);
 
   const form = useForm<z.infer<typeof welcomeSchema>>({
     mode: "onChange",
@@ -62,12 +65,8 @@ export default function WelcomePage() {
     }
   }, [user, form]);
 
-  if (isLoading || isLoadingDbUser || !user) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p>Loading your profile...</p>
-      </div>
-    );
+  if (!mounted || isLoading || isLoadingDbUser) {
+    return <Loading mounted={mounted} />;
   }
 
   if (error) {
@@ -86,58 +85,69 @@ export default function WelcomePage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Welcome 👋</CardTitle>
-          <CardDescription>
-            Finish your profile to get started, showcase your work, and connect with others in the community.
-          </CardDescription>
-        </CardHeader>
+    !fetchedUsers &&
+    user &&
+    !isLoading &&
+    !isLoadingDbUser && (
+      <div className="flex items-center justify-center min-h-screen">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>Welcome 👋</CardTitle>
+            <CardDescription>
+              Finish your profile to get started, showcase your work, and connect with others in the community.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4 px-8">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <InputFormItem
+                  label="Nickname"
+                  id="nickname"
+                  placeholder="hasnan_patel"
+                  form={form}
+                  prefix="@"
+                  required
+                  description="Enter a unique nickname. This will be used to identify you on the platform."
+                />
+                <InputFormItem
+                  label="Your Name"
+                  id="name"
+                  placeholder="Hasnan Patel"
+                  form={form}
+                  required
+                  description="Enter your full name, appears on your profile and projects."
+                />
+                <TextareaFormItem label="Bio" id="bio" size="sm" placeholder="Tell us a little about yourself..." form={form} />
+                <MultiSelectFormItem
+                  label="Roles"
+                  id="roles"
+                  form={form}
+                  data={roles}
+                  placeholder="Select your roles"
+                  required
+                />
 
-        <CardContent className="space-y-4 px-8">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <InputFormItem
-                label="Nickname"
-                id="nickname"
-                placeholder="hasnan_patel"
-                form={form}
-                prefix="@"
-                required
-                description="Enter a unique nickname. This will be used to identify you on the platform."
-              />
-              <InputFormItem
-                label="Your Name"
-                id="name"
-                placeholder="Hasnan Patel"
-                form={form}
-                required
-                description="Enter your full name, appears on your profile and projects."
-              />
-              <TextareaFormItem label="Bio" id="bio" size="sm" placeholder="Tell us a little about yourself..." form={form} />
-              <MultiSelectFormItem label="Roles" id="roles" form={form} data={roles} placeholder="Select your roles" required />
-
-              <div className="pt-4 text-sm text-muted-foreground">
-                <p>
-                  By creating your profile, you agree to our{" "}
-                  <Link href="/privacy-policy" className="text-blue-500 hover:underline">
-                    Privacy Policy
-                  </Link>{" "}
-                  and{" "}
-                  <Link href="/terms-of-service" className="text-blue-500 hover:underline">
-                    Terms of Service
-                  </Link>
-                  .
-                </p>
-              </div>
-              <Button type="submit" className="w-full">
-                Save and Continue
-              </Button>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-    </div>
+                <div className="pt-4 text-sm text-muted-foreground">
+                  <p>
+                    By creating your profile, you agree to our{" "}
+                    <Link href="/privacy-policy" className="text-blue-500 hover:underline">
+                      Privacy Policy
+                    </Link>{" "}
+                    and{" "}
+                    <Link href="/terms-of-service" className="text-blue-500 hover:underline">
+                      Terms of Service
+                    </Link>
+                    .
+                  </p>
+                </div>
+                <Button type="submit" className="w-full">
+                  Save and Continue
+                </Button>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+      </div>
+    )
   );
 }

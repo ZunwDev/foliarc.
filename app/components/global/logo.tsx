@@ -2,7 +2,11 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
-export function Logo() {
+interface LogoProps {
+  size?: number;
+}
+
+export function Logo({ size = 50 }: LogoProps) {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -18,8 +22,8 @@ export function Logo() {
     <svg
       version="1.0"
       xmlns="http://www.w3.org/2000/svg"
-      width="50"
-      height="50"
+      width={size}
+      height={size}
       viewBox="-50 0 290 290"
       preserveAspectRatio="xMidYMid meet"
       style={{ color: theme === "dark" ? "white" : "black" }}>

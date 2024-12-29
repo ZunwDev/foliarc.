@@ -1,4 +1,4 @@
-import { searchUsers, createUser, updateUser, deleteUser } from "@/lib/api/users";
+import { createUser, deleteUser, searchUsers, updateUser } from "@/lib/api/users";
 import { User } from "@/lib/api/users/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -72,6 +72,7 @@ export function useDeleteUser() {
       if (!userId) throw new Error("User ID is required");
       await deleteUser(userId);
     },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onSuccess: (_, userId) => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
     },
