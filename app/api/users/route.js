@@ -8,19 +8,40 @@ export async function GET(req) {
     if (!search) {
       return NextResponse.json({ error: "Searched keyword is required" }, { status: 400 });
     }
-    else if(!field) {
+    if (!field) {
       return NextResponse.json({ error: "Field is required" }, { status: 400 });
     }
 
-    const { data, error } = await supabase
-    .from('users')
-    .select('*')
-    .ilike(field, `%${search}%`);
+    const { data: exactMatch, error: emError } = await supabase
+      .from("users")
+      .select("*")
+      .eq(field, search);
 
-    if (error) {
-      throw new Error(error.message);
+    if (emError) {
+      throw new Error(emError.message);
     }
-    return NextResponse.json(data);
+
+    const { data: otherMatches, error: omError } = await supabase
+      .from("users")
+      .select("*")
+      .ilike(field, `%${search}%`);
+
+    if (omError) {
+      throw new Error(omError.message);
+    }
+
+    let allMatches = [];
+
+    if (exactMatch && exactMatch.length > 0) {
+      allMatches = [
+        exactMatch[0],
+        ...otherMatches.filter((item) => item.id !== exactMatch[0].id),
+      ];
+    } else {
+      allMatches = otherMatches;
+    }
+
+    return NextResponse.json(allMatches);
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 404 });
   }
@@ -79,8 +100,9 @@ export async function DELETE(req, params) {
 
     const { error } = await supabase
       .from('users')
-      .delete()
-      .eq('id', id);
+      .select()
+      .eq('id', id)
+      .delete();
 
     if (error) {
       throw new Error(error.message);
