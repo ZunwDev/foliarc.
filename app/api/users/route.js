@@ -17,18 +17,18 @@ export async function GET(req) {
       .select("*")
       .eq(field, search);
 
-    if (emError) {
-      throw new Error(emError.message);
-    }
+      if (emError) {
+        return NextResponse.json({ error }, { status: 400 });
+      }
 
     const { data: otherMatches, error: omError } = await supabase
       .from("users")
       .select("*")
       .ilike(field, `%${search}%`);
 
-    if (omError) {
-      throw new Error(omError.message);
-    }
+      if (omError) {
+        return NextResponse.json({ error }, { status: 400 });
+      }
 
     let allMatches = [];
 
@@ -55,9 +55,9 @@ export async function POST(req) {
       .insert([{ id, username, name, email, location, tags, interactions, bio }])
       .select();
 
-    if (error) {
-      throw new Error(error.message);
-    }
+      if (error) {
+        return NextResponse.json({ error }, { status: 400 });
+      }
 
     return NextResponse.json(data ? data[0] : { message: 'User created successfully' }, { status: 201 });
   } catch (error) {
@@ -80,9 +80,9 @@ export async function PUT(req, params) {
       .eq('id', id)
       .select();
 
-    if (error) {
-      throw new Error(error.message);
-    }
+      if (error) {
+        return NextResponse.json({ error }, { status: 400 });
+      }
 
     return NextResponse.json(data ? data[0] : { message: 'User updated successfully' }, { status: 201 });
   } catch (error) {
@@ -104,9 +104,9 @@ export async function DELETE(req, params) {
       .eq('id', id)
       .delete();
 
-    if (error) {
-      throw new Error(error.message);
-    }
+      if (error) {
+        return NextResponse.json({ error }, { status: 400 });
+      }
 
     return NextResponse.json({ message: 'User deleted successfully' }, { status: 200 });
   } catch (error) {
