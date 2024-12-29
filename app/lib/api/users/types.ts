@@ -5,7 +5,7 @@ export type User = {
   name: string | null;
   email: string | null;
   location: string | null;
-  tags: string[] | null;
+  tags: object[] | null;
   interactions: string[] | null;
   bio: string | null;
 };

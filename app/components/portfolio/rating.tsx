@@ -37,7 +37,7 @@ export function Rating({ ratings, setRatings }: RatingProps) {
                 <Button
                   variant="outline"
                   key={number}
-                  className={`size-12 rounded-full p-3 transition-all duration-200 ease-in-out transform ${
+                  className={`size-12 p-3 transition-all duration-200 ease-in-out transform ${
                     ratings[category.toLowerCase()] === number
                       ? "bg-blue-500 hover:bg-blue-700 transform scale-110"
                       : "bg-background text-blue-500 hover:bg-blue-400 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500"

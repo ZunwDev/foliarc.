@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
 import { InputFormItem, Loading, MultiSelectFormItem, TextareaFormItem } from "@/components/util";
-import { useFetchUser } from "@/lib/api/hooks";
+import { useCreateUser, useFetchUser } from "@/lib/api/hooks";
 import { roles } from "@/lib/constants";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const welcomeSchema = z.object({
-  nickname: z
+  username: z
     .string()
     .min(3, { message: "Nickname must be at least 3 characters" })
     .max(16, { message: "Nickname must not exceed 16 characters" }),
@@ -24,19 +24,19 @@ const welcomeSchema = z.object({
     .min(4, { message: "Name must be at least 4 characters" })
     .max(50, { message: "Name must not exceed 50 characters" }),
   bio: z.string().max(200, { message: "Bio must not exceed 200 characters" }).optional(),
-  roles: z
+  tags: z
     .array(z.object({ value: z.string(), label: z.string() }))
     .min(1, "At least one tag must be selected")
     .max(3, "You can select up to 3 tags"),
 });
 
-type WelcomeFormValues = z.infer<typeof welcomeSchema>;
-
 export default function WelcomePage() {
   const { user, error, isLoading } = useUser();
+  const { mutate: createUser, isError, error: createError } = useCreateUser();
   const { data: fetchedUsers, isLoading: isLoadingDbUser } = useFetchUser(user?.sub || "", "id");
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -52,16 +52,16 @@ export default function WelcomePage() {
     mode: "onChange",
     resolver: zodResolver(welcomeSchema),
     defaultValues: {
-      nickname: user?.nickname || user?.name || user?.email || "",
+      username: user?.nickname || user?.name || user?.email || "",
       name: "",
       bio: "",
-      roles: [],
+      tags: [],
     },
   });
 
   useEffect(() => {
     if (user) {
-      form.setValue("nickname", user.nickname || user.name || user.email || "");
+      form.setValue("username", user.nickname || user.name || user.email || "");
     }
   }, [user, form]);
 
@@ -77,11 +77,36 @@ export default function WelcomePage() {
     );
   }
 
-  const onSubmit = (data: WelcomeFormValues) => {
-    console.log("Form data:", data);
-    setTimeout(() => {
-      router.push("/");
-    }, 500);
+  const onSubmit = async (values: z.infer<typeof welcomeSchema>) => {
+    try {
+      await welcomeSchema.parseAsync(values);
+      setIsSubmitting(true);
+
+      if (!user) {
+        return;
+      }
+
+      const extendedValues = {
+        ...values,
+        id: user.sub as string,
+        email: user?.email || null,
+        bio: values.bio || null,
+      };
+
+      createUser(extendedValues, {
+        onSuccess: () => {
+          setIsSubmitting(false);
+          setTimeout(() => {
+            router.push("/");
+          }, 500);
+        },
+        onError: () => {
+          setIsSubmitting(false);
+        },
+      });
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   return (
@@ -101,13 +126,13 @@ export default function WelcomePage() {
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <InputFormItem
-                  label="Nickname"
-                  id="nickname"
+                  label="Username"
+                  id="username"
                   placeholder="hasnan_patel"
                   form={form}
                   prefix="@"
                   required
-                  description="Enter a unique nickname. This will be used to identify you on the platform."
+                  description="Enter a unique username. This will be used to identify you on the platform."
                 />
                 <InputFormItem
                   label="Your Name"
@@ -120,12 +145,18 @@ export default function WelcomePage() {
                 <TextareaFormItem label="Bio" id="bio" size="sm" placeholder="Tell us a little about yourself..." form={form} />
                 <MultiSelectFormItem
                   label="Roles"
-                  id="roles"
+                  id="tags"
                   form={form}
                   data={roles}
                   placeholder="Select your roles"
                   required
                 />
+
+                {isError && createError && (
+                  <p className="text-red-500 text-sm">
+                    {createError.message || "An error occurred while creating your profile. Please try again."}
+                  </p>
+                )}
 
                 <div className="pt-4 text-sm text-muted-foreground">
                   <p>
@@ -140,8 +171,8 @@ export default function WelcomePage() {
                     .
                   </p>
                 </div>
-                <Button type="submit" className="w-full">
-                  Save and Continue
+                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                  {isSubmitting ? "Saving..." : "Save and Continue"}
                 </Button>
               </form>
             </Form>

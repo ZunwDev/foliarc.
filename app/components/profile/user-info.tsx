@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getInitials } from "@/lib/utils";
-import { Badge, Linkedin, Mail, MapPin, X } from "lucide-react";
+import { Linkedin, Mail, MapPin, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -14,11 +14,11 @@ interface UserInfoProps {
     avatar: string;
     bio: string;
     location: string;
-    website: string;
   };
+  isCurrentUser: boolean;
 }
 
-export function UserInfo({ user }: UserInfoProps) {
+export function UserInfo({ user, isCurrentUser }: UserInfoProps) {
   const [imageError, setImageError] = useState(false);
 
   return (
@@ -27,12 +27,14 @@ export function UserInfo({ user }: UserInfoProps) {
         <div className="absolute inset-0 bg-grid-primary/10" />
       </div>
 
-      <Button
-        variant="outline"
-        className="absolute top-2 right-2 rounded-full shadow-md transition-colors"
-        onClick={() => console.log("Edit Profile clicked")}>
-        Edit Profile
-      </Button>
+      {isCurrentUser ? (
+        <Button
+          variant="outline"
+          className="absolute top-2 right-2 rounded-full shadow-md transition-colors"
+          onClick={() => console.log("Edit Profile clicked")}>
+          Edit Profile
+        </Button>
+      ) : null}
 
       <CardContent className="relative pt-0 pb-8">
         <div className="flex flex-col items-center">
@@ -44,11 +46,6 @@ export function UserInfo({ user }: UserInfoProps) {
           <div className="text-center mt-4 space-y-1">
             <h1 className="text-2xl font-bold text-foreground">{user.name}</h1>
             <p className="text-muted-foreground">@{user.username}</p>
-            {user.status && (
-              <Badge variant="secondary" className="mt-2">
-                {user.status}
-              </Badge>
-            )}
           </div>
 
           {/* Bio Section */}
