@@ -114,7 +114,7 @@ export default function WelcomePage() {
     user &&
     !isLoading &&
     !isLoadingDbUser && (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen pt-16">
         <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle>Welcome 👋</CardTitle>
@@ -172,7 +172,7 @@ export default function WelcomePage() {
                   </p>
                 </div>
                 <Button type="submit" className="w-full" disabled={isSubmitting}>
-                  {isSubmitting ? "Saving..." : "Save and Continue"}
+                  {isSubmitting ? "Creating..." : "Create profile"}
                 </Button>
               </form>
             </Form>

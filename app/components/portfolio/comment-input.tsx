@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 interface CommentInputProps {
@@ -10,7 +9,6 @@ interface CommentInputProps {
 export function CommentInput({ onChange, handleSubmit }: CommentInputProps) {
   const [newComment, setNewComment] = useState<string>("");
   const editableRef = useRef<HTMLDivElement | null>(null);
-  const [isEmpty, setIsEmpty] = useState<boolean>(false);
 
   useEffect(() => {
     if (editableRef.current) {
@@ -25,17 +23,19 @@ export function CommentInput({ onChange, handleSubmit }: CommentInputProps) {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      if (newComment.trim().length > 0) {
-        handleSubmit(newComment);
-        setNewComment("");
-        setIsEmpty(false);
-        if (editableRef.current) {
-          editableRef.current.innerText = "";
-        }
+    if (e.key === "Enter") {
+      if (e.shiftKey) {
+        document.execCommand("insertLineBreak");
+        e.preventDefault();
       } else {
-        setIsEmpty(true);
+        e.preventDefault();
+        if (newComment.trim().length > 0) {
+          handleSubmit(newComment);
+          setNewComment("");
+          if (editableRef.current) {
+            editableRef.current.innerText = "";
+          }
+        }
       }
     }
   };
@@ -44,12 +44,16 @@ export function CommentInput({ onChange, handleSubmit }: CommentInputProps) {
     if (newComment.trim().length > 0) {
       handleSubmit(newComment);
       setNewComment("");
-      setIsEmpty(false);
       if (editableRef.current) {
         editableRef.current.innerText = "";
       }
-    } else {
-      setIsEmpty(true);
+    }
+  };
+
+  const cancelComment = () => {
+    setNewComment("");
+    if (editableRef.current) {
+      editableRef.current.innerText = "";
     }
   };
 
@@ -60,9 +64,7 @@ export function CommentInput({ onChange, handleSubmit }: CommentInputProps) {
         contentEditable
         onInput={handleInputChange}
         onKeyDown={handleKeyDown}
-        className={`min-h-[40px] w-full resize-none overflow-hidden rounded-lg border p-3 text-sm text-foreground ${
-          isEmpty ? "border-red-500" : "border-muted-foreground"
-        }`}
+        className={`min-h-[40px] w-full resize-none overflow-hidden rounded-lg border p-3 text-sm text-foreground`}
         style={{
           whiteSpace: "pre-wrap",
           wordWrap: "break-word",
@@ -75,19 +77,21 @@ export function CommentInput({ onChange, handleSubmit }: CommentInputProps) {
         role="textbox"
         aria-placeholder="Type a message..."></div>
       <div
-        className="absolute left-3 top-[22%] text-sm text-muted-foreground pointer-events-none flex items-center"
+        className="absolute left-3 top-1/2 text-sm text-muted-foreground pointer-events-none flex items-center"
         style={{
           visibility: newComment ? "hidden" : "visible",
           transform: "translateY(-50%)",
         }}>
-        Type a message...
+        Add a comment...
       </div>
-      <div className="flex justify-end mt-4">
-        <Button onClick={handleButtonClick}>
-          <Send className="size mr-2" />
-          Post
-        </Button>
-      </div>
+      {newComment.trim().length > 0 && (
+        <div className="flex justify-end mt-4 gap-3">
+          <Button variant="outline" onClick={cancelComment}>
+            Cancel
+          </Button>
+          <Button onClick={handleButtonClick}>Comment</Button>
+        </div>
+      )}
     </div>
   );
 }
