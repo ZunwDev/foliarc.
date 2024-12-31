@@ -12,15 +12,24 @@ export async function GET(req) {
       return NextResponse.json({ error: "Field is required" }, { status: 400 });
     }
 
-    const { data: exactMatch } = await supabase
+    const { data: exactMatch, emError } = await supabase
       .from("users")
       .select("*")
       .eq(field, search);
 
-    const { data: otherMatches } = await supabase
+      if(emError) {
+        return NextResponse.json({ emError }, { status: 404 })
+      }
+
+    const { data: otherMatches, omError } = await supabase
       .from("users")
       .select("*")
       .ilike(field, `%${search}%`);
+
+      if(omError) {
+        return NextResponse.json({ omError }, { status: 404 })
+      }
+  
 
     let allMatches = [];
 
@@ -42,10 +51,14 @@ export async function GET(req) {
 export async function POST(req) {
   try {
     const { id, username, name, email, location, tags, interactions, bio } = await req.json();
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('users')
       .insert([{ id, username, name, email, location, tags, interactions, bio }])
       .select();
+
+    if(error) {
+      return NextResponse.json({ error }, { status: 406 })
+    }
 
     return NextResponse.json(data ? data[0] : { message: 'User created successfully' }, { status: 201 });
   } catch (error) {
@@ -62,11 +75,16 @@ export async function PUT(req, params) {
     }
 
     const { name, email, location, tags, interactions, bio } = await req.json();
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('users')
       .update([{ name, email, location, tags, interactions, bio }])
       .eq('id', id)
       .select();
+
+      if(error) {
+        return NextResponse.json({ error }, { status: 404 })
+      }
+  
 
     return NextResponse.json(data ? data[0] : { message: 'User updated successfully' }, { status: 201 });
   } catch (error) {
@@ -87,6 +105,11 @@ export async function DELETE(req, params) {
       .select()
       .eq('id', id)
       .delete();
+
+      if(error) {
+        return NextResponse.json({ error }, { status: 404 })
+      }
+  
 
     return NextResponse.json({ message: 'User deleted successfully' }, { status: 200 });
   } catch (error) {
