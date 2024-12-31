@@ -5,8 +5,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 type NonNullUser = Exclude<User, null>;
 
 type ApiError = {
+  code: string;
+  details: string | null;
+  hint: string | null;
   message: string;
-  statusCode?: number;
 };
 
 export function useFetchUser(search: string, field: keyof NonNullUser = "id") {
@@ -27,7 +29,7 @@ export function useFetchUser(search: string, field: keyof NonNullUser = "id") {
 export function useCreateUser() {
   const queryClient = useQueryClient();
 
-  return useMutation<NonNullUser, ApiError, Omit<NonNullUser, "id">>({
+  return useMutation<NonNullUser, ApiError, Omit<NonNullUser, "created_at" | "location" | "interactions">>({
     mutationFn: async (userData) => {
       const user = await createUser(userData);
       if (!user) throw new Error("Failed to create user");

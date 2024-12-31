@@ -15,7 +15,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useFetchUser } from "@/lib/api/hooks";
 import { getInitials } from "@/lib/utils";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { DoorOpen, FileText, LayoutDashboard, User } from "lucide-react";
+import { DoorOpen, LayoutDashboard, Settings, Star, User } from "lucide-react";
 import Link from "next/link";
 
 export function Profile() {
@@ -48,14 +48,21 @@ export function Profile() {
         <Link href={currentUser ? `/${currentUser.username}` : "/welcome"} passHref>
           <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
             <User className="size-5" />
-            <span className="text-sm font-medium">My Profile</span>
+            <span className="text-sm font-medium">Your Profile</span>
           </DropdownMenuItem>
         </Link>
 
-        <Link href="/submissions" passHref>
+        <Link href={currentUser ? `/${currentUser.username}/?tab=favorites` : "/welcome"} passHref>
           <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
-            <FileText className="size-5" />
-            <span className="text-sm font-medium">My Submissions</span>
+            <Star className="size-5" />
+            <span className="text-sm font-medium">Your Favorites</span>
+          </DropdownMenuItem>
+        </Link>
+
+        <Link href="/settings/profile" passHref>
+          <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-md">
+            <Settings className="size-5" />
+            <span className="text-sm font-medium">Settings</span>
           </DropdownMenuItem>
         </Link>
 

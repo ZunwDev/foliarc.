@@ -55,72 +55,7 @@ export function CommentSection({ comments, handleCommentSubmit, handleCommentCha
   if (error) return <div>{error.message}</div>;
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold mt-24">Comments</h2>
-      <p className="text-muted-foreground mb-4">
-        {user ? "Share your thoughts on this portfolio" : "Log in to leave a comment or interact with comments."}
-      </p>
-
-      <div>
-        {comments.map((comment) => (
-          <div key={comment.id} className="mb-4 pb-4 border-b last:border-b-0 mt-6">
-            <div className="flex items-start space-x-4">
-              <Avatar>
-                <AvatarImage src={comment.avatar} alt={comment.author} />
-                <AvatarFallback>{comment.author[0]}</AvatarFallback>
-              </Avatar>
-              <div className="flex-1">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-semibold flex items-center space-x-2">
-                    <Link href="#" className="hover:underline">
-                      {comment.author}
-                    </Link>
-                    <span className="text-sm text-muted-foreground">• {timeAgo(comment.date)}</span>
-                  </h3>
-                </div>
-                <p className="mt-1 text-sm">{comment.content}</p>
-
-                <div className="flex justify-between items-center mt-1 pr-1">
-                  <div className="flex space-x-2">
-                    <div className="flex items-center">
-                      <Button variant="ghost" size="sm" className="rounded-full" disabled={!user}>
-                        <ThumbsUp size={16} />
-                      </Button>
-                      12
-                      <Button variant="ghost" size="sm" className="rounded-full" disabled={!user}>
-                        <ThumbsDown size={16} />
-                      </Button>
-                    </div>
-                    <Button variant="ghost" size="sm" disabled={!user}>
-                      <MessageCircle size={16} />
-                      Reply
-                    </Button>
-                  </div>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="size-8 p-0 hover:bg-muted focus-visible:ring-1 focus-visible:ring-ring"
-                        disabled={!user}>
-                        <MoreHorizontal className="size-4" />
-                        <span className="sr-only">Open menu</span>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-40">
-                      <DropdownMenuItem className="cursor-pointer focus:bg-muted">
-                        <Flag />
-                        Report
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
+    <div className="pt-16">
       <div className="mt-4 flex flex-col gap-4">
         {user ? (
           <CommentInput onChange={handleCommentChange} handleSubmit={handleCommentSubmit} />
@@ -128,6 +63,63 @@ export function CommentSection({ comments, handleCommentSubmit, handleCommentCha
           <p className="text-muted-foreground text-sm text-center">Log in to add a comment or interact with comments.</p>
         )}
       </div>
+      {comments.map((comment) => (
+        <div key={comment.id} className="mb-4 pb-4 border-b last:border-b-0 mt-6">
+          <div className="flex items-start space-x-4">
+            <Avatar>
+              <AvatarImage src={comment.avatar} alt={comment.author} />
+              <AvatarFallback>{comment.author[0]}</AvatarFallback>
+            </Avatar>
+            <div className="flex-1">
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold flex items-center space-x-2">
+                  <Link href="#" className="hover:underline">
+                    {comment.author}
+                  </Link>
+                  <span className="text-sm text-muted-foreground">• {timeAgo(comment.date)}</span>
+                </h3>
+              </div>
+              <p className="mt-1 text-sm">{comment.content}</p>
+
+              <div className="flex justify-between items-center mt-1 pr-1">
+                <div className="flex space-x-2">
+                  <div className="flex items-center">
+                    <Button variant="ghost" size="sm" className="rounded-full" disabled={!user}>
+                      <ThumbsUp size={16} />
+                    </Button>
+                    12
+                    <Button variant="ghost" size="sm" className="rounded-full" disabled={!user}>
+                      <ThumbsDown size={16} />
+                    </Button>
+                  </div>
+                  <Button variant="ghost" size="sm" disabled={!user}>
+                    <MessageCircle size={16} />
+                    Reply
+                  </Button>
+                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="size-8 p-0 hover:bg-muted focus-visible:ring-1 focus-visible:ring-ring"
+                      disabled={!user}>
+                      <MoreHorizontal className="size-4" />
+                      <span className="sr-only">Open menu</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-40">
+                    <DropdownMenuItem className="cursor-pointer focus:bg-muted">
+                      <Flag />
+                      Report
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
