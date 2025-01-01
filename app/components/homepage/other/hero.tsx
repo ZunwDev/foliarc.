@@ -15,11 +15,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { InputFormItem, MultiSelectFormItem } from "@/components/util";
 import { useFetchUser } from "@/lib/api/hooks";
 import { technologies } from "@/lib/constants";
+import { useMount } from "@/lib/hooks";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -32,11 +33,7 @@ export function Hero() {
   const { user } = useUser();
   const { data: fetchedUsers, isLoading } = useFetchUser(user?.sub || "", "id");
   const [hasSubmitted, setHasSubmitted] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useMount();
 
   const currentUser = fetchedUsers?.[0] || null;
 

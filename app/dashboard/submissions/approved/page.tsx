@@ -200,6 +200,7 @@ export default function ApprovedSubmissionsPage() {
                           {image ? (
                             <div className="relative w-full h-full">
                               <Image
+                                loading="lazy"
                                 src={URL.createObjectURL(image)}
                                 alt="Uploaded Preview"
                                 className="absolute inset-0 object-contain w-full h-full rounded-md"

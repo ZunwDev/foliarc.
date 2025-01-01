@@ -4,19 +4,15 @@ import { PortfolioCard } from "@/components/homepage";
 import { UserInfo } from "@/components/profile";
 import { Custom404, Loading } from "@/components/util";
 import { useFetchUser } from "@/lib/api/hooks";
+import { useMount } from "@/lib/hooks";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
 
 export default function UserProfile() {
   const { user, isLoading: isUserLoading } = useUser();
   const params = useParams();
   const username = params?.user || "";
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useMount();
 
   const likeAmount = 1;
   const items = [1, 2, 3, 4];

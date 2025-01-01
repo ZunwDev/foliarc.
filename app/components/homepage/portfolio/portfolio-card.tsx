@@ -29,6 +29,7 @@ export function PortfolioCard({ likeAmount, index }: PortfolioCardProps) {
           <Link href={"/portfolio/1"} className="flex flex-col gap-4" passHref>
             <div className="relative">
               <Image
+                loading="lazy"
                 width={1200}
                 height={300}
                 src="/cats-9024710_960_720.jpg"

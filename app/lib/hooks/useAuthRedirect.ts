@@ -1,15 +1,12 @@
-import { useUser } from "@auth0/nextjs-auth0/client"; // Or the auth library you're using
+import { useMount } from "@/lib/hooks";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export const useAuthRedirect = () => {
   const { user, isLoading } = useUser();
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useMount();
 
   useEffect(() => {
     if (!mounted || isLoading) return;

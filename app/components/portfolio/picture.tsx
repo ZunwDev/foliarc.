@@ -17,6 +17,7 @@ export function Picture({ src, link = "https://www.example.com" }: { src: string
       <div className="aspect-video relative rounded-lg overflow-hidden group">
         <Link href={link} target="_blank">
           <Image
+            loading="lazy"
             src={src}
             alt="Portfolio Preview"
             layout="fill"

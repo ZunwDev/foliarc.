@@ -1,18 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useMount } from "@/lib/hooks";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
 
 export function ThemeSwitch() {
   const { theme, setTheme, resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
+  const mounted = useMount();
   if (!mounted) return null;
 
   const toggleTheme = () => {

@@ -1,6 +1,6 @@
 "use client";
+import { useMount } from "@/lib/hooks";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
 
 interface LogoProps {
   size?: number;
@@ -8,15 +8,8 @@ interface LogoProps {
 
 export function Logo({ size = 50 }: LogoProps) {
   const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
+  const mounted = useMount();
+  if (!mounted) return null;
 
   return (
     <svg

@@ -1,17 +1,11 @@
 "use client";
 import { PortfolioCard, SortDropdown } from "@/components/homepage";
-import { useEffect, useState } from "react";
+import { useMount } from "@/lib/hooks";
 
 export function PortfolioGallery() {
   const likeAmount = 1;
   const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
+  const mounted = useMount();
   if (!mounted) return null;
 
   return (
