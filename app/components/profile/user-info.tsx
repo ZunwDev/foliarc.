@@ -24,10 +24,6 @@ import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
-interface Social {
-  platform: "twitter" | "linkedin" | "facebook";
-  url: string;
-}
 interface UserInfoProps {
   user: {
     username: string;
@@ -37,7 +33,7 @@ interface UserInfoProps {
     bio: string;
     location: string;
     tags: { value: string; label: string }[];
-    socials: Social[];
+    socials: { platform: string; url: string }[];
   };
   isCurrentUser: boolean;
 }
@@ -61,34 +57,31 @@ const profileSchema = z.object({
   location: z.string().optional(),
   socials: z
     .array(
-      z
-        .string()
-        .url("Invalid URL format")
-        .refine((val) => val === "" || ["linkedin", "twitter", "facebook"].some((platform) => val.includes(platform)), {
-          message: "URL must be from LinkedIn, Twitter, or Facebook",
-        })
+      z.object({
+        url: z.string().url("Invalid URL format"),
+        platform: z.string().optional(),
+      })
     )
     .optional()
-    .transform((urls) => urls?.filter((url) => url !== "") || []),
+    .default([]),
 });
 
-function extractPlatformFromUrl(url: string): string {
-  const platforms = {
-    linkedin: /linkedin\.com/,
-    twitter: /twitter\.com/,
-    facebook: /facebook\.com/,
-  };
+const extractPlatformFromUrl = (url: string): string => {
+  if (url.includes("linkedin.com")) return "LinkedIn";
+  if (url.includes("twitter.com")) return "Twitter";
+  if (url.includes("facebook.com")) return "Facebook";
+  if (url.includes("github.com")) return "GitHub";
+  if (url.includes("instagram.com")) return "Instagram";
+  if (url.includes("youtube.com")) return "YouTube";
+  if (url.includes("twitch.com")) return "Twitch";
 
-  for (const [platform, regex] of Object.entries(platforms)) {
-    if (regex.test(url)) {
-      return platform;
-    }
-  }
+  throw new Error(
+    "Invalid URL. Please use a URL from one of the following platforms: LinkedIn, Twitter, Facebook, GitHub, Instagram, YouTube, or Twitch."
+  );
+};
 
-  console.warn(`Platform not recognized for URL: ${url}`);
-  return "unknown";
-}
 export function UserInfo({ user, isCurrentUser }: UserInfoProps) {
+  const [socialError, setSocialError] = useState("");
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [imageError, setImageError] = useState(false);
 
@@ -101,7 +94,7 @@ export function UserInfo({ user, isCurrentUser }: UserInfoProps) {
       tags: user.tags || [],
       email: user.email || "",
       location: user.location || "",
-      socials: user.socials?.map((social) => social.url) || [],
+      socials: user.socials || [],
     },
   });
 
@@ -111,7 +104,7 @@ export function UserInfo({ user, isCurrentUser }: UserInfoProps) {
     tags: { value: string; label: string }[];
     email: string;
     location?: string;
-    socials: string[];
+    socials: { url: string; platform?: string }[];
   };
 
   const { fields, append, remove } = useFieldArray<ProfileFormValues>({
@@ -122,24 +115,43 @@ export function UserInfo({ user, isCurrentUser }: UserInfoProps) {
   const onSubmit = async (values: z.infer<typeof profileSchema>) => {
     try {
       const parsedValues = await profileSchema.parseAsync(values);
+      if (socialError) setSocialError("");
 
-      const transformedSocials = (parsedValues.socials || [])
-        .filter((url) => url.trim() !== "")
-        .map((url) => ({
-          platform: extractPlatformFromUrl(url),
-          url,
-        }))
-        .filter((social) => social.platform !== "unknown") as Social[];
+      const finalSocials = parsedValues.socials?.map((social) => {
+        try {
+          const platform = extractPlatformFromUrl(social.url);
+          return { ...social, platform };
+        } catch {
+          setSocialError(
+            `${social.url} is not from allowed platforms. Please use a URL from one of the following platforms: LinkedIn, Twitter, Facebook, GitHub, Instagram, YouTube, or Twitch.`
+          );
+          return null;
+        }
+      });
+
+      const validSocials = finalSocials?.filter((social) => social !== null);
 
       const finalValues = {
         ...parsedValues,
-        socials: transformedSocials,
+        socials: validSocials,
       };
 
       console.log("Final values:", finalValues);
-      setDialogOpen(false);
+
+      if (!socialError) {
+        setDialogOpen(false);
+      }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("Form submission error:", error);
+      throw new Error("Invalid form data");
+    }
+  };
+
+  const handleAddSocial = () => {
+    if (fields.length < 8) {
+      append({ url: "", platform: "" });
+    } else {
+      alert("You can only add up to 8 social links.");
     }
   };
 
@@ -246,6 +258,7 @@ export function UserInfo({ user, isCurrentUser }: UserInfoProps) {
                       </Button>
                     </CollapsibleTrigger>
                     <CollapsibleContent className="space-y-3 pt-3">
+                      {socialError && <p className="text-red-500">{socialError}</p>}
                       {fields.map((field, index) => (
                         <div key={field.id} className="flex items-center gap-3 w-full">
                           <div className="flex-1">
@@ -254,13 +267,12 @@ export function UserInfo({ user, isCurrentUser }: UserInfoProps) {
                               label="Link"
                               form={form}
                               placeholder="URL (e.g., https://linkedin.com/username)"
-                              required={true}
+                              required
                               className="w-full"
                             />
                           </div>
 
                           <Button
-                            type="button"
                             variant="outline"
                             size="icon"
                             onClick={() => remove(index)}
@@ -270,17 +282,7 @@ export function UserInfo({ user, isCurrentUser }: UserInfoProps) {
                         </div>
                       ))}
 
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        onClick={() => {
-                          if (fields.length < 8) {
-                            append("");
-                          } else {
-                            alert("You can only add up to 8 social links.");
-                          }
-                        }}
-                        className="w-full">
+                      <Button type="button" variant="ghost" onClick={handleAddSocial} className="w-full">
                         + Add Social Link
                       </Button>
                     </CollapsibleContent>
