@@ -4,6 +4,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Calendar, Check, ExternalLink, Mail, X } from "lucide-react";
 import { useState } from "react";
@@ -16,6 +26,7 @@ interface PendingItem {
   avatarUrl: string;
   submitDate: string;
   status: "pending" | "approved" | "denied";
+  denyReason?: string;
 }
 
 export default function PendingSubmissionsPage() {
@@ -38,32 +49,27 @@ export default function PendingSubmissionsPage() {
       submitDate: "2023-12-14",
       status: "pending",
     },
-    {
-      id: "3",
-      userName: "Emily Rodriguez",
-      email: "emily.rodriguez@example.com",
-      portfolioUrl: "https://emilyrodriguez.design",
-      avatarUrl: "/placeholder.svg?height=40&width=40",
-      submitDate: "2023-12-13",
-      status: "pending",
-    },
-    {
-      id: "4",
-      userName: "Alex Thompson",
-      email: "alex.thompson@example.com",
-      portfolioUrl: "https://alexthompson.io",
-      avatarUrl: "/placeholder.svg?height=40&width=40",
-      submitDate: "2023-12-12",
-      status: "pending",
-    },
   ]);
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [denyReason, setDenyReason] = useState("");
 
   const handleApprove = (id: string) => {
     setItems(items.map((item) => (item.id === id ? { ...item, status: "approved" } : item)));
   };
 
-  const handleDeny = (id: string) => {
-    setItems(items.map((item) => (item.id === id ? { ...item, status: "denied" } : item)));
+  const handleOpenDenyDialog = (id: string) => {
+    setSelectedItemId(id);
+    setIsDialogOpen(true);
+  };
+
+  const handleDeny = () => {
+    if (selectedItemId) {
+      setItems(items.map((item) => (item.id === selectedItemId ? { ...item, status: "denied", denyReason } : item)));
+      setDenyReason("");
+      setIsDialogOpen(false);
+    }
   };
 
   return (
@@ -125,6 +131,40 @@ export default function PendingSubmissionsPage() {
                           <div className="flex gap-2 items-end space-y-2">
                             {item.status === "pending" ? (
                               <div className="flex flex-row flex-row-reverse gap-2">
+                                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                                  <DialogTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className="text-red-500 hover:text-red-600 hover:bg-red-500/10"
+                                      onClick={() => handleOpenDenyDialog(item.id)}>
+                                      <X className="h-4 w-4 mr-1" />
+                                      Deny
+                                    </Button>
+                                  </DialogTrigger>
+                                  <DialogContent>
+                                    <DialogHeader>
+                                      <DialogTitle>Deny Submission</DialogTitle>
+                                      <DialogDescription>
+                                        You are about to deny {item.userName}&apos;s submission.
+                                      </DialogDescription>
+                                    </DialogHeader>
+
+                                    <Input
+                                      placeholder="Enter the reason for denial"
+                                      value={denyReason}
+                                      onChange={(e) => setDenyReason(e.target.value)}
+                                    />
+                                    <DialogFooter>
+                                      <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                                        Cancel
+                                      </Button>
+                                      <Button variant="destructive" onClick={handleDeny} disabled={!denyReason.trim()}>
+                                        Deny
+                                      </Button>
+                                    </DialogFooter>
+                                  </DialogContent>
+                                </Dialog>
                                 <Button
                                   variant="outline"
                                   size="sm"
@@ -132,14 +172,6 @@ export default function PendingSubmissionsPage() {
                                   onClick={() => handleApprove(item.id)}>
                                   <Check className="h-4 w-4 mr-1" />
                                   Approve
-                                </Button>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  className="text-red-500 hover:text-red-600 hover:bg-red-500/10"
-                                  onClick={() => handleDeny(item.id)}>
-                                  <X className="h-4 w-4 mr-1" />
-                                  Deny
                                 </Button>
                               </div>
                             ) : (

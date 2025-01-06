@@ -49,7 +49,7 @@ export function InputFormItem({
     <FormItem>
       <FormLabel htmlFor={id} className="block" isRequired={required}>
         {label}
-        {!required ? <span className="text-muted-foreground">(optional)</span> : ""}
+        {!required ? <span className="text-muted-foreground"> (optional)</span> : ""}
       </FormLabel>
       <div className="flex flex-row items-center">
         {prefix && (

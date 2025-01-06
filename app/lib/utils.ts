@@ -17,3 +17,17 @@ export const getInitials = (name: string) => {
   const words = name.match(/\b\w/g) || [];
   return words.length > 1 ? words.slice(0, 2).join("").toUpperCase() : name[0].toUpperCase();
 };
+
+export function formatISODate(isoDate: string, locale = "en-US"): string {
+  const options: Intl.DateTimeFormatOptions = {
+    weekday: "short",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZoneName: "short",
+  };
+
+  return new Date(isoDate).toLocaleString(locale, options);
+}

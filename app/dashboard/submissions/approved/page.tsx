@@ -138,8 +138,8 @@ export default function ApprovedSubmissionsPage() {
         <div className="pl-6">
           <h1 className="text-3xl font-bold tracking-tight">Approved Portfolio Submissions</h1>
           <p className="text-muted-foreground">
-            Select a user from the list to review their submission. Fill in any missing details, and once completed, add their
-            portfolio to the database. After selection, the user will be removed from the list.
+            Select a user from the list to fill in any missing details, and once completed, add their portfolio to the database.
+            After selection, the user will be removed from the list.
           </p>
         </div>
         <div className="flex flex-row w-full gap-8 p-6">

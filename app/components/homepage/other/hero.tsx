@@ -52,8 +52,8 @@ export function Hero() {
   };
 
   const renderButton = () => {
-    if (!mounted || isLoading) {
-      return <Skeleton className="h-10 sm:h-11 md:h-12 lg:h-14 w-48 rounded-full"></Skeleton>;
+    if (!mounted || isLoading || !user) {
+      return <Skeleton className="h-10 sm:h-11 md:h-12 lg:h-14 w-48 rounded-full" />;
     }
 
     if (!user) {
