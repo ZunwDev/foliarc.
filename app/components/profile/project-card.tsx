@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogFooter, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Clock, ExternalLink, Heart, Info, MessageCircle, Trash2, XCircle } from "lucide-react";
+import { Clock, ExternalLink, Flag, Heart, Info, MessageCircle, Star, Trash2, XCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -22,7 +22,7 @@ type Project = {
   reason?: string;
 };
 
-export function ProjectCard({ data }: { data: Project }) {
+export function ProjectCard({ data, isCurrentUser }: { data: Project; isCurrentUser: boolean }) {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const overallScore = 88;
   const calculations = "Hireability: 80%\nCreativity: 95%\nAesthetic: 90%";
@@ -32,26 +32,49 @@ export function ProjectCard({ data }: { data: Project }) {
     setDialogOpen(false);
   };
 
+  const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
   return (
     <Card className="relative overflow-hidden">
       <CardHeader className="p-0 relative group">
         <div className="relative">
           {data.status === "approved" ? (
-            <Link href="/portfolio/1" className="flex flex-col gap-4" passHref>
-              <div className="relative">
-                <Image
-                  loading="lazy"
-                  width={1200}
-                  height={300}
-                  src={data.image}
-                  alt={data.title ? data.title : "image"}
-                  className="w-full h-[200px] object-cover object-top transform transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                  <ExternalLink className="text-foreground size-10" />
+            <div className="relative">
+              <Link href="/portfolio/1" className="flex flex-col gap-4" passHref>
+                <div className="relative overflow-hidden">
+                  <Image
+                    loading="lazy"
+                    width={1200}
+                    height={300}
+                    src={data.image}
+                    alt={data.title ? data.title : "image"}
+                    className="w-full h-[200px] object-cover object-top transform transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <ExternalLink className="text-foreground size-10" />
+                  </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+              {!isCurrentUser && (
+                <div className="absolute top-2 right-2 flex space-x-1">
+                  <Button variant="outline" size="icon" className="rounded-full hover:text-red-500" onClick={handleButtonClick}>
+                    <Heart />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="rounded-full hover:text-yellow-500"
+                    onClick={handleButtonClick}>
+                    <Star />
+                  </Button>
+                  <Button variant="outline" size="icon" className="rounded-full hover:text-red-700" onClick={handleButtonClick}>
+                    <Flag />
+                  </Button>
+                </div>
+              )}
+            </div>
           ) : (
             <div className="relative">
               <Image
@@ -73,34 +96,45 @@ export function ProjectCard({ data }: { data: Project }) {
                   </DialogTrigger>
 
                   <DialogContent>
-                    <DialogTitle className="text-xl font-semibold">
+                    <DialogTitle className="text-xl font-semibold text-center">
                       {data.status === "denied" ? "Denial Details" : "Submission Details"}
                     </DialogTitle>
-                    <div className="text-sm text-muted-foreground space-y-2">
-                      <div>
-                        Type: <strong>{data.type === "project" ? "Project" : "Portfolio"}</strong>
+                    <div className="text-sm text-muted-foreground space-y-4">
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium">Type:</span>
+                        <span className="font-bold">{data.type === "project" ? "Project" : "Portfolio"}</span>
                       </div>
-                      <div>
-                        Technologies:
-                        <span className="pl-1 space-x-1">
+
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium">Technologies:</span>
+                        <div className="flex flex-wrap gap-2 mt-2">
                           {data.technologies && data.technologies.map((item, index) => <Badge key={index}>{item}</Badge>)}
-                        </span>
+                        </div>
                       </div>
+
                       {data.type === "project" && (
-                        <div>
-                          Title: <strong>{data.title}</strong>
+                        <div className="flex justify-between items-center">
+                          <span className="font-medium">Title:</span>
+                          <span className="font-bold">{data.title}</span>
                         </div>
                       )}
-                      <div>
-                        Submitted On: <strong>{formatISODate(data.createdAt) || "Unknown"}</strong>
+
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium">Submitted On:</span>
+                        <span className="font-bold">{formatISODate(data.createdAt) || "Unknown"}</span>
                       </div>
+
                       {data.status === "denied" && (
                         <div>
-                          Deny Reason: <strong>{data.reason || "No specific reason provided."}</strong>
+                          <span className="font-medium">Deny Reason:</span>
+                          <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-md text-red-700">
+                            {data.reason || "No specific reason provided."}
+                          </div>
                         </div>
                       )}
                     </div>
-                    <DialogFooter className="space-x-4 pt-4">
+
+                    <DialogFooter className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-4 pt-6">
                       <Button variant="outline" onClick={() => setDialogOpen(false)} className="w-full sm:w-auto">
                         Close
                       </Button>
@@ -108,7 +142,7 @@ export function ProjectCard({ data }: { data: Project }) {
                         <Button
                           variant="destructive"
                           onClick={handleDelete}
-                          className="w-full sm:w-auto bg-red-500 hover:bg-red-600 text-white">
+                          className="w-full sm:w-auto bg-red-500 hover:bg-red-600 text-white flex items-center justify-center gap-2">
                           <Trash2 size={20} />
                           Delete Submission
                         </Button>

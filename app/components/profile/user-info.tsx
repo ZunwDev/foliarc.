@@ -18,7 +18,7 @@ import { InputFormItem, MultiSelectFormItem, TextareaFormItem } from "@/componen
 import { technologies } from "@/lib/constants";
 import { getInitials } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Briefcase, ChevronsUpDown, Link2, Linkedin, Mail, MapPin, Trash, User, X } from "lucide-react";
+import { Briefcase, ChevronsUpDown, Link2, Linkedin, Mail, MapPin, Plus, Trash, User, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -115,7 +115,9 @@ export function UserInfo({ user, isCurrentUser }: UserInfoProps) {
   const onSubmit = async (values: z.infer<typeof profileSchema>) => {
     try {
       const parsedValues = await profileSchema.parseAsync(values);
-      if (socialError) setSocialError("");
+      setSocialError(""); // Clear any existing social error
+
+      let hasError = false; // Track if there are any errors in socials
 
       const finalSocials = parsedValues.socials?.map((social) => {
         try {
@@ -125,6 +127,7 @@ export function UserInfo({ user, isCurrentUser }: UserInfoProps) {
           setSocialError(
             `${social.url} is not from allowed platforms. Please use a URL from one of the following platforms: LinkedIn, Twitter, Facebook, GitHub, Instagram, YouTube, or Twitch.`
           );
+          hasError = true;
           return null;
         }
       });
@@ -138,7 +141,7 @@ export function UserInfo({ user, isCurrentUser }: UserInfoProps) {
 
       console.log("Final values:", finalValues);
 
-      if (!socialError) {
+      if (!hasError) {
         setDialogOpen(false);
       }
     } catch (error) {
@@ -146,7 +149,6 @@ export function UserInfo({ user, isCurrentUser }: UserInfoProps) {
       throw new Error("Invalid form data");
     }
   };
-
   const handleAddSocial = () => {
     if (fields.length < 8) {
       append({ url: "", platform: "" });
@@ -257,17 +259,15 @@ export function UserInfo({ user, isCurrentUser }: UserInfoProps) {
                         <ChevronsUpDown className="size-4 text-muted-foreground" />
                       </Button>
                     </CollapsibleTrigger>
-                    <CollapsibleContent className="space-y-3 pt-3">
+                    <CollapsibleContent className="pt-3">
                       {socialError && <p className="text-red-500">{socialError}</p>}
                       {fields.map((field, index) => (
                         <div key={field.id} className="flex items-center gap-3 w-full">
                           <div className="flex-1">
                             <InputFormItem
                               id={`socials.${index}.url`}
-                              label="Link"
                               form={form}
                               placeholder="URL (e.g., https://linkedin.com/username)"
-                              required
                               className="w-full"
                             />
                           </div>
@@ -276,13 +276,13 @@ export function UserInfo({ user, isCurrentUser }: UserInfoProps) {
                             variant="outline"
                             size="icon"
                             onClick={() => remove(index)}
-                            className="flex items-center justify-center mt-8">
+                            className="flex items-center justify-center mt-2">
                             <Trash />
                           </Button>
                         </div>
                       ))}
 
-                      <Button type="button" variant="ghost" onClick={handleAddSocial} className="w-full">
+                      <Button type="button" variant="ghost" onClick={handleAddSocial} className="w-full mt-2">
                         + Add Social Link
                       </Button>
                     </CollapsibleContent>
@@ -301,8 +301,8 @@ export function UserInfo({ user, isCurrentUser }: UserInfoProps) {
         </Dialog>
       ) : null}
 
-      <CardContent className="relative pt-0 pb-8">
-        <div className="flex flex-col xl:gap-0 xl:items-center">
+      <CardContent className="pt-0 pb-8 w-full">
+        <div className="flex flex-col xl:gap-0 xl:items-center w-full">
           <Avatar
             className="size-24 md:size-28 lg:size-32 xl:size-40 border-4 border-background shadow-xl -mt-16 transition-all duration-300"
             onError={() => setImageError(true)}>
@@ -325,49 +325,62 @@ export function UserInfo({ user, isCurrentUser }: UserInfoProps) {
             )}
 
             {user.bio && (
-              <p className="mt-4 xl:text-center text-foreground max-w-sm leading-relaxed text-pretty truncate">{user.bio}</p>
+              <p className="pt-2 xl:text-center text-foreground xl:max-w-sm leading-relaxed text-pretty truncate">{user.bio}</p>
             )}
 
-            <div className="w-full mt-6 space-y-1">
-              {user.location && (
-                <div className="flex items-center space-x-2 group hover:text-primary transition-colors">
-                  <MapPin size={18} className="text-muted-foreground" />
-                  <span>{user.location}</span>
-                </div>
-              )}
-
+            <div className="w-full pt-2 space-y-1">
               {user.email && (
                 <Link
                   href={`mailto:${user.email}`}
                   className="flex items-center space-x-2 group hover:text-blue-500 hover:underline text-pretty truncate">
-                  <Mail size={18} className="text-muted-foreground" />
-                  <span>{user.email}</span>
+                  <Mail size={16} className="text-muted-foreground" />
+                  <span className="text-sm">{user.email}</span>
                 </Link>
               )}
-            </div>
+              {user.location ? (
+                <div className="flex items-center space-x-2 group hover:text-primary transition-colors">
+                  <MapPin size={16} className="text-muted-foreground" />
+                  <span className="text-sm">{user.location}</span>
+                </div>
+              ) : (
+                <div
+                  onClick={() => setDialogOpen(true)}
+                  className="items-center flex gap-1 text-muted-foreground hover:text-primary transition-colors group cursor-pointer">
+                  <Plus size={16} className="text-muted-foreground group-hover:text-primary" />
+                  <span className="text-sm">Add location</span>
+                </div>
+              )}
 
-            {user.socials?.length > 0 && (
-              <div className="flex items-center justify-center space-x-4 mt-6">
-                {user.socials.find((social) => social.platform === "twitter") && (
-                  <Link
-                    href={`https://twitter.com/${user.socials.find((social) => social.platform === "twitter")?.url}`}
-                    target="_blank"
-                    className="p-2 rounded-full hover:bg-primary/10 transition-colors"
-                    aria-label="Twitter Profile">
-                    <X size={20} className="text-primary hover:scale-110 transition-transform" />
-                  </Link>
-                )}
-                {user.socials.find((social) => social.platform === "linkedin") && (
-                  <Link
-                    href={`https://linkedin.com/in/${user.socials.find((social) => social.platform === "linkedin")?.url}`}
-                    target="_blank"
-                    className="p-2 rounded-full hover:bg-primary/10 transition-colors"
-                    aria-label="LinkedIn Profile">
-                    <Linkedin size={20} className="text-primary hover:scale-110 transition-transform" />
-                  </Link>
-                )}
-              </div>
-            )}
+              {user.socials?.length > 0 ? (
+                <div className="flex items-center justify-center space-x-4 mt-6">
+                  {user.socials.find((social) => social.platform === "twitter") && (
+                    <Link
+                      href={`https://twitter.com/${user.socials.find((social) => social.platform === "twitter")?.url}`}
+                      target="_blank"
+                      className="p-2 rounded-full hover:bg-primary/10 transition-colors"
+                      aria-label="Twitter Profile">
+                      <X size={16} className="text-primary hover:scale-110 transition-transform" />
+                    </Link>
+                  )}
+                  {user.socials.find((social) => social.platform === "linkedin") && (
+                    <Link
+                      href={`https://linkedin.com/in/${user.socials.find((social) => social.platform === "linkedin")?.url}`}
+                      target="_blank"
+                      className="p-2 rounded-full hover:bg-primary/10 transition-colors"
+                      aria-label="LinkedIn Profile">
+                      <Linkedin size={16} className="text-primary hover:scale-110 transition-transform" />
+                    </Link>
+                  )}
+                </div>
+              ) : (
+                <div
+                  onClick={() => setDialogOpen(true)}
+                  className="items-center flex gap-1 text-muted-foreground hover:text-primary transition-colors group cursor-pointer">
+                  <Plus size={16} className="text-muted-foreground group-hover:text-primary" />
+                  <span className="text-sm">Add socials</span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </CardContent>

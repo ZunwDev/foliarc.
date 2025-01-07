@@ -27,7 +27,7 @@ export function PortfolioCard({ likeAmount, index }: PortfolioCardProps) {
       <CardHeader className="p-0 relative group">
         <div className="relative">
           <Link href={"/portfolio/1"} className="flex flex-col gap-4" passHref>
-            <div className="relative">
+            <div className="relative overflow-hidden">
               <Image
                 loading="lazy"
                 width={1200}

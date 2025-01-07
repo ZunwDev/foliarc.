@@ -91,28 +91,25 @@ export default function UserProfile() {
   const { data: fetchedUsers, isLoading } = useFetchUser(username as string, "username");
   const currentUser = fetchedUsers?.[0] || null;
 
+  const isCurrentUser = !!(user && currentUser && user.sub === currentUser.id);
+
   if (!mounted || isLoading || isUserLoading) return <Loading mounted={mounted} />;
   if (!currentUser) return <Custom404 />;
-
-  const isCurrentUser = user?.sub === currentUser.id;
 
   return (
     <section className="relative min-h-[100dvh] py-16 bg-background overflow-hidden pt-32 max-w-[1600px] mx-auto px-4">
       <div className="flex flex-col xl:flex-row gap-8">
-        {/* User Info Sidebar */}
         <aside className="w-full xl:max-w-sm flex-shrink-0">
           <div className="h-full">
             <UserInfo user={currentUser} isCurrentUser={isCurrentUser} />
           </div>
         </aside>
 
-        {/* Main Content */}
         <main className="flex-1 min-w-0">
           <h2 className="text-2xl font-bold mb-6">
             {currentUser.name}&apos;s {isCurrentUser ? "Submissions" : "Projects"}
           </h2>
 
-          {/* Published Projects Section */}
           <section className="mb-12">
             {isCurrentUser && <h3 className="text-xl font-semibold mb-4">Published Projects</h3>}
             {data.some((item) => item.status === "approved") ? (
@@ -120,7 +117,7 @@ export default function UserProfile() {
                 {data
                   .filter((item) => item.status === "approved")
                   .map((item, index) => (
-                    <ProjectCard key={index} data={item} />
+                    <ProjectCard key={index} isCurrentUser={isCurrentUser} data={item} />
                   ))}
               </div>
             ) : (
@@ -128,7 +125,6 @@ export default function UserProfile() {
             )}
           </section>
 
-          {/* Projects Under Review Section */}
           {isCurrentUser && (
             <section>
               <h3 className="text-xl font-semibold mb-4">Projects Under Review</h3>
@@ -137,7 +133,7 @@ export default function UserProfile() {
                   {data
                     .filter((item) => item.status === "pending" || item.status === "denied")
                     .map((item, index) => (
-                      <ProjectCard key={index} data={item} />
+                      <ProjectCard key={index} isCurrentUser={isCurrentUser} data={item} />
                     ))}
                 </div>
               ) : (

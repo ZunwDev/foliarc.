@@ -34,7 +34,7 @@ export function InputFormItem({
   ...rest
 }: {
   id: string;
-  label: string;
+  label?: string;
   placeholder?: string;
   description?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -49,7 +49,7 @@ export function InputFormItem({
     <FormItem>
       <FormLabel htmlFor={id} className="block" isRequired={required}>
         {label}
-        {!required ? <span className="text-muted-foreground"> (optional)</span> : ""}
+        {label && !required ? <span className="text-muted-foreground"> (optional)</span> : ""}
       </FormLabel>
       <div className="flex flex-row items-center">
         {prefix && (
