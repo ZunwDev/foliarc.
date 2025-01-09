@@ -2,10 +2,9 @@ import { axiosInstance, handleRequest } from "@/lib/api";
 import { User } from "./types";
 
 /**
-  /users?search=keyword&field=column-in-table
+  /users?search=keyword&field=column-in-table,
+  Omit = not required fields 
 */
-
-/** Omit = not required fields */
 export async function searchUsers(search: string, field: keyof User = "id"): Promise<User[]> {
   const query = new URLSearchParams({ search, field }).toString();
   return handleRequest<User[]>(axiosInstance.get(`/users?${query}`));
