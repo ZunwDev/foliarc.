@@ -55,7 +55,7 @@ export default function UserFeedbackPage() {
 
   return (
     <div className="flex pt-16 justify-center">
-      <div className="p-6">
+      <div className="">
         <div className="mx-auto max-w-4xl space-y-6">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">User Feedback</h1>

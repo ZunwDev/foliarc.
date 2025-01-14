@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
+import { Option } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { CommandList } from "cmdk";
 import { format } from "date-fns";
@@ -245,7 +246,9 @@ export function SelectFormItem({
   description,
   form,
   required = false,
-  data = [], // Provide a default empty array for `data`
+  data = [],
+  onChange,
+  enableSearch = false,
   ...rest
 }: {
   id: string;
@@ -255,7 +258,9 @@ export function SelectFormItem({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: any;
   required?: boolean;
-  data?: string[]; // data is optional, but we default it to an empty array
+  data?: string[];
+  onChange?: (value: string) => void;
+  enableSearch?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const selectedValue = form.getValues(id)?.toLowerCase();
@@ -283,7 +288,7 @@ export function SelectFormItem({
         </PopoverTrigger>
         <PopoverContent className={cn({ "h-96": data.length > 10 })}>
           <Command>
-            <CommandInput placeholder={placeholder} />
+            {enableSearch && <CommandInput placeholder={placeholder} />}
             <ScrollArea className={cn({ "h-96": data.length > 10 })}>
               <CommandEmpty>No {id} found.</CommandEmpty>
               <CommandGroup>
@@ -295,6 +300,9 @@ export function SelectFormItem({
                     onSelect={(currentValue) => {
                       form.setValue(id, currentValue);
                       setOpen(false);
+                      if (onChange) {
+                        onChange(currentValue);
+                      }
                     }}
                     {...rest}>
                     {item}
@@ -311,11 +319,6 @@ export function SelectFormItem({
   );
 }
 
-type TagOption = {
-  value: string;
-  label: string;
-};
-
 export function MultiSelectFormItem({
   id,
   label,
@@ -331,28 +334,33 @@ export function MultiSelectFormItem({
   description?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: any;
-  data?: TagOption[];
+  data?: Option[];
   required?: boolean;
 }) {
-  const [selectedValues, setSelectedValues] = useState<TagOption[]>([]);
+  const [selectedValues, setSelectedValues] = useState<Option[]>(form.getValues(id) || []);
 
   useEffect(() => {
-    const values = form.getValues(id) || [];
-    if (Array.isArray(values) && !arraysEqual(values, selectedValues)) {
-      setSelectedValues(values);
+    const subscription = form.watch((value: Partial<Record<string, unknown>>, { name }: { name?: string }) => {
+      if (name === id) {
+        const formValues = (value[id] as Option[]) || [];
+        if (!arraysEqual(formValues, selectedValues)) {
+          setSelectedValues(formValues);
+        }
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, id, selectedValues]);
+
+  useEffect(() => {
+    if (!arraysEqual(selectedValues, form.getValues(id))) {
+      form.setValue(id, selectedValues, { shouldValidate: true, shouldDirty: true });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form, id]);
-
-  useEffect(() => {
-    form.setValue(id, selectedValues);
   }, [selectedValues, form, id]);
 
-  const toggleValue = (option: TagOption) => {
+  const toggleValue = (option: Option) => {
     setSelectedValues((current) => {
       const exists = current.some((item) => item.value === option.value);
-      const newValues = exists ? current.filter((item) => item.value !== option.value) : [...current, option];
-      return newValues;
+      return exists ? current.filter((item) => item.value !== option.value) : [...current, option];
     });
   };
 
@@ -361,7 +369,7 @@ export function MultiSelectFormItem({
   };
 
   return (
-    <FormItem className="flex flex-col space-y-2">
+    <FormItem className="space-y-2">
       <FormLabel htmlFor={id} isRequired={required}>
         {label}
       </FormLabel>

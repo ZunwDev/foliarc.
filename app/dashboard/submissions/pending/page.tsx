@@ -1,21 +1,12 @@
 "use client";
 
+import { SubmissionDenyDialog } from "@/components/dialogs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Calendar, Check, ExternalLink, Mail, X } from "lucide-react";
+import { Calendar, Check, ExternalLink, Mail } from "lucide-react";
 import { useState } from "react";
 
 interface PendingItem {
@@ -74,7 +65,7 @@ export default function PendingSubmissionsPage() {
 
   return (
     <div className="flex pt-16 justify-center">
-      <div className="p-6 w-full">
+      <div className="w-full">
         <div className="mx-auto max-w-4xl space-y-6">
           <div className="flex items-center justify-between">
             <div>
@@ -90,9 +81,9 @@ export default function PendingSubmissionsPage() {
             </div>
           </div>
 
-          <Card>
+          <Card className="h-[70dvh]">
             <CardContent className="pt-6">
-              <ScrollArea className="h-[500px] pr-4">
+              <ScrollArea className="h-full pr-4">
                 <div className="space-y-4">
                   {items.map((item) => (
                     <Card key={item.id}>
@@ -131,40 +122,15 @@ export default function PendingSubmissionsPage() {
                           <div className="flex gap-2 items-end space-y-2">
                             {item.status === "pending" ? (
                               <div className="flex flex-row flex-row-reverse gap-2">
-                                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                                  <DialogTrigger asChild>
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      className="text-red-500 hover:text-red-600 hover:bg-red-500/10"
-                                      onClick={() => handleOpenDenyDialog(item.id)}>
-                                      <X className="h-4 w-4 mr-1" />
-                                      Deny
-                                    </Button>
-                                  </DialogTrigger>
-                                  <DialogContent>
-                                    <DialogHeader>
-                                      <DialogTitle>Deny Submission</DialogTitle>
-                                      <DialogDescription>
-                                        You are about to deny {item.userName}&apos;s submission.
-                                      </DialogDescription>
-                                    </DialogHeader>
-
-                                    <Input
-                                      placeholder="Enter the reason for denial"
-                                      value={denyReason}
-                                      onChange={(e) => setDenyReason(e.target.value)}
-                                    />
-                                    <DialogFooter>
-                                      <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                                        Cancel
-                                      </Button>
-                                      <Button variant="destructive" onClick={handleDeny} disabled={!denyReason.trim()}>
-                                        Deny
-                                      </Button>
-                                    </DialogFooter>
-                                  </DialogContent>
-                                </Dialog>
+                                <SubmissionDenyDialog
+                                  item={item}
+                                  isOpen={isDialogOpen}
+                                  setIsDialogOpen={setIsDialogOpen}
+                                  onSubmit={handleDeny}
+                                  denyReason={denyReason}
+                                  handleOpenDenyDialog={handleOpenDenyDialog}
+                                  setDenyReason={setDenyReason}
+                                />
                                 <Button
                                   variant="outline"
                                   size="sm"

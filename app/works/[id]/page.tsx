@@ -1,6 +1,6 @@
 "use client";
 
-import { CommentSection, MainProfile, Picture, Rating, RatingCircles, Socials } from "@/components/portfolio";
+import { CommentSection, MainProfile, Picture, Rating, RatingCircles, Socials } from "@/components/work";
 import { useState } from "react";
 
 interface Comment {
@@ -11,7 +11,7 @@ interface Comment {
   date: number | string;
 }
 
-export default function PortfolioView() {
+export default function WorkView() {
   const likeAmount = 1;
   const [comments, setComments] = useState<Comment[]>([
     {

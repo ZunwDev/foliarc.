@@ -4,6 +4,7 @@ import { ProjectCard, UserInfo } from "@/components/profile";
 import { Custom404, Loading } from "@/components/util";
 import { useFetchUser } from "@/lib/api/hooks";
 import { useMount } from "@/lib/hooks";
+import { Project } from "@/lib/types";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useParams } from "next/navigation";
 
@@ -12,19 +13,6 @@ export default function UserProfile() {
   const params = useParams();
   const username = params?.user || "";
   const mounted = useMount();
-
-  type Project = {
-    id: string;
-    type: "portfolio" | "project";
-    status: "pending" | "denied" | "approved";
-    title?: string;
-    likeAmount: number;
-    createdAt: string;
-    repliesCount: number;
-    image: string;
-    reason?: string;
-    technologies: string[];
-  };
 
   const data: Project[] = [
     {
@@ -106,14 +94,12 @@ export default function UserProfile() {
         </aside>
 
         <main className="flex-1 min-w-0">
-          <h2 className="text-2xl font-bold mb-6">
-            {currentUser.name}&apos;s {isCurrentUser ? "Submissions" : "Projects"}
-          </h2>
+          <h2 className="text-2xl font-bold mb-6">{isCurrentUser ? "Your Submissions" : `${currentUser.name}'s Work`}</h2>
 
           <section className="mb-12">
-            {isCurrentUser && <h3 className="text-xl font-semibold mb-4">Published Projects</h3>}
+            {isCurrentUser && <h3 className="text-xl font-semibold mb-4">Live Work</h3>}
             {data.some((item) => item.status === "approved") ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-4 lg:gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
                 {data
                   .filter((item) => item.status === "approved")
                   .map((item, index) => (
@@ -121,15 +107,15 @@ export default function UserProfile() {
                   ))}
               </div>
             ) : (
-              <p className="text-muted-foreground">No published projects yet.</p>
+              <p className="text-muted-foreground">No published work yet.</p>
             )}
           </section>
 
           {isCurrentUser && (
             <section>
-              <h3 className="text-xl font-semibold mb-4">Projects Under Review</h3>
+              <h3 className="text-xl font-semibold mb-4">Under Review</h3>
               {data.some((item) => item.status === "pending" || item.status === "denied") ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-4 lg:gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-4">
                   {data
                     .filter((item) => item.status === "pending" || item.status === "denied")
                     .map((item, index) => (
@@ -137,7 +123,7 @@ export default function UserProfile() {
                     ))}
                 </div>
               ) : (
-                <p className="text-muted-foreground">No projects under review at the moment.</p>
+                <p className="text-muted-foreground">No work under review at the moment.</p>
               )}
             </section>
           )}

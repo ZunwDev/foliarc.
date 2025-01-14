@@ -3,15 +3,11 @@ import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useMediaQuery } from "@/lib/hooks";
+import { Option } from "@/lib/types";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
-type SortOption = {
-  value: string;
-  label: string;
-};
-
-const sortOptions: SortOption[] = [
+const sortOptions: Option[] = [
   { value: "Hot", label: "Hot" },
   { value: "Popular", label: "Popular" },
   { value: "New", label: "New" },
@@ -21,7 +17,7 @@ const sortOptions: SortOption[] = [
 export function SortDropdown() {
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedSortOption, setSelectedSortOption] = useState<SortOption>({
+  const [selectedSortOption, setSelectedSortOption] = useState<Option>({
     label: "Popular",
     value: "popular",
   });
@@ -67,7 +63,7 @@ function SortOptionList({
   setSelectedSortOption,
 }: {
   setIsOpen: (open: boolean) => void;
-  setSelectedSortOption: (sortOption: SortOption) => void;
+  setSelectedSortOption: (sortOption: Option) => void;
 }) {
   return (
     <Command>

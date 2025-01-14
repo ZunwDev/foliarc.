@@ -1,26 +1,13 @@
+import { ProjectCardInfoDialog } from "@/components/dialogs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogFooter, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Clock, ExternalLink, Flag, Heart, Info, MessageCircle, Star, Trash2, XCircle } from "lucide-react";
+import { Project } from "@/lib/types";
+import { Clock, ExternalLink, Flag, Heart, MessageCircle, Star, XCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { formatISODate } from "../../lib/utils";
-
-type Project = {
-  id: string;
-  type: "portfolio" | "project";
-  status: "pending" | "denied" | "approved";
-  title?: string;
-  likeAmount: number;
-  createdAt: string;
-  repliesCount: number;
-  image: string;
-  technologies: string[];
-  reason?: string;
-};
 
 export function ProjectCard({ data, isCurrentUser }: { data: Project; isCurrentUser: boolean }) {
   const [isDialogOpen, setDialogOpen] = useState(false);
@@ -52,7 +39,7 @@ export function ProjectCard({ data, isCurrentUser }: { data: Project; isCurrentU
                     alt={data.title ? data.title : "image"}
                     className="w-full h-[200px] object-cover object-top transform transition-transform duration-300 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  <div className="absolute inset-0 flex items-center justify-center bg-background/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                     <ExternalLink className="text-foreground size-10" />
                   </div>
                 </div>
@@ -88,68 +75,12 @@ export function ProjectCard({ data, isCurrentUser }: { data: Project; isCurrentU
                 }`}
               />
               <div className="absolute top-2 right-2 flex">
-                <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button variant="outline" size="icon" className="rounded-full hover:text-muted-foreground">
-                      <Info className="size-4" />
-                    </Button>
-                  </DialogTrigger>
-
-                  <DialogContent>
-                    <DialogTitle className="text-xl font-semibold text-center">
-                      {data.status === "denied" ? "Denial Details" : "Submission Details"}
-                    </DialogTitle>
-                    <div className="text-sm text-muted-foreground space-y-4">
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium">Type:</span>
-                        <span className="font-bold">{data.type === "project" ? "Project" : "Portfolio"}</span>
-                      </div>
-
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium">Technologies:</span>
-                        <div className="flex flex-wrap gap-2 mt-2">
-                          {data.technologies && data.technologies.map((item, index) => <Badge key={index}>{item}</Badge>)}
-                        </div>
-                      </div>
-
-                      {data.type === "project" && (
-                        <div className="flex justify-between items-center">
-                          <span className="font-medium">Title:</span>
-                          <span className="font-bold">{data.title}</span>
-                        </div>
-                      )}
-
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium">Submitted On:</span>
-                        <span className="font-bold">{formatISODate(data.createdAt) || "Unknown"}</span>
-                      </div>
-
-                      {data.status === "denied" && (
-                        <div>
-                          <span className="font-medium">Deny Reason:</span>
-                          <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-md text-red-700">
-                            {data.reason || "No specific reason provided."}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    <DialogFooter className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-4 pt-6">
-                      <Button variant="outline" onClick={() => setDialogOpen(false)} className="w-full sm:w-auto">
-                        Close
-                      </Button>
-                      {data.status === "denied" && (
-                        <Button
-                          variant="destructive"
-                          onClick={handleDelete}
-                          className="w-full sm:w-auto bg-red-500 hover:bg-red-600 text-white flex items-center justify-center gap-2">
-                          <Trash2 size={20} />
-                          Delete Submission
-                        </Button>
-                      )}
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
+                <ProjectCardInfoDialog
+                  data={data}
+                  isOpen={isDialogOpen}
+                  setDialogOpen={setDialogOpen}
+                  onSubmit={handleDelete}
+                />
               </div>
             </div>
           )}
@@ -159,17 +90,20 @@ export function ProjectCard({ data, isCurrentUser }: { data: Project; isCurrentU
       {data.status === "approved" && (
         <CardContent className="p-4">
           <div className="flex justify-between items-start">
-            <div className="flex items-start gap-2 flex-col">
+            <div className="flex items-start gap-1 flex-col">
               <h3 className="text-lg font-bold">{data.type === "project" ? data.title : "Portfolio"}</h3>
               <div className="flex flex-wrap gap-1 justify-start">
                 {data.technologies && data.technologies.map((item, index) => <Badge key={index}>{item}</Badge>)}
               </div>
-              <div className="flex items-center gap-1 text-muted-foreground">
-                <MessageCircle className="size-4" />
-                <span>{data.repliesCount}</span>
-                <span>•</span>
-                <Heart className="size-4 text-red-500 fill-red-500" />
-                <span className="text-muted-foreground">{data.likeAmount}</span>
+              <div className="flex flex-row gap-3 pt-1.5">
+                <div className="flex items-center gap-1 text-muted-foreground">
+                  <Heart className="size-4 text-red-500 fill-red-500" />
+                  <span className="text-muted-foreground">{data.likeAmount}</span>
+                </div>
+                <div className="flex items-center gap-1 text-muted-foreground">
+                  <MessageCircle className="size-4" />
+                  <span>{data.repliesCount}</span>
+                </div>
               </div>
             </div>
             <TooltipProvider>
@@ -197,7 +131,9 @@ export function ProjectCard({ data, isCurrentUser }: { data: Project; isCurrentU
                     <span className="text-xs text-muted-foreground mt-2">Overall Score</span>
                   </div>
                 </TooltipTrigger>
-                <TooltipContent className="z-50 overflow-hidden rounded-md border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95">
+                <TooltipContent
+                  className="z-50 overflow-hidden rounded-md border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95"
+                  style={{ whiteSpace: "pre-line" }}>
                   {calculations}
                 </TooltipContent>
               </Tooltip>

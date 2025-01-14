@@ -1,15 +1,9 @@
 import { createUser, deleteUser, searchUsers, updateUser } from "@/lib/api/users";
 import { User } from "@/lib/api/users/types";
+import { ApiError } from "@/lib/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 type NonNullUser = Exclude<User, null>;
-
-type ApiError = {
-  code: string;
-  details: string | null;
-  hint: string | null;
-  message: string;
-};
 
 export function useFetchUser(search: string, field: keyof NonNullUser = "id") {
   return useQuery<NonNullUser[], ApiError>({

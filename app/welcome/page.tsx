@@ -6,6 +6,7 @@ import { InputFormItem, Loading, LoadingSpinner, MultiSelectFormItem, TextareaFo
 import { useCreateUser, useFetchUser } from "@/lib/api/hooks";
 import { roles } from "@/lib/constants";
 import { useMount } from "@/lib/hooks";
+import { NewProfileSchema } from "@/lib/schemas";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -13,28 +14,6 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
-const welcomeSchema = z.object({
-  username: z
-    .string()
-    .min(3, { message: "Nickname must be at least 3 characters" })
-    .max(16, { message: "Nickname must not exceed 16 characters" })
-    .trim(),
-  name: z
-    .string()
-    .min(4, { message: "Name must be at least 4 characters" })
-    .max(50, { message: "Name must not exceed 50 characters" })
-    .trim(),
-  bio: z
-    .string()
-    .max(200, { message: "Bio must not exceed 200 characters" })
-    .optional()
-    .transform((val) => val?.trim() || null),
-  tags: z
-    .array(z.object({ value: z.string(), label: z.string() }))
-    .min(1, "At least one tag must be selected")
-    .max(3, "You can select up to 3 tags"),
-});
 
 export default function WelcomePage() {
   const { user, isLoading } = useUser();
@@ -47,9 +26,9 @@ export default function WelcomePage() {
     if (!isLoading && (!user || fetchedUsers)) router.push("/");
   }, [isLoading, user, fetchedUsers, router]);
 
-  const form = useForm<z.infer<typeof welcomeSchema>>({
+  const form = useForm<z.infer<typeof NewProfileSchema>>({
     mode: "onChange",
-    resolver: zodResolver(welcomeSchema),
+    resolver: zodResolver(NewProfileSchema),
     defaultValues: {
       username: user?.nickname || user?.name || user?.email || "",
       name: "",
@@ -64,9 +43,9 @@ export default function WelcomePage() {
 
   if (isLoading || isLoadingDbUser || !user || fetchedUsers) return <Loading mounted={mounted} />;
 
-  const onSubmit = async (values: z.infer<typeof welcomeSchema>) => {
+  const onSubmit = async (values: z.infer<typeof NewProfileSchema>) => {
     try {
-      await welcomeSchema.parseAsync(values);
+      await NewProfileSchema.parseAsync(values);
       const extendedValues = {
         ...values,
         id: user?.sub as string,
@@ -103,7 +82,7 @@ export default function WelcomePage() {
                 form={form}
                 prefix="@"
                 required
-                description="Enter a unique username. This will be used to identify you on the platform."
+                description="Enter a unique username. This will be used to identify you on the platform. It can't be changed later."
               />
               <InputFormItem
                 label="Your Name"

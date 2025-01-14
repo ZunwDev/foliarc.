@@ -1,21 +1,11 @@
 "use client";
 
+import { SubmitSubmissionDialog } from "@/components/dialogs";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Form } from "@/components/ui/form";
 import { Skeleton } from "@/components/ui/skeleton";
-import { InputFormItem, MultiSelectFormItem } from "@/components/util";
 import { useFetchUser } from "@/lib/api/hooks";
-import { technologies } from "@/lib/constants";
 import { useMount } from "@/lib/hooks";
+import { NewSubmissionSchema } from "@/lib/schemas";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
@@ -23,11 +13,6 @@ import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
-const PortfolioSchema = z.object({
-  url: z.string().url("Invalid URL format"),
-  technologies: z.array(z.object({ value: z.string(), label: z.string() })).min(1, "At least one tag must be selected"),
-});
 
 export function Hero() {
   const { user } = useUser();
@@ -37,16 +22,18 @@ export function Hero() {
 
   const currentUser = fetchedUsers?.[0] || null;
 
-  const form = useForm<z.infer<typeof PortfolioSchema>>({
+  const form = useForm<z.infer<typeof NewSubmissionSchema>>({
     mode: "onChange",
-    resolver: zodResolver(PortfolioSchema),
+    resolver: zodResolver(NewSubmissionSchema),
     defaultValues: {
       url: "",
       technologies: [],
+      type: "portfolio",
+      title: "",
     },
   });
 
-  const handleFormSubmit = (values: z.infer<typeof PortfolioSchema>) => {
+  const onSubmit = (values: z.infer<typeof NewSubmissionSchema>) => {
     console.log(values);
     setHasSubmitted(true);
   };
@@ -77,51 +64,7 @@ export function Hero() {
     }
 
     if (!hasSubmitted) {
-      return (
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="h-10 sm:h-11 md:h-12 lg:h-14 px-4 sm:px-8 md:px-10 lg:px-12 text-lg sm:text-xl md:text-2xl rounded-full text-white bg-blue-600 border-2 border-blue-600 hover:bg-blue-700 shadow-lg transition-all duration-300 transform hover:scale-105 relative group">
-              Submit Your Work
-              <span className="absolute inset-0 rounded-full bg-blue-600 opacity-0 group-hover:opacity-40 transition-opacity duration-300 blur-md"></span>
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Submit Your Work</DialogTitle>
-              <DialogDescription>
-                Fill out your name and a link to your portfolio, project, or GitHub. Approval may take some time. Click{" "}
-                <strong>submit</strong> when done.
-              </DialogDescription>
-            </DialogHeader>
-            <Form {...form}>
-              <form className="mt-4">
-                <div className="flex flex-col w-full gap-4">
-                  <InputFormItem
-                    label="Portfolio URL"
-                    id="url"
-                    form={form}
-                    required
-                    description="Insert a link to your portfolio or project."
-                    placeholder="https://www.example.com"
-                  />
-                  <MultiSelectFormItem
-                    id="technologies"
-                    label="Technologies"
-                    placeholder="Choose technologies..."
-                    description="Select one or more technologies you use in your project/portfolio."
-                    form={form}
-                    data={technologies}
-                    required
-                  />
-                </div>
-              </form>
-            </Form>
-            <DialogFooter>
-              <Button onClick={form.handleSubmit(handleFormSubmit)}>Submit</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      );
+      return <SubmitSubmissionDialog form={form} onSubmit={onSubmit} />;
     }
 
     return null;

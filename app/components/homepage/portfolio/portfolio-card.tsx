@@ -3,16 +3,17 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
-import { ExternalLink, Flag, Heart, MapPin, Star } from "lucide-react";
+import { ExternalLink, Flag, Heart, MapPin, MessageCircle, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 interface PortfolioCardProps {
-  likeAmount: number;
   index: number;
 }
 
-export function PortfolioCard({ likeAmount, index }: PortfolioCardProps) {
+export function PortfolioCard({ index }: PortfolioCardProps) {
+  const likeAmount = 1;
+  const replyAmount = 1;
   const overallScore = 88;
   const calculations = "Hireability: 80%\nCreativity: 95%\nAesthetic: 90%";
 
@@ -26,7 +27,7 @@ export function PortfolioCard({ likeAmount, index }: PortfolioCardProps) {
       className="rounded-lg shadow-lg overflow-hidden transition-all hover:bg-secondary hover:shadow-xl relative duration-300">
       <CardHeader className="p-0 relative group">
         <div className="relative">
-          <Link href={"/portfolio/1"} className="flex flex-col gap-4" passHref>
+          <Link href={`/works/${index}`} className="flex flex-col gap-4" passHref>
             <div className="relative overflow-hidden">
               <Image
                 loading="lazy"
@@ -37,8 +38,8 @@ export function PortfolioCard({ likeAmount, index }: PortfolioCardProps) {
                 className="w-full h-[250px] object-cover object-top transform transition-transform duration-300 group-hover:scale-105"
               />
               {/* Icon overlay */}
-              <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                <ExternalLink className="text-foreground size-10" />
+              <div className="absolute inset-0 flex items-center justify-center bg-background/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <ExternalLink className="text-foreground/70 size-10" />
               </div>
             </div>
           </Link>
@@ -61,7 +62,7 @@ export function PortfolioCard({ likeAmount, index }: PortfolioCardProps) {
             <Link className="text-lg" href="/johndoe">
               <Avatar className="mr-3">
                 <AvatarImage src="https://via.placeholder.com/40" alt="Creator's Avatar" />
-                <AvatarFallback>AB</AvatarFallback>
+                <AvatarFallback className="bg-muted">AB</AvatarFallback>
               </Avatar>
             </Link>
             <div className="flex flex-col gap-1">
@@ -72,16 +73,21 @@ export function PortfolioCard({ likeAmount, index }: PortfolioCardProps) {
                 <Badge>Developer</Badge>
                 <Badge>UI/UX Designer</Badge>
               </div>
-              <div className="text-sm text-muted-foreground flex flex-row items-center gap-1">
+              <div className="text-sm text-muted-foreground flex flex-row items-center gap-3 pt-2">
                 <div className="flex items-center gap-1">
                   <MapPin className="size-4" />
                   <span>Atlanta</span>
                 </div>
                 {likeAmount > 0 && (
                   <div className="flex items-center gap-1">
-                    <span className="text-muted-foreground">•</span>
                     <Heart className="size-4 text-red-500 fill-red-500" />
                     <span className="font-medium">{likeAmount}</span>
+                  </div>
+                )}
+                {replyAmount > 0 && (
+                  <div className="flex items-center gap-1">
+                    <MessageCircle className="size-4 text-muted-foreground" />
+                    <span className="font-medium">{replyAmount}</span>
                   </div>
                 )}
               </div>

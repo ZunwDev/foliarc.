@@ -1,16 +1,10 @@
 import { createPortfolio, deletePortfolio, searchPortfolios, updatePortfolio } from "@/lib/api/portfolios";
 import { Portfolio } from "@/lib/api/portfolios/types";
+import { ApiError } from "@/lib/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { UUID } from "crypto";
 
 type NonNullPortfolio = Exclude<Portfolio, null>;
-
-type ApiError = {
-  code: string;
-  details: string | null;
-  hint: string | null;
-  message: string;
-};
 
 export function useFetchPortfolios(search: string, field: keyof NonNullPortfolio = "pid") {
   return useQuery<NonNullPortfolio[], ApiError>({
