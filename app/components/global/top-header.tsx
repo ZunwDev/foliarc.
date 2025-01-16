@@ -37,9 +37,9 @@ export function Header() {
             </Link>
           )}
 
-          <div className="ml-auto flex gap-2 flex-row-reverse">
-            <Profile />
+          <div className="ml-auto flex gap-2">
             <ThemeSwitch />
+            <Profile />
           </div>
         </nav>
       </header>

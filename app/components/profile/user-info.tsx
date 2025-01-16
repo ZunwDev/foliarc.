@@ -93,6 +93,7 @@ export function UserInfo({ user, isCurrentUser }: UserInfoProps) {
 
   const handleImageUpload = async (file: File) => {
     try {
+      console.log("Uploading file:", file);
       //await uploadToServer(file);
     } catch (error) {
       console.error("Upload failed:", error);

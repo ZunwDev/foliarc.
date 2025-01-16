@@ -6,12 +6,12 @@
 
 ## Features
 
-- **Portfolio Upload**: Share your work by uploading links to your portfolios or projects.
+- **Work Upload**: Share your work by uploading links to your portfolios or projects.
 - **Feedback System**: Receive constructive ratings and comments on key aspects such as creativity, aesthetic, and hireability and more.
 - **Rating Metrics**: Evaluate others' work using standardized metrics for fair and actionable feedback.
-- **Interactive Discussions**: Comment on portfolios and engage in meaningful conversations.
+- **Interactive Discussions**: Comment on any work and engage in meaningful conversations.
 - **Profile Customization**: Customize your profile to highlight your skills and achievements. [PLANNED]
-- **Discover Portfolios**: Browse and filter portfolios based on categories, tags, or ratings. [MAYBE]
+- **Discover Others Work**: Browse and filter works based on categories, tags, or ratings. [MAYBE]
 
 ---
 

@@ -11,8 +11,8 @@ import { useState } from "react";
 
 export function ProjectCard({ data, isCurrentUser }: { data: Project; isCurrentUser: boolean }) {
   const [isDialogOpen, setDialogOpen] = useState(false);
-  const overallScore = 88;
-  const calculations = "Hireability: 80%\nCreativity: 95%\nAesthetic: 90%";
+  const overallScore = 8.8;
+  const calculations = "Hireability: 8\nCreativity: 9.5\nAesthetic: 9";
 
   const handleDelete = () => {
     console.log("Project deleted");
@@ -29,7 +29,7 @@ export function ProjectCard({ data, isCurrentUser }: { data: Project; isCurrentU
         <div className="relative">
           {data.status === "approved" ? (
             <div className="relative">
-              <Link href="/portfolio/1" className="flex flex-col gap-4" passHref>
+              <Link href="/works/1" className="flex flex-col gap-4" passHref>
                 <div className="relative overflow-hidden">
                   <Image
                     loading="lazy"
@@ -120,15 +120,14 @@ export function ProjectCard({ data, isCurrentUser }: { data: Project; isCurrentU
                           className="stroke-primary fill-none"
                           strokeWidth="4"
                           strokeDasharray="176"
-                          strokeDashoffset={(176 - (176 * overallScore) / 100).toFixed(1)}
+                          strokeDashoffset={(176 - (176 * overallScore) / 10).toFixed(1)}
                           style={{ transformOrigin: "center", transform: "rotate(-90deg)" }}
                         />
                       </svg>
                       <div className="absolute inset-0 flex items-center justify-center text-lg font-semibold">
-                        {overallScore}%
+                        {overallScore}
                       </div>
                     </div>
-                    <span className="text-xs text-muted-foreground mt-2">Overall Score</span>
                   </div>
                 </TooltipTrigger>
                 <TooltipContent

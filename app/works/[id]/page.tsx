@@ -96,10 +96,10 @@ export default function WorkView() {
   return (
     <div className="min-h-screen bg-background p-6 pt-48 w-full overflow-hidden relative">
       <div className="mx-auto max-w-6xl space-y-8 w-full">
-        <div className="flex flex-col md:flex-row gap-6">
-          <Picture src="/cats-9024710_960_720.jpg" link="https://www.example.com" />
+        <div className="flex flex-col lg:flex-row gap-6">
+          <Picture src="/img-demo.png" link="https://www.example.com" />
 
-          <div className="md:w-1/3 space-y-6">
+          <div className="lg:w-1/3 space-y-6">
             <MainProfile likeAmount={likeAmount} />
             <Socials />
             <RatingCircles />

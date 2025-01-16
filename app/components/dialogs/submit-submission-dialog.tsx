@@ -56,14 +56,18 @@ export function SubmitSubmissionDialog({
                         <Briefcase className="size-6 text-primary" />
                         <span className="font-medium">Portfolio</span>
                         <div
-                          className={`absolute top-[0.5rem] right-[0.5rem] w-3 h-3 rounded-full ${
-                            form.watch("type") === "portfolio" ? "bg-primary" : "bg-transparent"
-                          }`}
-                        />
+                          className={`absolute top-[0.5rem] right-[0.5rem] size-3 rounded-full border-2 ${
+                            form.watch("type") === "portfolio"
+                              ? "border-primary bg-primary flex items-center justify-center"
+                              : "border-muted bg-transparent"
+                          }`}>
+                          {form.watch("type") === "portfolio" && <div className="size-1.5 rounded-full bg-white"></div>}
+                        </div>
                       </div>
                     </label>
                   </div>
 
+                  {/* Project Option */}
                   <div className="relative">
                     <RadioGroupItem value="project" id="project" className="peer sr-only" />
                     <label
@@ -73,10 +77,13 @@ export function SubmitSubmissionDialog({
                         <File className="size-6 text-primary" />
                         <span className="font-medium">Project</span>
                         <div
-                          className={`absolute top-[0.5rem] right-[0.5rem] w-3 h-3 rounded-full ${
-                            form.watch("type") === "project" ? "bg-primary" : "bg-transparent"
-                          }`}
-                        />
+                          className={`absolute top-[0.5rem] right-[0.5rem] size-3 rounded-full border-2 ${
+                            form.watch("type") === "project"
+                              ? "border-primary bg-primary flex items-center justify-center"
+                              : "border-muted bg-transparent"
+                          }`}>
+                          {form.watch("type") === "project" && <div className="size-1.5 rounded-full bg-white"></div>}
+                        </div>
                       </div>
                     </label>
                   </div>

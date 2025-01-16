@@ -15,7 +15,7 @@ export function ThemeSwitch() {
   };
 
   return (
-    <Button variant="ghost" size="icon" onClick={toggleTheme}>
+    <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle dark mode">
       {resolvedTheme === "dark" ? <Sun className="text-foreground" /> : <Moon className="text-foreground" />}
     </Button>
   );

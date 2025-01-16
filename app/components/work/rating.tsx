@@ -21,36 +21,61 @@ export function Rating({ ratings, setRatings }: RatingProps) {
     }));
   };
 
+  const categories = [
+    {
+      keyword: "hireability",
+      label: "Does this work demonstrate strong hireability?",
+      labels: { low: "Not hireable", mid: "Potential hire", high: "Highly hireable" },
+    },
+    {
+      keyword: "creativity",
+      label: "How creative is this work?",
+      labels: { low: "Unoriginal", mid: "Moderately creative", high: "Extremely creative" },
+    },
+    {
+      keyword: "aesthetic",
+      label: "How aesthetically pleasing is this work?",
+      labels: { low: "Unappealing", mid: "Visually acceptable", high: "Highly aesthetic" },
+    },
+  ];
+
   return (
     <div className="pt-24">
       <h2 className="text-2xl font-semibold">Your Rating</h2>
       <p className="text-muted-foreground">
-        {user ? "Rate this portfolio across multiple categories" : "Log in to rate this portfolio across multiple categories."}
+        {user ? "Rate this work across multiple categories" : "Log in to rate this work across multiple categories."}
       </p>
 
-      <Card className="bg-secondary/20 p-6 rounded-lg shadow-md mt-6">
-        {["Hireability", "Creativity", "Aesthetic"].map((category) => (
-          <div key={category} className="mb-8">
-            <h3 className="text-xl font-medium mb-4 text-center">{category}</h3>
-            <div className="flex justify-center space-x-2 flex-wrap gap-2">
-              {Array.from({ length: 10 }, (_, index) => index + 1).map((number) => (
-                <Button
-                  variant="outline"
-                  key={number}
-                  className={`size-12 p-3 transition-all duration-200 ease-in-out transform ${
-                    ratings[category.toLowerCase()] === number
-                      ? "bg-blue-500 hover:bg-blue-700 transform scale-110"
-                      : "bg-background text-blue-500 hover:bg-blue-400 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500"
-                  }`}
-                  onClick={() => handleRatingChange(category.toLowerCase(), number)}
-                  disabled={!user}>
-                  {number}
-                </Button>
-              ))}
+      <Card className="bg-secondary/50 p-6 rounded-lg shadow-md mt-6 flex flex-col gap-8 justify-center items-center">
+        {categories.map(({ keyword, label, labels }) => (
+          <div key={keyword} className="max-w-[550px] items-center justify-center">
+            <h3 className="text-lg font-medium mb-2">{label}</h3>
+            <div className="flex flex-col items-center gap-4">
+              <div className="grid grid-cols-5 gap-2 sm:grid-cols-10">
+                {Array.from({ length: 10 }, (_, index) => index + 1).map((number) => (
+                  <Button
+                    variant="outline"
+                    key={number}
+                    className={`p-3 md:size-12 md:p-0 transition-all duration-200 ease-in-out transform text-xl font-semibold ${
+                      ratings[keyword] === number
+                        ? "bg-blue-500 hover:bg-blue-700 transform scale-110 text-white hover:text-white"
+                        : "bg-background text-blue-500 hover:bg-blue-400 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500 hover:text-background"
+                    }`}
+                    onClick={() => handleRatingChange(keyword, number)}
+                    disabled={!user}>
+                    {number}
+                  </Button>
+                ))}
+              </div>
+              <div className="flex justify-between w-full max-w-[320px] sm:max-w-[550px] mt-2 text-sm font-medium text-muted-foreground">
+                <span className="flex-1 text-left px-2">{labels.low}</span>
+                <span className="flex-1 text-center px-2">{labels.mid}</span>
+                <span className="flex-1 text-right px-2">{labels.high}</span>
+              </div>
             </div>
           </div>
         ))}
-        <div className="flex justify-end">{user ? <Button>Save Rating</Button> : null}</div>
+        <div className="flex justify-end ml-auto">{user ? <Button>Save Rating</Button> : null}</div>
       </Card>
     </div>
   );

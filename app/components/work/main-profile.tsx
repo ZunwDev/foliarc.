@@ -2,23 +2,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Heart, MapPin } from "lucide-react";
-import Link from "next/link";
 
 export function MainProfile({ likeAmount }: { likeAmount: number }) {
   return (
-    <Card className="bg-secondary/50 p-4 rounded-lg">
+    <Card className="bg-secondary/50 p-4 rounded-lg lg:w-96 w-full">
       <div className="flex flex-row">
         <div className="flex items-center space-x-4">
-          <Link className="text-xl font-semibold" href="/johndoe">
-            <Avatar className="h-16 w-16">
-              <AvatarImage src="" alt="Jane Doe" />
-              <AvatarFallback>JD</AvatarFallback>
-            </Avatar>
-          </Link>
+          <Avatar className="size-16 text-xl font-semibold">
+            <AvatarImage src="" alt="Jane Doe" />
+            <AvatarFallback>JD</AvatarFallback>
+          </Avatar>
           <div className="flex flex-col gap-1">
-            <Link className="text-xl font-semibold hover:underline" href="/johndoe">
-              Jane Doe
-            </Link>
+            <span className="text-xl font-semibold">Jane Doe</span>
             <div className="flex flex-row flex-wrap gap-1">
               <Badge>Developer</Badge>
               <Badge>UI/UX Designer</Badge>
