@@ -7,11 +7,11 @@ import { ExternalLink, Heart, MapPin, MessageCircle, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-interface PortfolioCardProps {
+interface CreationCardProps {
   index: number;
 }
 
-export function PortfolioCard({ index }: PortfolioCardProps) {
+export function CreationCard({ index }: CreationCardProps) {
   const likeAmount = 1;
   const replyAmount = 1;
   const overallScore = 8.8;
@@ -27,14 +27,14 @@ export function PortfolioCard({ index }: PortfolioCardProps) {
       className="rounded-lg shadow-lg overflow-hidden transition-all hover:bg-secondary hover:shadow-xl relative duration-300">
       <CardHeader className="p-0 relative group">
         <div className="relative">
-          <Link href={`/works/${index}`} className="flex flex-col gap-4" passHref>
+          <Link href={`/creations/${index}`} className="flex flex-col gap-4" passHref>
             <div className="relative overflow-hidden">
               <Image
                 loading="lazy"
                 width={1200}
                 height={300}
                 src="/img-demo.png"
-                alt="Work Image"
+                alt="Creation Image"
                 className="w-full h-[250px] object-cover object-top transform transition-transform duration-300 group-hover:scale-105"
               />
               <div className="absolute inset-0 flex items-center justify-center bg-background/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100">

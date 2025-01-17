@@ -1,7 +1,7 @@
+import { CommentInput } from "@/components/creations/comment-input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { CommentInput } from "@/components/work/comment-input";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { Flag, MessageCircle, MoreHorizontal, ThumbsDown, ThumbsUp } from "lucide-react";
 import Link from "next/link";

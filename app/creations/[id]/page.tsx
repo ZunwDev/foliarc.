@@ -1,6 +1,6 @@
 "use client";
 
-import { CommentSection, MainProfile, Picture, Rating, RatingCircles, Socials } from "@/components/work";
+import { CommentSection, MainProfile, Picture, Rating, RatingCircles, Socials } from "@/components/creations";
 import { useState } from "react";
 
 interface Comment {

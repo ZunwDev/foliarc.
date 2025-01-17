@@ -96,10 +96,10 @@ export default function UserProfile() {
         </aside>
 
         <main className="flex-1 min-w-0">
-          <h2 className="text-2xl font-bold mb-6">{isCurrentUser ? "Your Submissions" : `${currentUser.name}'s Work`}</h2>
+          <h2 className="text-2xl font-bold mb-6">{isCurrentUser ? "Your Submissions" : `${currentUser.name}'s Creations`}</h2>
 
           <section className="mb-12">
-            {isCurrentUser && <h3 className="text-xl font-semibold mb-4">Live Work</h3>}
+            {isCurrentUser && <h3 className="text-xl font-semibold mb-4">Live Creations</h3>}
             {data.some((item) => item.status === "approved") ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
                 {data
@@ -109,7 +109,7 @@ export default function UserProfile() {
                   ))}
               </div>
             ) : (
-              <p className="text-muted-foreground">No published work yet.</p>
+              <p className="text-muted-foreground">No published creations yet.</p>
             )}
           </section>
 
@@ -125,7 +125,7 @@ export default function UserProfile() {
                     ))}
                 </div>
               ) : (
-                <p className="text-muted-foreground">No work under review at the moment.</p>
+                <p className="text-muted-foreground">No creations under review at the moment.</p>
               )}
             </section>
           )}

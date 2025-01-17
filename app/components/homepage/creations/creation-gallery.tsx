@@ -1,10 +1,10 @@
 "use client";
-import { PortfolioCard } from "@/components/homepage";
+import { CreationCard } from "@/components/homepage";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useMount } from "@/lib/hooks";
 import { useState } from "react";
 
-export function PortfolioGallery() {
+export function CreationGallery() {
   const items = [
     { id: 1, type: "portfolio" },
     { id: 2, type: "project" },
@@ -45,7 +45,7 @@ export function PortfolioGallery() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
         {filteredItems.map((item, index) => (
-          <PortfolioCard key={item.id} index={index} />
+          <CreationCard key={item.id} index={index} />
         ))}
       </div>
     </div>

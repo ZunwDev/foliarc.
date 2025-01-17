@@ -16,7 +16,7 @@ export function Picture({ src, link = "https://www.example.com" }: { src: string
     <div className="md:w-full space-y-6">
       <div className="relative w-full h-full rounded-lg overflow-hidden group">
         <Link href={link} target="_blank">
-          <Image loading="lazy" src={src} alt="Work Preview" width={900} height={300} />
+          <Image loading="lazy" src={src} alt="Creation Preview" width={900} height={300} />
           <div className="absolute inset-0 top-0 flex items-center justify-center bg-black/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
             <ExternalLink className="text-white size-10" />
           </div>

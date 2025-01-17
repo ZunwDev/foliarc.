@@ -24,17 +24,17 @@ export function Rating({ ratings, setRatings }: RatingProps) {
   const categories = [
     {
       keyword: "hireability",
-      label: "Does this work demonstrate strong hireability?",
+      label: "Does this creation demonstrate strong hireability?",
       labels: { low: "Not hireable", mid: "Potential hire", high: "Highly hireable" },
     },
     {
       keyword: "creativity",
-      label: "How creative is this work?",
+      label: "How creative is this creation?",
       labels: { low: "Unoriginal", mid: "Moderately creative", high: "Extremely creative" },
     },
     {
       keyword: "aesthetic",
-      label: "How aesthetically pleasing is this work?",
+      label: "How aesthetically pleasing is this creation?",
       labels: { low: "Unappealing", mid: "Visually acceptable", high: "Highly aesthetic" },
     },
   ];
@@ -43,7 +43,7 @@ export function Rating({ ratings, setRatings }: RatingProps) {
     <div className="pt-24">
       <h2 className="text-2xl font-semibold">Your Rating</h2>
       <p className="text-muted-foreground">
-        {user ? "Rate this work across multiple categories" : "Log in to rate this work across multiple categories."}
+        {user ? "Rate this creation across multiple categories" : "Log in to rate this creation across multiple categories."}
       </p>
 
       <Card className="bg-secondary/50 p-6 rounded-lg shadow-md mt-6 flex flex-col gap-8 justify-center items-center">

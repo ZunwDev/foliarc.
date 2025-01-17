@@ -15,24 +15,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <QueryClientProvider client={queryClient}>
       <html lang="en" suppressHydrationWarning>
         <head>
-          <title>Foliarc | Share and Get Feedback on Your Portfolio/Project</title>
+          <title>foliarc. | Share and Get Feedback on Your Portfolio/Project</title>
           <meta
             name="description"
-            content="Foliarc is a platform for showcasing your portfolio/project, sharing your projects, and getting valuable feedback from others in the community."
+            content="foliarc. is a platform for showcasing your portfolio/project, sharing your projects, and getting valuable feedback from others in the community."
           />
           <meta property="og:type" content="website" />
-          <meta property="og:title" content="Foliarc | Share and Get Feedback on Your Portfolio/Project" />
+          <meta property="og:title" content="foliarc. | Share and Get Feedback on Your Portfolio/Project" />
           <meta
             property="og:description"
-            content="Foliarc is a platform for showcasing your portfolio/project, sharing your projects, and getting valuable feedback from others in the community."
+            content="foliarc. is a platform for showcasing your portfolio/project, sharing your projects, and getting valuable feedback from others in the community."
           />
           <meta property="og:url" content="https://www.foliarc.com" />
           <meta property="og:image" content="https://www.foliarc.com/logo.jpg" />
           <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content="Foliarc | Share and Get Feedback on Your Portfolio/Project" />
+          <meta name="twitter:title" content="foliarc. | Share and Get Feedback on Your Portfolio/Project" />
           <meta
             name="twitter:description"
-            content="Foliarc is a platform for showcasing your portfolio/project, sharing your projects, and getting valuable feedback from others in the community."
+            content="foliarc. is a platform for showcasing your portfolio/project, sharing your projects, and getting valuable feedback from others in the community."
           />
           <meta name="twitter:image" content="https://www.foliarc.com/logo.jpg" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -43,10 +43,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               __html: JSON.stringify({
                 "@context": "https://schema.org",
                 "@type": "WebSite",
-                name: "Foliarc",
+                name: "foliarc.",
                 url: "https://www.foliarc.com",
                 description:
-                  "Foliarc is a platform for showcasing your portfolio/project, sharing your projects, and getting valuable feedback from others in the community.",
+                  "foliarc. is a platform for showcasing your portfolio/project, sharing your projects, and getting valuable feedback from others in the community.",
               }),
             }}
           />

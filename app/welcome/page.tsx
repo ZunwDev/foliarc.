@@ -69,7 +69,7 @@ export default function WelcomePage() {
         <CardHeader>
           <CardTitle>Welcome 👋</CardTitle>
           <CardDescription>
-            Finish your profile to get started, showcase your work, and connect with others in the community.
+            Finish your profile to get started, showcase your creations, and connect with others in the community.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4 px-8">

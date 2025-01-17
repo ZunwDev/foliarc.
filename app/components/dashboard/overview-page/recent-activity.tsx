@@ -8,7 +8,7 @@ const activities = [
       image: "/avatars/01.png",
       initials: "JD",
     },
-    action: "submitted a work for review",
+    action: "submitted a creation for review",
     time: "2 hours ago",
   },
   {

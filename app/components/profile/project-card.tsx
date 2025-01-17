@@ -29,7 +29,7 @@ export function ProjectCard({ data, isCurrentUser }: { data: Project; isCurrentU
         <div className="relative">
           {data.status === "approved" ? (
             <div className="relative">
-              <Link href="/works/1" className="flex flex-col gap-4" passHref>
+              <Link href="/creations/1" className="flex flex-col gap-4" passHref>
                 <div className="relative overflow-hidden">
                   <Image
                     loading="lazy"
