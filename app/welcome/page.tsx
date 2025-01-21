@@ -7,6 +7,7 @@ import { useCreateUser, useFetchUser } from "@/lib/api/hooks";
 import { roles } from "@/lib/constants";
 import { useMount } from "@/lib/hooks";
 import { NewProfileSchema } from "@/lib/schemas";
+import { ApiError } from "@/lib/types";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -55,8 +56,7 @@ export default function WelcomePage() {
 
       createUser(extendedValues, {
         onSuccess: () => setTimeout(() => router.push("/"), 500),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onError: (error: any) => form.setError("username", { message: error.toString() }),
+        onError: (error: ApiError) => form.setError("username", { message: error.message }),
       });
     } catch (error) {
       console.error("Error submitting form:", error);

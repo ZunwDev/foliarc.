@@ -16,12 +16,42 @@ import { format } from "date-fns";
 import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SelectRangeEventHandler } from "react-day-picker";
+import { FieldValues, Path, PathValue, UseFormReturn } from "react-hook-form";
 
 const handleWheel = (e: React.WheelEvent<HTMLInputElement>) => {
   (e.target as HTMLInputElement).blur();
 };
 
-export function InputFormItem({
+type BaseFormItemProps<T extends FieldValues> = {
+  id: string;
+  label?: string;
+  description?: string;
+  form: UseFormReturn<T>;
+  required?: boolean;
+  children: React.ReactNode;
+};
+
+const BaseFormItem = <T extends FieldValues>({ id, label, description, form, required, children }: BaseFormItemProps<T>) => {
+  const errorMessage = form?.formState?.errors?.[id]?.message;
+
+  return (
+    <FormItem>
+      {label && (
+        <FormLabel htmlFor={id} isRequired={required}>
+          {label}
+          {!required && <span className="text-muted-foreground"> (optional)</span>}
+        </FormLabel>
+      )}
+      {children}
+      {description && <FormDescription>{description}</FormDescription>}
+      <FormMessage>{typeof errorMessage === "string" ? errorMessage : null}</FormMessage>
+    </FormItem>
+  );
+};
+
+export default BaseFormItem;
+
+export function InputFormItem<T extends FieldValues>({
   id,
   label,
   placeholder = "",
@@ -34,12 +64,11 @@ export function InputFormItem({
   className = "",
   ...rest
 }: {
-  id: string;
+  id: Path<T>;
   label?: string;
   placeholder?: string;
   description?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  form: any;
+  form: UseFormReturn<T>;
   type?: string;
   suffix?: string;
   prefix?: string;
@@ -47,11 +76,7 @@ export function InputFormItem({
   className?: string;
 }) {
   return (
-    <FormItem>
-      <FormLabel htmlFor={id} className="block" isRequired={required}>
-        {label}
-        {label && !required ? <span className="text-muted-foreground"> (optional)</span> : ""}
-      </FormLabel>
+    <BaseFormItem id={id} label={label} description={description} form={form} required={required}>
       <div className="flex flex-row items-center">
         {prefix && (
           <div className={cn("bg-muted h-10 w-8 flex justify-center items-center border rounded-tl-md rounded-bl-md")}>
@@ -60,7 +85,6 @@ export function InputFormItem({
         )}
         <Input
           id={id}
-          name={id}
           type={type}
           onWheel={handleWheel}
           placeholder={placeholder}
@@ -81,13 +105,11 @@ export function InputFormItem({
           </div>
         )}
       </div>
-      {description && <FormDescription>{description}</FormDescription>}
-      <FormMessage>{form.formState.errors[id]?.message}</FormMessage>
-    </FormItem>
+    </BaseFormItem>
   );
 }
 
-export function TextareaFormItem({
+export function TextareaFormItem<T extends FieldValues>({
   id,
   label,
   placeholder,
@@ -97,12 +119,11 @@ export function TextareaFormItem({
   size = "md", // Default size
   ...rest
 }: {
-  id: string;
+  id: Path<T>;
   label: string;
   placeholder?: string;
   description?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  form: any;
+  form: UseFormReturn<T>;
   required?: boolean;
   size?: "sm" | "md" | "lg";
 }) {
@@ -113,19 +134,13 @@ export function TextareaFormItem({
   };
 
   return (
-    <FormItem>
-      <FormLabel htmlFor={id} isRequired={required}>
-        {label}
-        {!required ? <span className="text-muted-foreground"> (optional)</span> : ""}
-      </FormLabel>
-      <Textarea id={id} name={id} placeholder={placeholder} {...form.register(id)} className={sizeClasses[size]} {...rest} />
-      {description && <FormDescription>{description}</FormDescription>}
-      <FormMessage>{form?.formState?.errors?.[id]?.message}</FormMessage>
-    </FormItem>
+    <BaseFormItem id={id} label={label} description={description} form={form} required={required}>
+      <Textarea id={id} placeholder={placeholder} {...form.register(id)} className={sizeClasses[size]} {...rest} />
+    </BaseFormItem>
   );
 }
 
-export function CheckboxFormItem({
+export function CheckboxFormItem<T extends FieldValues>({
   id,
   label,
   description,
@@ -133,18 +148,17 @@ export function CheckboxFormItem({
   checked = false,
   ...rest
 }: {
-  id: string;
+  id: Path<T>;
   label: string;
   description?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  form: any;
+  form: UseFormReturn<T>;
   checked?: boolean;
 }) {
   const [isChecked, setIsChecked] = useState(checked || false);
 
   const handleCheckboxChange = (e: boolean) => {
     setIsChecked(e);
-    form.setValue(id, e);
+    form.setValue(id, e as PathValue<T, Path<T>>, { shouldDirty: true, shouldValidate: true });
   };
 
   return (
@@ -152,7 +166,6 @@ export function CheckboxFormItem({
       <div className="flex flex-row gap-2 items-center">
         <Checkbox
           id={id}
-          name={id}
           {...form.register(id)}
           {...rest}
           checked={isChecked}
@@ -165,7 +178,7 @@ export function CheckboxFormItem({
   );
 }
 
-export function DateRangeFormItem({
+export function DateRangeFormItem<T extends FieldValues>({
   id,
   label,
   description,
@@ -175,11 +188,11 @@ export function DateRangeFormItem({
   setDate,
   ...rest
 }: {
-  id: string;
+  id: Path<T>;
   label: string;
   description?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  form: any;
+
+  form: UseFormReturn<T>;
   required?: boolean;
   date?: { from: Date; to?: Date };
   setDate?: (date: { from: Date; to?: Date }) => void;
@@ -194,10 +207,7 @@ export function DateRangeFormItem({
   };
 
   return (
-    <FormItem>
-      <FormLabel htmlFor={id} className="block" isRequired={required}>
-        {label}
-      </FormLabel>
+    <BaseFormItem id={id} label={label} description={description} form={form} required={required}>
       <div className={cn("grid gap-2")}>
         <Popover>
           <PopoverTrigger asChild>
@@ -233,13 +243,11 @@ export function DateRangeFormItem({
           </PopoverContent>
         </Popover>
       </div>
-      {description && <FormDescription>{description}</FormDescription>}
-      <FormMessage>{form.formState.errors[id]?.message}</FormMessage>
-    </FormItem>
+    </BaseFormItem>
   );
 }
 
-export function SelectFormItem({
+export function SelectFormItem<T extends FieldValues>({
   id,
   label,
   placeholder,
@@ -251,12 +259,11 @@ export function SelectFormItem({
   enableSearch = false,
   ...rest
 }: {
-  id: string;
+  id: Path<T>;
   label: string;
   placeholder?: string;
   description?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  form: any;
+  form: UseFormReturn<T>;
   required?: boolean;
   data?: string[];
   onChange?: (value: string) => void;
@@ -268,10 +275,7 @@ export function SelectFormItem({
   const buttonText = selectedItem ?? `Select ${id || "default"}...`;
 
   return (
-    <FormItem className="flex flex-col space-y-2">
-      <FormLabel htmlFor={id} isRequired={required}>
-        {label}
-      </FormLabel>
+    <BaseFormItem id={id} label={label} description={description} form={form} required={required}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <FormControl>
@@ -298,7 +302,10 @@ export function SelectFormItem({
                     id={id}
                     value={item}
                     onSelect={(currentValue) => {
-                      form.setValue(id, currentValue);
+                      form.setValue(id, currentValue as PathValue<T, Path<T>>, {
+                        shouldValidate: true,
+                        shouldDirty: true,
+                      });
                       setOpen(false);
                       if (onChange) {
                         onChange(currentValue);
@@ -313,13 +320,11 @@ export function SelectFormItem({
           </Command>
         </PopoverContent>
       </Popover>
-      <FormDescription>{description}</FormDescription>
-      <FormMessage>{form.formState.errors[id]?.message}</FormMessage>
-    </FormItem>
+    </BaseFormItem>
   );
 }
 
-export function MultiSelectFormItem({
+export function MultiSelectFormItem<T extends FieldValues>({
   id,
   label,
   placeholder,
@@ -328,12 +333,11 @@ export function MultiSelectFormItem({
   data = [],
   required = false,
 }: {
-  id: string;
+  id: Path<T>;
   label: string;
   placeholder?: string;
   description?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  form: any;
+  form: UseFormReturn<T>;
   data?: Option[];
   required?: boolean;
 }) {
@@ -353,7 +357,10 @@ export function MultiSelectFormItem({
 
   useEffect(() => {
     if (!arraysEqual(selectedValues, form.getValues(id))) {
-      form.setValue(id, selectedValues, { shouldValidate: true, shouldDirty: true });
+      form.setValue(id, selectedValues as PathValue<T, Path<T>>, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
     }
   }, [selectedValues, form, id]);
 
@@ -369,10 +376,7 @@ export function MultiSelectFormItem({
   };
 
   return (
-    <FormItem className="space-y-2">
-      <FormLabel htmlFor={id} isRequired={required}>
-        {label}
-      </FormLabel>
+    <BaseFormItem id={id} label={label} description={description} form={form} required={required}>
       <Popover modal={true}>
         <PopoverTrigger asChild>
           <Button
@@ -427,14 +431,11 @@ export function MultiSelectFormItem({
           </ScrollArea>
         </PopoverContent>
       </Popover>
-      {description && <FormDescription>{description}</FormDescription>}
-      <FormMessage>{form.formState.errors[id]?.message}</FormMessage>
-    </FormItem>
+    </BaseFormItem>
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const arraysEqual = (arr1: any[], arr2: any[]) => {
+const arraysEqual = (arr1: Option[], arr2: Option[]) => {
   if (arr1.length !== arr2.length) return false;
   return arr1.every((value, index) => value.value === arr2[index].value);
 };

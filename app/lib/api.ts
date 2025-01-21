@@ -16,9 +16,14 @@ export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
   return axios.isAxiosError(error);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function isApiErrorResponse(data: any): data is ApiErrorResponse {
-  return data && typeof data === "object" && "error" in data && typeof data.error === "object" && "details" in data.error;
+function isApiErrorResponse(data: unknown): data is ApiErrorResponse {
+  return (
+    data !== null &&
+    typeof data === "object" &&
+    "error" in data &&
+    typeof (data as { error: unknown }).error === "object" &&
+    (data as { error: { details: unknown } }).error.details !== undefined
+  );
 }
 
 export const axiosInstance = axios.create({
