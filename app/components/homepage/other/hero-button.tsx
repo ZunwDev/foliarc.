@@ -1,15 +1,11 @@
-import { SubmitSubmissionDialog } from "@/components/dialogs";
+import { SubmissionForm } from "@/components/forms";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useFetchUser } from "@/lib/api/hooks";
 import { useMount } from "@/lib/hooks";
-import { NewSubmissionSchema } from "@/lib/schemas";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 export function HeroButton() {
   const { user } = useUser();
@@ -17,22 +13,6 @@ export function HeroButton() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const mounted = useMount();
   const currentUser = fetchedUsers?.[0] || null;
-
-  const form = useForm<z.infer<typeof NewSubmissionSchema>>({
-    mode: "onChange",
-    resolver: zodResolver(NewSubmissionSchema),
-    defaultValues: {
-      url: "",
-      technologies: [],
-      type: "portfolio",
-      title: "",
-    },
-  });
-
-  const onSubmit = (values: z.infer<typeof NewSubmissionSchema>) => {
-    console.log(values);
-    setHasSubmitted(true);
-  };
 
   const renderButton = () => {
     if (!mounted) {
@@ -60,7 +40,7 @@ export function HeroButton() {
     }
 
     if (!hasSubmitted) {
-      return <SubmitSubmissionDialog form={form} onSubmit={onSubmit} />;
+      return <SubmissionForm setHasSubmitted={setHasSubmitted} />;
     }
 
     return null;

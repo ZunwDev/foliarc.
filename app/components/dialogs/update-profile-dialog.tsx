@@ -1,3 +1,4 @@
+import { UpdateProfileSchema } from "@/components/forms/update-profile-form";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,7 +12,6 @@ import {
 import { Form } from "@/components/ui/form";
 import { InputFormItem, MultiSelectFormItem, TextareaFormItem } from "@/components/util";
 import { roles } from "@/lib/constants";
-import { UpdateProfileSchema } from "@/lib/schemas";
 import { Plus, Trash } from "lucide-react";
 import { useFieldArray, UseFormReturn } from "react-hook-form";
 import { z } from "zod";

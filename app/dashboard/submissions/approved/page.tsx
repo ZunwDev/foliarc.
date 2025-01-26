@@ -1,83 +1,25 @@
 "use client";
 
+import { NewCreationForm } from "@/components/forms";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Form } from "@/components/ui/form";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { InputFormItem, MultiSelectFormItem, SelectFormItem } from "@/components/util";
-import { technologies } from "@/lib/constants";
-import { NewPortfolioSchema } from "@/lib/schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { ApprovedItem } from "@/lib/types";
 import Image from "next/image";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-interface ApprovedItem {
-  id: string;
-  userName: string;
-  email: string;
-  portfolioUrl: string;
-  type: "portfolio" | "project";
-  title?: string;
-  avatarUrl: string;
-  submitDate: string;
-  technologies: { value: string; label: string }[];
-  status: "pending" | "approved" | "denied";
-}
 
 export default function ApprovedSubmissionsPage() {
   const [image, setImage] = useState<File | null>(null);
   const [selectedUser, setSelectedUser] = useState<ApprovedItem | null>(null);
   const [selectedType, setSelectedType] = useState("");
 
-  const form = useForm<z.infer<typeof NewPortfolioSchema>>({
-    mode: "onChange",
-    resolver: zodResolver(NewPortfolioSchema),
-    defaultValues: {
-      url: "",
-      technologies: [],
-      type: "",
-      title: "",
-    },
-  });
-
-  const handleTypeChange = (value: string) => {
-    setSelectedType(value);
-    form.setValue("type", value, { shouldValidate: true });
-
-    if (value.toLowerCase() !== "project") {
-      form.setValue("title", "", { shouldValidate: true });
-    }
-
-    if (value.toLowerCase() === "project") {
-      form.trigger("title");
-    }
-  };
-
-  const handleSelectUser = async (id: string) => {
-    const user = items.find((item) => item.id === id) || null;
-
-    if (user) {
-      form.setValue("technologies", user.technologies, { shouldDirty: true, shouldTouch: true });
-      form.setValue("url", user.portfolioUrl || "", { shouldDirty: true, shouldTouch: true });
-      form.setValue("type", user.type || "", { shouldDirty: true, shouldTouch: true });
-
-      setSelectedType(user.type || "");
-
-      if (user.type.toLowerCase() === "project" && user.title) {
-        form.setValue("title", user.title, { shouldDirty: true, shouldTouch: true });
-      } else {
-        form.setValue("title", "", { shouldDirty: true, shouldTouch: true });
-      }
+  const handleSelectUser = async (data: ApprovedItem | null) => {
+    if (data) {
+      const selectedItem = items.find((item) => item.id === data.id) || null;
+      setSelectedUser(selectedItem);
     } else {
-      form.reset();
-      form.setValue("type", "");
-      setSelectedType("");
+      setSelectedUser(null);
     }
-
-    setSelectedUser(user);
   };
 
   const handleFileChange = (files: FileList | null) => {
@@ -95,20 +37,6 @@ export default function ApprovedSubmissionsPage() {
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       setImage(e.dataTransfer.files[0]);
     }
-  };
-
-  const onSubmit = async (values: z.infer<typeof NewPortfolioSchema>) => {
-    if (values.type.toLowerCase() === "project" && !values.title?.trim()) {
-      form.setError("title", {
-        type: "manual",
-        message: "Title is required for projects",
-      });
-      return;
-    }
-
-    await NewPortfolioSchema.parseAsync(values);
-    console.log(values);
-    console.log("Portfolio submitted!");
   };
 
   const items: ApprovedItem[] = [
@@ -200,7 +128,7 @@ export default function ApprovedSubmissionsPage() {
                       className={`flex items-center p-3 rounded-md cursor-pointer border ${
                         selectedUser?.id === item.id ? "border-blue-500" : "hover:border-blue-600"
                       } transition-all`}
-                      onClick={() => handleSelectUser(item.id)}>
+                      onClick={() => handleSelectUser(item)}>
                       <Avatar className="flex-shrink-0">
                         <AvatarImage src={item.avatarUrl} alt={item.userName} />
                         <AvatarFallback>
@@ -272,53 +200,12 @@ export default function ApprovedSubmissionsPage() {
                     </div>
                   </div>
                   <div className="w-full xl:w-1/2 xl:h-full h-80 overflow-y-auto relative px-1">
-                    <Form {...form}>
-                      <form className="h-full w-full flex flex-col gap-4">
-                        <div className="flex flex-col w-full gap-4">
-                          <InputFormItem
-                            label="Portfolio URL"
-                            id="url"
-                            form={form}
-                            required
-                            description="Insert a link to your portfolio or project."
-                            placeholder="https://www.example.com"
-                          />
-                          <MultiSelectFormItem
-                            id="technologies"
-                            label="Technologies"
-                            placeholder="Choose technologies..."
-                            description="Select one or more technologies."
-                            form={form}
-                            data={technologies}
-                            required
-                          />
-                          <SelectFormItem
-                            id="type"
-                            label="Type"
-                            form={form}
-                            required
-                            data={["Portfolio", "Project"]}
-                            description="Select whether this is a portfolio or project."
-                            onChange={handleTypeChange}
-                          />
-                          {selectedType.toLowerCase() === "project" && (
-                            <InputFormItem
-                              label="Title"
-                              id="title"
-                              form={form}
-                              required
-                              description="Provide a title for the project."
-                              placeholder="Enter title..."
-                            />
-                          )}
-                        </div>
-                      </form>
-                    </Form>
-                    <div className="absolute xl:bottom-0 right-0 bottom-[-12rem]">
-                      <Button onClick={form.handleSubmit(onSubmit)} disabled={!form.formState.isValid}>
-                        Add to Portfolios
-                      </Button>
-                    </div>
+                    <NewCreationForm
+                      selectedType={selectedType}
+                      setSelectedType={setSelectedType}
+                      selectedUser={selectedUser}
+                      onUserSelect={handleSelectUser}
+                    />
                   </div>
                 </div>
               ) : (

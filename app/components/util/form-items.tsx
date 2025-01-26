@@ -49,8 +49,6 @@ const BaseFormItem = <T extends FieldValues>({ id, label, description, form, req
   );
 };
 
-export default BaseFormItem;
-
 export function InputFormItem<T extends FieldValues>({
   id,
   label,
@@ -276,50 +274,52 @@ export function SelectFormItem<T extends FieldValues>({
 
   return (
     <BaseFormItem id={id} label={label} description={description} form={form} required={required}>
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <FormControl>
-            <Button
-              variant="outline"
-              role="combobox"
-              name={`${id}Select`}
-              aria-expanded={open}
-              className={cn({ "text-muted-foreground": !form.getValues(id) })}>
-              {buttonText}
-              <ChevronsUpDown className="ml-auto size-4 shrink-0 opacity-50" />
-            </Button>
-          </FormControl>
-        </PopoverTrigger>
-        <PopoverContent className={cn({ "h-96": data.length > 10 })}>
-          <Command>
-            {enableSearch && <CommandInput placeholder={placeholder} />}
-            <ScrollArea className={cn({ "h-96": data.length > 10 })}>
-              <CommandEmpty>No {id} found.</CommandEmpty>
-              <CommandGroup>
-                {data.map((item, index) => (
-                  <CommandItem
-                    key={`${item}${index}`}
-                    id={id}
-                    value={item}
-                    onSelect={(currentValue) => {
-                      form.setValue(id, currentValue as PathValue<T, Path<T>>, {
-                        shouldValidate: true,
-                        shouldDirty: true,
-                      });
-                      setOpen(false);
-                      if (onChange) {
-                        onChange(currentValue);
-                      }
-                    }}
-                    {...rest}>
-                    {item}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </ScrollArea>
-          </Command>
-        </PopoverContent>
-      </Popover>
+      <div className="flex flex-col gap-2">
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <FormControl>
+              <Button
+                variant="outline"
+                role="combobox"
+                name={`${id}Select`}
+                aria-expanded={open}
+                className={cn({ "text-muted-foreground": !form.getValues(id) })}>
+                {buttonText}
+                <ChevronsUpDown className="ml-auto size-4 shrink-0 opacity-50" />
+              </Button>
+            </FormControl>
+          </PopoverTrigger>
+          <PopoverContent className={cn({ "h-96": data.length > 10 })}>
+            <Command>
+              {enableSearch && <CommandInput placeholder={placeholder} />}
+              <ScrollArea className={cn({ "h-96": data.length > 10 })}>
+                <CommandEmpty>No {id} found.</CommandEmpty>
+                <CommandGroup>
+                  {data.map((item, index) => (
+                    <CommandItem
+                      key={`${item}${index}`}
+                      id={id}
+                      value={item}
+                      onSelect={(currentValue) => {
+                        form.setValue(id, currentValue as PathValue<T, Path<T>>, {
+                          shouldValidate: true,
+                          shouldDirty: true,
+                        });
+                        setOpen(false);
+                        if (onChange) {
+                          onChange(currentValue);
+                        }
+                      }}
+                      {...rest}>
+                      {item}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </ScrollArea>
+            </Command>
+          </PopoverContent>
+        </Popover>
+      </div>
     </BaseFormItem>
   );
 }

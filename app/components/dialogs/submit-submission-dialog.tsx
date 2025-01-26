@@ -1,3 +1,4 @@
+import { NewSubmissionSchema } from "@/components/forms/submission-form";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,7 +13,6 @@ import { Form } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { InputFormItem, MultiSelectFormItem } from "@/components/util";
 import { technologies } from "@/lib/constants";
-import { NewSubmissionSchema } from "@/lib/schemas";
 import { Briefcase, File } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";

@@ -33,3 +33,16 @@ export type ApiError = {
   hint: string | null;
   message: string;
 };
+
+export type ApprovedItem = {
+  id: string;
+  userName: string;
+  email: string;
+  portfolioUrl: string;
+  type: "portfolio" | "project";
+  title?: string;
+  avatarUrl: string;
+  submitDate: string;
+  technologies: { value: string; label: string }[];
+  status: "pending" | "approved" | "denied";
+};
